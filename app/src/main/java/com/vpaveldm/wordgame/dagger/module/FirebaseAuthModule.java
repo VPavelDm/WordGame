@@ -1,6 +1,10 @@
 package com.vpaveldm.wordgame.dagger.module;
 
+import android.support.annotation.Nullable;
+
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.vpaveldm.wordgame.firebase.FirebaseAuthManager;
 
 import javax.inject.Singleton;
 
@@ -14,6 +18,19 @@ public class FirebaseAuthModule {
     @Singleton
     public FirebaseAuth provideFirebaseAuth() {
         return FirebaseAuth.getInstance();
+    }
+
+    @Provides
+    @Singleton
+    @Nullable
+    public FirebaseUser provideFirebaseAuthUser(FirebaseAuth auth) {
+        return auth.getCurrentUser();
+    }
+
+    @Provides
+    @Singleton
+    public FirebaseAuthManager provideFirebaseAuthManager(@Nullable FirebaseUser user, FirebaseAuth auth) {
+        return new FirebaseAuthManager(user, auth);
     }
 
 }

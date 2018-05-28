@@ -10,18 +10,25 @@ import com.vpaveldm.wordgame.Application;
 import com.vpaveldm.wordgame.dagger.component.ActivityComponent;
 import com.vpaveldm.wordgame.dagger.module.ActivityModule;
 
-public class InitializerActivity implements LifecycleObserver {
+import javax.inject.Inject;
+
+import ru.terrakok.cicerone.Navigator;
+
+public class DaggerActivityInitializer implements LifecycleObserver {
 
     private Context sContext;
 
-    InitializerActivity(Context sContext) {
+    @Inject
+    Navigator mNavigator;
+
+    DaggerActivityInitializer(Context sContext) {
         this.sContext = sContext;
     }
 
     private static ActivityComponent sActivityComponent;
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    public void init() {
+    public void initDagger() {
         if (sActivityComponent == null) {
             ActivityModule module = new ActivityModule(sContext);
             sActivityComponent = Application.getAppComponent().plusActivityComponent(module);
@@ -30,7 +37,7 @@ public class InitializerActivity implements LifecycleObserver {
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    public void clear() {
+    public void clearDagger() {
         sContext = null;
         sActivityComponent = null;
     }

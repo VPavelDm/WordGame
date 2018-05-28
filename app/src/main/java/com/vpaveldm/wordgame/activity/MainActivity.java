@@ -1,45 +1,36 @@
 package com.vpaveldm.wordgame.activity;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.vpaveldm.wordgame.R;
-import com.vpaveldm.wordgame.activity.InitializerActivity;
-import com.vpaveldm.wordgame.logging.LoggingFragment;
+import com.vpaveldm.wordgame.firebase.FirebaseAuthManager;
 
 import javax.inject.Inject;
 
+import ru.terrakok.cicerone.Router;
+
 public class MainActivity extends AppCompatActivity {
 
-    private final static String MAIN_ACTIVITY_TAG = "mainActivityTAG";
-
     @Inject
-    FirebaseAuth mAuth;
+    Router mRouter;
     @Inject
-    FragmentManager mFragmentManager;
+    FirebaseAuthManager mFirebaseAuthManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getLifecycle().addObserver(new InitializerActivity(this));
+        getLifecycle().addObserver(new DaggerActivityInitializer(this));
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        if (mAuth.getCurrentUser() == null) {
-            Log.i(MAIN_ACTIVITY_TAG, "login");
-            if (mFragmentManager.findFragmentById(R.id.fragmentContainer) == null) {
-                Fragment fragment = new LoggingFragment();
-                mFragmentManager.beginTransaction()
-                        .add(R.id.fragmentContainer, fragment)
-                        .commit();
-            }
+    protected void onResume() {
+        super.onResume();
+        if (mFirebaseAuthManager.isConnected()){
+
+        } else {
+            mRouter.navigateTo(getString(R.string.fragment_login));
         }
     }
 }
