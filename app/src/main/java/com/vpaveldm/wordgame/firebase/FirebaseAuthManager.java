@@ -6,18 +6,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import javax.inject.Inject;
 
 public class FirebaseAuthManager {
 
-    private FirebaseUser mUser;
     private FirebaseAuth mAuth;
 
     @Inject
-    public FirebaseAuthManager(FirebaseUser user, FirebaseAuth auth) {
-        mUser = user;
+    public FirebaseAuthManager(FirebaseAuth auth) {
         mAuth = auth;
     }
 
@@ -26,6 +23,8 @@ public class FirebaseAuthManager {
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                if (listener == null)
+                    return;
                 if (task.isSuccessful()) {
                     listener.success();
                 } else {
@@ -40,6 +39,8 @@ public class FirebaseAuthManager {
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                if (listener == null)
+                    return;
                 if (task.isSuccessful()) {
                     listener.success();
                 } else {
@@ -49,7 +50,11 @@ public class FirebaseAuthManager {
         });
     }
 
+    public void signOut() {
+        mAuth.signOut();
+    }
+
     public boolean isConnected() {
-        return mUser != null;
+        return mAuth.getCurrentUser() != null;
     }
 }

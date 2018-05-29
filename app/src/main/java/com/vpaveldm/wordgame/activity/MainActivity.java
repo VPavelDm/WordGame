@@ -21,14 +21,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getLifecycle().addObserver(new DaggerActivityInitializer(this));
+        getLifecycle().addObserver(new ActivityComponentManager(this));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (mFirebaseAuthManager.isConnected()){
-
+            mRouter.navigateTo(getString(R.string.fragment_menu));
         } else {
             mRouter.navigateTo(getString(R.string.fragment_login));
         }

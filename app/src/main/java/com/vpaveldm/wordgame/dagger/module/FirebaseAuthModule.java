@@ -22,15 +22,8 @@ public class FirebaseAuthModule {
 
     @Provides
     @Singleton
-    @Nullable
-    public FirebaseUser provideFirebaseAuthUser(FirebaseAuth auth) {
-        return auth.getCurrentUser();
-    }
-
-    @Provides
-    @Singleton
-    public FirebaseAuthManager provideFirebaseAuthManager(@Nullable FirebaseUser user, FirebaseAuth auth) {
-        return new FirebaseAuthManager(user, auth);
+    public FirebaseAuthManager provideFirebaseAuthManager(FirebaseAuth auth) {
+        return new FirebaseAuthManager(auth);
     }
 
 }

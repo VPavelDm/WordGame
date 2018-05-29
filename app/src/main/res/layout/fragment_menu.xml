@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/playButton"
+        style="@android:style/Widget.Holo.Button.Small"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/label_play"
+        app:layout_constraintBottom_toTopOf="@+id/ratingButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/ratingButton"
+        style="@android:style/Widget.Holo.Button.Small"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/label_rating"
+        app:layout_constraintBottom_toTopOf="@+id/outButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/outButton"
+        style="@android:style/Widget.Holo.Button.Small"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="230dp"
+        android:text="@string/label_logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

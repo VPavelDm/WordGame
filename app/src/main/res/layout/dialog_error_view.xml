@@ -4,10 +4,10 @@
              android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/errorDialogTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="13dp"
-        android:text="@string/label_no_user_found"
         android:textSize="17sp"
         android:textStyle="normal"/>
 

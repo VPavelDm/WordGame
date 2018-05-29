@@ -14,14 +14,14 @@ import javax.inject.Inject;
 
 import ru.terrakok.cicerone.Navigator;
 
-public class DaggerActivityInitializer implements LifecycleObserver {
+public class ActivityComponentManager implements LifecycleObserver {
 
     private Context sContext;
 
     @Inject
     Navigator mNavigator;
 
-    DaggerActivityInitializer(Context sContext) {
+    ActivityComponentManager(Context sContext) {
         this.sContext = sContext;
     }
 
@@ -40,5 +40,9 @@ public class DaggerActivityInitializer implements LifecycleObserver {
     public void clearDagger() {
         sContext = null;
         sActivityComponent = null;
+    }
+
+    public static ActivityComponent getActivityComponent() {
+        return sActivityComponent;
     }
 }

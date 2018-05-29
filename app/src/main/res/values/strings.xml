@@ -7,8 +7,14 @@
     <string name="label_register">Register</string>
     <string name="label_forget_password">Forget Password</string>
     <string name="label_no_user_found">The user with this E-mail and password was not found</string>
+    <string name="label_registration_denied">Registration failed</string>
     <string name="fragment_login">LOGIN_FRAGMENT</string>
+    <string name="fragment_menu">MENU_FRAGMENT</string>
     <string name="unsupported_operation">%1$s is not supported operation</string>
     <string name="illegal_argument">%1$s is not supported argument</string>
     <string name="label_ok">OK</string>
+    <string name="illegal_access">Arguments are not initialized</string>
+    <string name="label_logout">Log out</string>
+    <string name="label_rating">Rating</string>
+    <string name="label_play">Play</string>
 </resources>

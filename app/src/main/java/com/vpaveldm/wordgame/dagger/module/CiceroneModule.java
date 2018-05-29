@@ -9,6 +9,7 @@ import android.util.Log;
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.logging.LoggingFragment;
+import com.vpaveldm.wordgame.menu.MenuFragment;
 
 import dagger.Module;
 import dagger.Provides;
@@ -44,6 +45,9 @@ public class CiceroneModule {
                 switch (screenKey) {
                     case "LOGIN_FRAGMENT": {
                         return new LoggingFragment();
+                    }
+                    case "MENU_FRAGMENT": {
+                        return new MenuFragment();
                     }
                     default: {
                         String error = context.getString(R.string.illegal_argument, "screen key");

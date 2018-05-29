@@ -12,5 +12,4 @@ import dagger.Component;
 @Singleton
 public interface AppComponent {
     ActivityComponent plusActivityComponent(ActivityModule activityModule);
-    void inject(LoggingFragment fragment);
 }
