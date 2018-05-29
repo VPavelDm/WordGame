@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.logging;
+package com.vpaveldm.wordgame.fragment.logging;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

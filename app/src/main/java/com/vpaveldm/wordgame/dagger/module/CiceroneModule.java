@@ -8,8 +8,8 @@ import android.util.Log;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
-import com.vpaveldm.wordgame.logging.LoggingFragment;
-import com.vpaveldm.wordgame.menu.MenuFragment;
+import com.vpaveldm.wordgame.fragment.logging.LoggingFragment;
+import com.vpaveldm.wordgame.fragment.menu.MenuFragment;
 
 import dagger.Module;
 import dagger.Provides;

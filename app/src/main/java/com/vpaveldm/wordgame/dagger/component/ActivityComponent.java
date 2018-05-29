@@ -4,8 +4,8 @@ import com.vpaveldm.wordgame.activity.MainActivity;
 import com.vpaveldm.wordgame.dagger.module.ActivityModule;
 import com.vpaveldm.wordgame.dagger.module.CiceroneModule;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
-import com.vpaveldm.wordgame.logging.LoggingFragment;
-import com.vpaveldm.wordgame.menu.MenuFragment;
+import com.vpaveldm.wordgame.fragment.logging.LoggingFragment;
+import com.vpaveldm.wordgame.fragment.menu.MenuFragment;
 
 import dagger.Subcomponent;
 

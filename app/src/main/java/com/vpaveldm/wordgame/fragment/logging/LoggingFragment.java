@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.logging;
+package com.vpaveldm.wordgame.fragment.logging;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
