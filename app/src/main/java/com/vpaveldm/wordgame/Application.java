@@ -3,6 +3,7 @@ package com.vpaveldm.wordgame;
 
 import com.vpaveldm.wordgame.dagger.component.AppComponent;
 import com.vpaveldm.wordgame.dagger.component.DaggerAppComponent;
+import com.vpaveldm.wordgame.dagger.module.AppContextModule;
 import com.vpaveldm.wordgame.dagger.module.FirebaseAuthModule;
 
 public class Application extends android.app.Application {
@@ -14,6 +15,7 @@ public class Application extends android.app.Application {
         super.onCreate();
         sAppComponent = DaggerAppComponent.builder()
                 .firebaseAuthModule(new FirebaseAuthModule())
+                .appContextModule(new AppContextModule(getApplicationContext()))
                 .build();
     }
 
