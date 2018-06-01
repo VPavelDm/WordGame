@@ -9,26 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.vpaveldm.wordgame.R;
-import com.vpaveldm.wordgame.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.firebase.FirebaseAuthManager;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import ru.terrakok.cicerone.Router;
 
 public class MenuFragment extends Fragment {
-
-    @Inject
-    FirebaseAuthManager mAuthManager;
-    @Inject
-    Router mRouter;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Nullable
     @Override
@@ -36,16 +20,5 @@ public class MenuFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
         ButterKnife.bind(this, view);
         return view;
-    }
-
-    @OnClick(R.id.playButton)
-    void clickPlayButton() {
-
-    }
-
-    @OnClick(R.id.outButton)
-    void clickOutButton() {
-        mAuthManager.signOut();
-        mRouter.newRootScreen(getString(R.string.fragment_login));
     }
 }
