@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.menu;
+package com.vpaveldm.wordgame.fragments.menu;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

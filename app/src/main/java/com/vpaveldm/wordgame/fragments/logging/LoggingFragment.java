@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.logging;
+package com.vpaveldm.wordgame.fragments.logging;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.vpaveldm.wordgame.R;
-import com.vpaveldm.wordgame.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.firebase.FirebaseAuthManager;
 import com.vpaveldm.wordgame.firebase.IFirebaseListener;
 

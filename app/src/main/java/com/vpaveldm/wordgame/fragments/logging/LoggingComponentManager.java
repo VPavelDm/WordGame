@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.logging;
+package com.vpaveldm.wordgame.fragments.logging;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
