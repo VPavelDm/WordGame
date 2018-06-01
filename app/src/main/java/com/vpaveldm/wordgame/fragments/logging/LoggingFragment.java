@@ -1,6 +1,7 @@
 package com.vpaveldm.wordgame.fragments.logging;
 
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.firebase.FirebaseAuthManager;
@@ -63,12 +65,11 @@ public class LoggingFragment extends Fragment {
 
             @Override
             public void failure() {
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
-                if (activity == null)
-                    return;
-                ErrorDialog noUserDialogFragment = new ErrorDialog();
-                noUserDialogFragment.prepareBundle(getString(R.string.label_registration_denied));
-                noUserDialogFragment.show(activity.getSupportFragmentManager(), null);
+                Toast.makeText(
+                        getContext(),
+                        getString(R.string.label_registration_denied),
+                        Toast.LENGTH_LONG
+                ).show();
             }
         });
     }
@@ -85,12 +86,10 @@ public class LoggingFragment extends Fragment {
 
             @Override
             public void failure() {
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
-                if (activity == null)
-                    return;
-                ErrorDialog noUserDialogFragment = new ErrorDialog();
-                noUserDialogFragment.prepareBundle(getString(R.string.label_no_user_found));
-                noUserDialogFragment.show(activity.getSupportFragmentManager(), null);
+                Toast.makeText(getContext(),
+                        getString(R.string.label_no_user_found),
+                        Toast.LENGTH_LONG
+                ).show();
             }
         });
     }
