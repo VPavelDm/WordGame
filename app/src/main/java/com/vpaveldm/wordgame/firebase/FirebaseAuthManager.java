@@ -19,6 +19,10 @@ public class FirebaseAuthManager {
     }
 
     public void signUp(String email, String password, final IFirebaseListener listener) {
+        if (isEmptyEmailOrPassword(email, password)) {
+            listener.failure();
+            return;
+        }
         Task<AuthResult> task = mAuth.createUserWithEmailAndPassword(email, password);
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -35,6 +39,10 @@ public class FirebaseAuthManager {
     }
 
     public void signIn(String email, String password, final IFirebaseListener listener) {
+        if (isEmptyEmailOrPassword(email, password)) {
+            listener.failure();
+            return;
+        }
         Task<AuthResult> task = mAuth.signInWithEmailAndPassword(email, password);
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -56,5 +64,9 @@ public class FirebaseAuthManager {
 
     public boolean isConnected() {
         return mAuth.getCurrentUser() != null;
+    }
+
+    private boolean isEmptyEmailOrPassword(String email, String password) {
+        return email.equals("") || password.equals("");
     }
 }
