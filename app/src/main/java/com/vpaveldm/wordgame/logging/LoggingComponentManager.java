@@ -13,7 +13,7 @@ public class LoggingComponentManager implements LifecycleObserver {
 
     private static LoggingComponent sLoggingComponent;
 
-    public LoggingComponentManager(LoggingFragment loggingFragment) {
+    LoggingComponentManager(LoggingFragment loggingFragment) {
         mLoggingFragment = loggingFragment;
     }
 
