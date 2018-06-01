@@ -13,13 +13,15 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.vpaveldm.wordgame.R;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class FirebaseAuthManager {
 
     private FirebaseAuth mAuth;
 
     @Inject
-    public FirebaseAuthManager(FirebaseAuth auth) {
+    FirebaseAuthManager(FirebaseAuth auth) {
         mAuth = auth;
     }
 

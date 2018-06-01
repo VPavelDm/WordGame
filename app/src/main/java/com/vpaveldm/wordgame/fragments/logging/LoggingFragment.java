@@ -45,8 +45,8 @@ public class LoggingFragment extends Fragment implements IFirebaseListener {
     private static final int RC_SIGN_IN = 1;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         getLifecycle().addObserver(new LoggingComponentManager(this));
     }
 

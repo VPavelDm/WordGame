@@ -18,10 +18,4 @@ public class FirebaseAuthModule {
         return FirebaseAuth.getInstance();
     }
 
-    @Provides
-    @Singleton
-    public FirebaseAuthManager provideFirebaseAuthManager(FirebaseAuth auth) {
-        return new FirebaseAuthManager(auth);
-    }
-
 }
