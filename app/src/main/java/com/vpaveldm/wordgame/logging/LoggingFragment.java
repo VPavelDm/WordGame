@@ -41,7 +41,7 @@ public class LoggingFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityComponentManager.getActivityComponent().inject(this);
+        getLifecycle().addObserver(new LoggingComponentManager(this));
     }
 
     @Nullable

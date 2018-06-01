@@ -1,9 +1,7 @@
 package com.vpaveldm.wordgame.dagger.module;
 
-import android.support.annotation.Nullable;
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.vpaveldm.wordgame.dagger.scope.FragmentScope;
 import com.vpaveldm.wordgame.firebase.FirebaseAuthManager;
 
 import javax.inject.Singleton;

@@ -11,6 +11,8 @@ import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.logging.LoggingFragment;
 import com.vpaveldm.wordgame.menu.MenuFragment;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 import ru.terrakok.cicerone.Cicerone;
@@ -20,6 +22,12 @@ import ru.terrakok.cicerone.android.SupportFragmentNavigator;
 
 @Module
 public class CiceroneModule {
+
+    private FragmentManager mManager;
+
+    public CiceroneModule(FragmentManager manager) {
+        mManager = manager;
+    }
 
     @Provides
     @ActivityScope
@@ -38,8 +46,8 @@ public class CiceroneModule {
 
     @Provides
     @ActivityScope
-    public Navigator provideNavigator(final Context context, FragmentManager manager) {
-        return new SupportFragmentNavigator(manager, R.id.fragmentContainer) {
+    public Navigator provideNavigator(@Named("Application") final Context context) {
+        return new SupportFragmentNavigator(mManager, R.id.fragmentContainer) {
             @Override
             protected Fragment createFragment(String screenKey, Object data) {
                 switch (screenKey) {

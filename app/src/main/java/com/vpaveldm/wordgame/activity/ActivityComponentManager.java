@@ -4,11 +4,12 @@ package com.vpaveldm.wordgame.activity;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.content.Context;
+import android.support.v4.app.FragmentManager;
 
 import com.vpaveldm.wordgame.Application;
 import com.vpaveldm.wordgame.dagger.component.ActivityComponent;
-import com.vpaveldm.wordgame.dagger.module.ActivityModule;
+import com.vpaveldm.wordgame.dagger.component.AppComponent;
+import com.vpaveldm.wordgame.dagger.module.CiceroneModule;
 
 import javax.inject.Inject;
 
@@ -16,13 +17,13 @@ import ru.terrakok.cicerone.Navigator;
 
 public class ActivityComponentManager implements LifecycleObserver {
 
-    private Context sContext;
+    private MainActivity mActivity;
 
     @Inject
     Navigator mNavigator;
 
-    ActivityComponentManager(Context sContext) {
-        this.sContext = sContext;
+    ActivityComponentManager(MainActivity activity) {
+        this.mActivity = activity;
     }
 
     private static ActivityComponent sActivityComponent;
@@ -30,15 +31,17 @@ public class ActivityComponentManager implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void initDagger() {
         if (sActivityComponent == null) {
-            ActivityModule module = new ActivityModule(sContext);
-            sActivityComponent = Application.getAppComponent().plusActivityComponent(module);
+            FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
+            CiceroneModule ciceroneModule = new CiceroneModule(fragmentManager);
+            AppComponent appComponent = Application.getAppComponent();
+            sActivityComponent = appComponent.plusActivityComponent(ciceroneModule);
         }
-        sActivityComponent.inject((MainActivity) sContext);
+        sActivityComponent.inject(mActivity);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     public void clearDagger() {
-        sContext = null;
+        mActivity = null;
         sActivityComponent = null;
     }
 
