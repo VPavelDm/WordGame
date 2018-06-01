@@ -6,8 +6,10 @@
     <string name="label_other_way_login">or login by</string>
     <string name="label_register">Register</string>
     <string name="label_forget_password">Forget Password</string>
-    <string name="label_no_user_found">The user with this E-mail and password was not found</string>
-    <string name="label_registration_denied">Registration failed</string>
+    <string name="error_no_user_found">The user with this E-mail and password was not found</string>
+    <string name="error_registration_denied">Registration failed</string>
+    <string name="error_incorrect_email_or_password">Email or password is empty</string>
+    <string name="error_google_connection">Connection to Google failed…</string>
     <string name="fragment_login">LOGIN_FRAGMENT</string>
     <string name="fragment_menu">MENU_FRAGMENT</string>
     <string name="unsupported_operation">%1$s is not supported operation</string>

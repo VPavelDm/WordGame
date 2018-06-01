@@ -2,6 +2,7 @@ package com.vpaveldm.wordgame.dagger.component;
 
 import com.vpaveldm.wordgame.activity.MainActivity;
 import com.vpaveldm.wordgame.dagger.module.CiceroneModule;
+import com.vpaveldm.wordgame.dagger.module.GoogleAuthModule;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 
 import dagger.Subcomponent;
@@ -11,5 +12,5 @@ import dagger.Subcomponent;
 public interface ActivityComponent {
     void inject(MainActivity activity);
 
-    LoggingComponent plus();
+    LoggingComponent plus(GoogleAuthModule module);
 }
