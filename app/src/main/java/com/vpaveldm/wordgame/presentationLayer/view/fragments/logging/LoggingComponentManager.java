@@ -1,17 +1,14 @@
-package com.vpaveldm.wordgame.fragments.logging;
+package com.vpaveldm.wordgame.presentationLayer.view.fragments.logging;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 
-import com.vpaveldm.wordgame.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.dagger.component.LoggingComponent;
+import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 
 public class LoggingComponentManager implements LifecycleObserver {
 
     private LoggingFragment mLoggingFragment;
-
-    private static LoggingComponent sLoggingComponent;
 
     LoggingComponentManager(LoggingFragment loggingFragment) {
         mLoggingFragment = loggingFragment;
@@ -19,15 +16,11 @@ public class LoggingComponentManager implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void initDagger() {
-        if (sLoggingComponent == null) {
-            sLoggingComponent = ActivityComponentManager.getActivityComponent().plus();
-        }
-        sLoggingComponent.inject(mLoggingFragment);
+        ActivityComponentManager.getActivityComponent().inject(mLoggingFragment);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     public void clearDagger() {
         mLoggingFragment = null;
-        sLoggingComponent = null;
     }
 }

@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame;
+package com.vpaveldm.wordgame.presentationLayer;
 
 
 import com.vpaveldm.wordgame.dagger.component.AppComponent;

@@ -10,6 +10,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    dataBinding {
+        enabled = true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -22,10 +25,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    //noinspection GradleDependency
-    implementation 'com.google.firebase:firebase-database:11.6.0'
-    //noinspection GradleDependency
-    implementation 'com.google.firebase:firebase-auth:11.6.0'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-auth:16.0.1'
     implementation 'com.google.dagger:dagger-android-support:2.11'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
@@ -36,6 +37,8 @@ dependencies {
     implementation 'ru.terrakok.cicerone:cicerone:1.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //Lifecycle with LiveData and ViewModel
+    implementation "android.arch.lifecycle:extensions:1.1.1"
 }
 
 

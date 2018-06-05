@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.activity;
+package com.vpaveldm.wordgame.presentationLayer.view.activity;
 
 
 import android.arch.lifecycle.Lifecycle;
@@ -6,7 +6,7 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v4.app.FragmentManager;
 
-import com.vpaveldm.wordgame.Application;
+import com.vpaveldm.wordgame.presentationLayer.Application;
 import com.vpaveldm.wordgame.dagger.component.ActivityComponent;
 import com.vpaveldm.wordgame.dagger.component.AppComponent;
 import com.vpaveldm.wordgame.dagger.module.CiceroneModule;

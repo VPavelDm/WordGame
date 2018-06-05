@@ -1,11 +1,11 @@
-package com.vpaveldm.wordgame.activity;
+package com.vpaveldm.wordgame.presentationLayer.view.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.vpaveldm.wordgame.R;
-import com.vpaveldm.wordgame.firebase.FirebaseAuthManager;
 
 import javax.inject.Inject;
 
@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     Router mRouter;
     @Inject
-    FirebaseAuthManager mAuthManager;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         FragmentManager manager = getSupportFragmentManager();
         if (manager.findFragmentById(R.id.fragmentContainer) == null) {
-            if (mAuthManager.isConnected()){
+            if (mAuth.getCurrentUser() != null) {
                 mRouter.replaceScreen(getString(R.string.fragment_menu));
             } else {
                 mRouter.replaceScreen(getString(R.string.fragment_login));
