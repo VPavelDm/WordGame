@@ -9,24 +9,23 @@ import com.vpaveldm.wordgame.domainLayer.interactors.LoggingInteractor;
 import com.vpaveldm.wordgame.presentationLayer.model.LoggingModelInPresentationLayer;
 import com.vpaveldm.wordgame.presentationLayer.transform.PresentationLayerTransformer;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.presentationLayer.view.fragments.logging.LoggingComponentManager;
 
 import javax.inject.Inject;
 
 public class LoggingViewModel extends ViewModel implements IErrorListener {
 
     @Inject
-    PresentationLayerTransformer mModelTransformer;
+    PresentationLayerTransformer mTransformer;
     @Inject
     LoggingInteractor mLoggingInteractor;
 
-    private MutableLiveData<Boolean> mModelLiveData;
+    private MutableLiveData<LiveDataMessage> mModelLiveData;
 
-    public void init(){
+    public void init() {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    public LiveData<Boolean> getModelLiveData() {
+    public LiveData<LiveDataMessage> getModelLiveData() {
         if (mModelLiveData == null) {
             mModelLiveData = new MutableLiveData<>();
         }
@@ -35,21 +34,25 @@ public class LoggingViewModel extends ViewModel implements IErrorListener {
 
     public void signIn(String email, String password) {
         LoggingModelInPresentationLayer model =
-                mModelTransformer.getLoggingModelInPresentationLayer(email, password);
+                mTransformer.getLoggingModelInPresentationLayer(email, password);
         mLoggingInteractor.signIn(model, this);
     }
 
     public void signUp(String email, String password) {
-
+        LoggingModelInPresentationLayer model =
+                mTransformer.getLoggingModelInPresentationLayer(email, password);
+        mLoggingInteractor.signUp(model, this);
     }
 
     @Override
     public void success() {
-        mModelLiveData.setValue(true);
+        LiveDataMessage dataMessage = new LiveDataMessage(true, null);
+        mModelLiveData.setValue(dataMessage);
     }
 
     @Override
-    public void failure() {
-        mModelLiveData.setValue(false);
+    public void failure(String message) {
+        LiveDataMessage dataMessage = new LiveDataMessage(false, message);
+        mModelLiveData.setValue(dataMessage);
     }
 }

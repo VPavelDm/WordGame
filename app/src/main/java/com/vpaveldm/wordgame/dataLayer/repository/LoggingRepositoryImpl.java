@@ -32,6 +32,11 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         LoggingModelInDataLayer dataModel = mTransformer.transform(model);
         String email = dataModel.getEmail();
         String password = dataModel.getPassword();
+        if (email.equals("") || password.equals("")){
+            listener.failure("Entry email or password field");
+            return;
+        }
+
         Task<AuthResult> task = mAuth.signInWithEmailAndPassword(email, password);
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -39,7 +44,44 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
                 if (task.isSuccessful()) {
                     listener.success();
                 } else {
-                    listener.failure();
+                    Exception exception = task.getException();
+                    String message;
+                    if (exception == null) {
+                        message = "Unknown error";
+                    } else {
+                        message = exception.getMessage();
+                    }
+                    listener.failure(message);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void signUp(LoggingModelInDomainLayer model, final IErrorListener listener) {
+        LoggingModelInDataLayer dataModel = mTransformer.transform(model);
+        String email = dataModel.getEmail();
+        String password = dataModel.getPassword();
+        if (email.equals("") || password.equals("")){
+            listener.failure("Entry email or password field");
+            return;
+        }
+
+        Task<AuthResult> task = mAuth.createUserWithEmailAndPassword(email, password);
+        task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    listener.success();
+                } else {
+                    Exception exception = task.getException();
+                    String message;
+                    if (exception == null) {
+                        message = "Unknown error";
+                    } else {
+                        message = exception.getMessage();
+                    }
+                    listener.failure(message);
                 }
             }
         });

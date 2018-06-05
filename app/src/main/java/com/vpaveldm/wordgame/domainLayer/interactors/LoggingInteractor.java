@@ -30,8 +30,23 @@ public class LoggingInteractor {
             }
 
             @Override
-            public void failure() {
-                listener.failure();
+            public void failure(String message) {
+                listener.failure(message);
+            }
+        });
+    }
+
+    public void signUp(LoggingModelInPresentationLayer model, final IErrorListener listener){
+        LoggingModelInDomainLayer domainModel = mTransformer.transform(model);
+        mRepository.signUp(domainModel, new IErrorListener() {
+            @Override
+            public void success() {
+                listener.success();
+            }
+
+            @Override
+            public void failure(String message) {
+                listener.failure(message);
             }
         });
     }

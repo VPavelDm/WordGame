@@ -2,5 +2,5 @@ package com.vpaveldm.wordgame.errors;
 
 public interface IErrorListener {
     void success();
-    void failure();
+    void failure(String message);
 }

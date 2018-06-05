@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.databinding.FragmentLoggingBinding;
+import com.vpaveldm.wordgame.presentationLayer.viewModel.LiveDataMessage;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.LoggingViewModel;
 
 import javax.inject.Inject;
@@ -26,7 +27,7 @@ import ru.terrakok.cicerone.Router;
  *
  * @author Pavel Vaitsikhouski
  */
-public class LoggingFragment extends Fragment implements Observer<Boolean> {
+public class LoggingFragment extends Fragment implements Observer<LiveDataMessage> {
 
     @Inject
     Router mRouter;
@@ -67,15 +68,15 @@ public class LoggingFragment extends Fragment implements Observer<Boolean> {
     }
 
     @Override
-    public void onChanged(@Nullable Boolean isSuccess) {
-        if (isSuccess == null) {
+    public void onChanged(@Nullable LiveDataMessage dataMessage) {
+        if (dataMessage == null) {
             return;
         }
-        if (isSuccess) {
+        if (dataMessage.isSuccess()) {
             mRouter.replaceScreen(getString(R.string.fragment_menu));
         } else {
             Toast.makeText(getContext(),
-                    getString(R.string.label_no_user_found),
+                    dataMessage.getMessage(),
                     Toast.LENGTH_LONG
             ).show();
         }
