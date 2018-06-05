@@ -2,6 +2,7 @@ package com.vpaveldm.wordgame.presentationLayer.view.fragments.logging;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,8 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import ru.terrakok.cicerone.Router;
 
 /**
@@ -29,17 +32,18 @@ import ru.terrakok.cicerone.Router;
  */
 public class LoggingFragment extends Fragment implements Observer<LiveDataMessage> {
 
+    public static final int RC_GOOGLE_LOGIN = 1;
     @Inject
     Router mRouter;
 
     private FragmentLoggingBinding mBinding;
     private LoggingViewModel loggingViewModel;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         loggingViewModel = ViewModelProviders.of(this).get(LoggingViewModel.class);
-        loggingViewModel.init();
         loggingViewModel.getModelLiveData().observe(this, this);
     }
 
@@ -57,14 +61,22 @@ public class LoggingFragment extends Fragment implements Observer<LiveDataMessag
     void clickRegisterButton() {
         String email = mBinding.emailET.getText().toString();
         String password = mBinding.passwordET.getText().toString();
-        loggingViewModel.signUp(email, password);
+        Disposable disposable = loggingViewModel.signUp(email, password);
+        mCompositeDisposable.add(disposable);
     }
 
     @OnClick(R.id.loginButton)
     void clickLoginButton() {
         String email = mBinding.emailET.getText().toString();
         String password = mBinding.passwordET.getText().toString();
-        loggingViewModel.signIn(email, password);
+        Disposable disposable = loggingViewModel.signIn(email, password);
+        mCompositeDisposable.add(disposable);
+    }
+
+    @OnClick(R.id.googleLoginButton)
+    void clickGoogleLoginButton() {
+        Intent intent = loggingViewModel.getIntentForGoogle();
+        startActivityForResult(intent, RC_GOOGLE_LOGIN);
     }
 
     @Override
@@ -72,6 +84,7 @@ public class LoggingFragment extends Fragment implements Observer<LiveDataMessag
         if (dataMessage == null) {
             return;
         }
+        mCompositeDisposable.clear();
         if (dataMessage.isSuccess()) {
             mRouter.replaceScreen(getString(R.string.fragment_menu));
         } else {
@@ -79,6 +92,18 @@ public class LoggingFragment extends Fragment implements Observer<LiveDataMessag
                     dataMessage.getMessage(),
                     Toast.LENGTH_LONG
             ).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case RC_GOOGLE_LOGIN: {
+
+                break;
+            }
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

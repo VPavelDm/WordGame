@@ -1,22 +1,17 @@
 package com.vpaveldm.wordgame.presentationLayer.model;
 
+import android.content.Intent;
+
 public class LoggingModelInPresentationLayer {
 
-    private boolean isSuccess;
     private String email;
     private String password;
+    private Intent data;
 
-    public LoggingModelInPresentationLayer(String email, String password) {
+    private LoggingModelInPresentationLayer(String email, String password, Intent data) {
         this.email = email;
         this.password = password;
-    }
-
-    public void setSuccess(boolean success) {
-        isSuccess = success;
-    }
-
-    public boolean isSuccess() {
-        return isSuccess;
+        this.data = data;
     }
 
     public String getEmail() {
@@ -25,5 +20,34 @@ public class LoggingModelInPresentationLayer {
 
     public String getPassword() {
         return password;
+    }
+
+    public Intent getData() {
+        return data;
+    }
+
+    public static class Builder {
+        private String email;
+        private String password;
+        private Intent data;
+
+        public Builder addEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder addPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder addData(Intent data) {
+            this.data = data;
+            return this;
+        }
+
+        public LoggingModelInPresentationLayer create() {
+            return new LoggingModelInPresentationLayer(email, password, data);
+        }
     }
 }

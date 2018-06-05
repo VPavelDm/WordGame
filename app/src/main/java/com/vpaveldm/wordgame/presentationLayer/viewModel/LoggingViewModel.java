@@ -3,8 +3,8 @@ package com.vpaveldm.wordgame.presentationLayer.viewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.Intent;
 
-import com.vpaveldm.wordgame.errors.IErrorListener;
 import com.vpaveldm.wordgame.domainLayer.interactors.LoggingInteractor;
 import com.vpaveldm.wordgame.presentationLayer.model.LoggingModelInPresentationLayer;
 import com.vpaveldm.wordgame.presentationLayer.transform.PresentationLayerTransformer;
@@ -12,47 +12,58 @@ import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentMa
 
 import javax.inject.Inject;
 
-public class LoggingViewModel extends ViewModel implements IErrorListener {
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+public class LoggingViewModel extends ViewModel {
 
     @Inject
     PresentationLayerTransformer mTransformer;
     @Inject
     LoggingInteractor mLoggingInteractor;
 
-    private MutableLiveData<LiveDataMessage> mModelLiveData;
-
-    public void init() {
-        ActivityComponentManager.getActivityComponent().inject(this);
-    }
+    private static MutableLiveData<LiveDataMessage> sLiveData;
 
     public LiveData<LiveDataMessage> getModelLiveData() {
-        if (mModelLiveData == null) {
-            mModelLiveData = new MutableLiveData<>();
+        ActivityComponentManager.getActivityComponent().inject(this);
+        if (sLiveData == null) {
+            sLiveData = new MutableLiveData<>();
         }
-        return mModelLiveData;
+        return sLiveData;
     }
 
-    public void signIn(String email, String password) {
+    public Disposable signIn(String email, String password) {
         LoggingModelInPresentationLayer model =
-                mTransformer.getLoggingModelInPresentationLayer(email, password);
-        mLoggingInteractor.signIn(model, this);
+                mTransformer.getLoggingModel(email, password);
+        Single<Boolean> subject = mLoggingInteractor.signIn(model);
+        return subject.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        item -> sLiveData.setValue(new LiveDataMessage(true, null)),
+                        throwable -> sLiveData.setValue(new LiveDataMessage(false, throwable.getMessage()))
+                );
     }
 
-    public void signUp(String email, String password) {
+    public Disposable signUp(String email, String password) {
         LoggingModelInPresentationLayer model =
-                mTransformer.getLoggingModelInPresentationLayer(email, password);
-        mLoggingInteractor.signUp(model, this);
+                mTransformer.getLoggingModel(email, password);
+        Single<Boolean> subject = mLoggingInteractor.signUp(model);
+        return subject.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        item -> sLiveData.setValue(new LiveDataMessage(true, null)),
+                        throwable -> sLiveData.setValue(new LiveDataMessage(false, throwable.getMessage()))
+                );
     }
 
-    @Override
-    public void success() {
-        LiveDataMessage dataMessage = new LiveDataMessage(true, null);
-        mModelLiveData.setValue(dataMessage);
+    public Intent getIntentForGoogle() {
+        LoggingModelInPresentationLayer model = mTransformer.getLoggingModel();
+        return null;
     }
 
-    @Override
-    public void failure(String message) {
-        LiveDataMessage dataMessage = new LiveDataMessage(false, message);
-        mModelLiveData.setValue(dataMessage);
+    public void signInByGoogle(Intent data) {
+
     }
 }

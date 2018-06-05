@@ -1,19 +1,17 @@
 package com.vpaveldm.wordgame.dataLayer.repository;
 
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
-import com.vpaveldm.wordgame.errors.IErrorListener;
 import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
 import com.vpaveldm.wordgame.dataLayer.model.LoggingModelInDataLayer;
 import com.vpaveldm.wordgame.dataLayer.transform.DataLayerTransformer;
 import com.vpaveldm.wordgame.domainLayer.model.LoggingModelInDomainLayer;
 
 import javax.inject.Inject;
+
+import io.reactivex.Single;
 
 @ActivityScope
 public class LoggingRepositoryImpl implements ILoggingRepository {
@@ -28,62 +26,58 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
     }
 
     @Override
-    public void signIn(final LoggingModelInDomainLayer model, final IErrorListener listener) {
-        LoggingModelInDataLayer dataModel = mTransformer.transform(model);
-        String email = dataModel.getEmail();
-        String password = dataModel.getPassword();
-        if (email.equals("") || password.equals("")){
-            listener.failure("Entry email or password field");
-            return;
-        }
-
-        Task<AuthResult> task = mAuth.signInWithEmailAndPassword(email, password);
-        task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    listener.success();
+    public Single<Boolean> signIn(LoggingModelInDomainLayer model) {
+        return Single.create(subscriber -> {
+            LoggingModelInDataLayer dataModel = mTransformer.transform(model);
+            String email = dataModel.getEmail();
+            String password = dataModel.getPassword();
+            if (email.equals("") || password.equals("")) {
+                subscriber.onError(new IllegalArgumentException("Entry email or password field"));
+                return;
+            }
+            Task<AuthResult> task = mAuth.signInWithEmailAndPassword(email, password);
+            task.addOnCompleteListener(authResultTask -> {
+                if (authResultTask.isSuccessful()) {
+                    subscriber.onSuccess(true);
                 } else {
-                    Exception exception = task.getException();
+                    Exception exception = authResultTask.getException();
                     String message;
                     if (exception == null) {
                         message = "Unknown error";
                     } else {
                         message = exception.getMessage();
                     }
-                    listener.failure(message);
+                    subscriber.onError(new IllegalArgumentException(message));
                 }
-            }
+            });
         });
     }
 
     @Override
-    public void signUp(LoggingModelInDomainLayer model, final IErrorListener listener) {
-        LoggingModelInDataLayer dataModel = mTransformer.transform(model);
-        String email = dataModel.getEmail();
-        String password = dataModel.getPassword();
-        if (email.equals("") || password.equals("")){
-            listener.failure("Entry email or password field");
-            return;
-        }
-
-        Task<AuthResult> task = mAuth.createUserWithEmailAndPassword(email, password);
-        task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    listener.success();
+    public Single<Boolean> signUp(LoggingModelInDomainLayer model) {
+        return Single.create(subscriber -> {
+            LoggingModelInDataLayer dataModel = mTransformer.transform(model);
+            String email = dataModel.getEmail();
+            String password = dataModel.getPassword();
+            if (email.equals("") || password.equals("")) {
+                subscriber.onError(new IllegalArgumentException("Entry email or password field"));
+                return;
+            }
+            Task<AuthResult> task = mAuth.createUserWithEmailAndPassword(email, password);
+            task.addOnCompleteListener(resultTask -> {
+                if (resultTask.isSuccessful()) {
+                    subscriber.onSuccess(true);
                 } else {
-                    Exception exception = task.getException();
+                    Exception exception = resultTask.getException();
                     String message;
                     if (exception == null) {
                         message = "Unknown error";
                     } else {
                         message = exception.getMessage();
                     }
-                    listener.failure(message);
+                    subscriber.onError(new IllegalArgumentException(message));
                 }
-            }
+            });
         });
     }
 }

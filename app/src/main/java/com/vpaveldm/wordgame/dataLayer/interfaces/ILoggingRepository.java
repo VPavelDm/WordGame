@@ -1,9 +1,10 @@
 package com.vpaveldm.wordgame.dataLayer.interfaces;
 
-import com.vpaveldm.wordgame.errors.IErrorListener;
 import com.vpaveldm.wordgame.domainLayer.model.LoggingModelInDomainLayer;
 
+import io.reactivex.Single;
+
 public interface ILoggingRepository {
-    void signIn(LoggingModelInDomainLayer model, IErrorListener listener);
-    void signUp(LoggingModelInDomainLayer model, IErrorListener listener);
+    Single<Boolean> signIn(LoggingModelInDomainLayer model);
+    Single<Boolean> signUp(LoggingModelInDomainLayer model);
 }

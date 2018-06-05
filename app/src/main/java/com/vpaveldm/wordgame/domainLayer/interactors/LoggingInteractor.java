@@ -1,13 +1,14 @@
 package com.vpaveldm.wordgame.domainLayer.interactors;
 
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
-import com.vpaveldm.wordgame.errors.IErrorListener;
 import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
 import com.vpaveldm.wordgame.domainLayer.model.LoggingModelInDomainLayer;
 import com.vpaveldm.wordgame.domainLayer.transform.DomainLayerTransformer;
 import com.vpaveldm.wordgame.presentationLayer.model.LoggingModelInPresentationLayer;
 
 import javax.inject.Inject;
+
+import io.reactivex.Single;
 
 @ActivityScope
 public class LoggingInteractor {
@@ -21,33 +22,18 @@ public class LoggingInteractor {
         mRepository = repository;
     }
 
-    public void signIn(final LoggingModelInPresentationLayer model, final IErrorListener listener) {
+    public Single<Boolean> signIn(LoggingModelInPresentationLayer model) {
         LoggingModelInDomainLayer domainModel = mTransformer.transform(model);
-        mRepository.signIn(domainModel, new IErrorListener() {
-            @Override
-            public void success() {
-                listener.success();
-            }
-
-            @Override
-            public void failure(String message) {
-                listener.failure(message);
-            }
-        });
+        return mRepository.signIn(domainModel);
     }
 
-    public void signUp(LoggingModelInPresentationLayer model, final IErrorListener listener){
+    public Single<Boolean> signUp(LoggingModelInPresentationLayer model) {
         LoggingModelInDomainLayer domainModel = mTransformer.transform(model);
-        mRepository.signUp(domainModel, new IErrorListener() {
-            @Override
-            public void success() {
-                listener.success();
-            }
+        return mRepository.signUp(domainModel);
+    }
 
-            @Override
-            public void failure(String message) {
-                listener.failure(message);
-            }
-        });
+    public void getGoogleIntent() {
+
+
     }
 }
