@@ -6,6 +6,7 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v4.app.FragmentManager;
 
+import com.vpaveldm.wordgame.dagger.module.GoogleAuthModule;
 import com.vpaveldm.wordgame.presentationLayer.Application;
 import com.vpaveldm.wordgame.dagger.component.ActivityComponent;
 import com.vpaveldm.wordgame.dagger.component.AppComponent;
@@ -33,8 +34,9 @@ public class ActivityComponentManager implements LifecycleObserver {
         if (sActivityComponent == null) {
             FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
             CiceroneModule ciceroneModule = new CiceroneModule(fragmentManager);
+            GoogleAuthModule authModule = new GoogleAuthModule(mActivity);
             AppComponent appComponent = Application.getAppComponent();
-            sActivityComponent = appComponent.plusActivityComponent(ciceroneModule);
+            sActivityComponent = appComponent.plusActivityComponent(ciceroneModule, authModule);
         }
         sActivityComponent.inject(mActivity);
     }

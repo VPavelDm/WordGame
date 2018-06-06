@@ -1,6 +1,5 @@
 package com.vpaveldm.wordgame.presentationLayer.view.fragments.logging;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.databinding.FragmentLoggingBinding;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.LiveDataMessage;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.LoggingViewModel;
 
 import javax.inject.Inject;
@@ -30,7 +28,7 @@ import ru.terrakok.cicerone.Router;
  *
  * @author Pavel Vaitsikhouski
  */
-public class LoggingFragment extends Fragment implements Observer<LiveDataMessage> {
+public class LoggingFragment extends Fragment {
 
     public static final int RC_GOOGLE_LOGIN = 1;
     @Inject
@@ -44,7 +42,24 @@ public class LoggingFragment extends Fragment implements Observer<LiveDataMessag
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         loggingViewModel = ViewModelProviders.of(this).get(LoggingViewModel.class);
-        loggingViewModel.getModelLiveData().observe(this, this);
+        loggingViewModel.subscribeOnMessageLiveData(this, dataMessage -> {
+            if (dataMessage == null) {
+                return;
+            }
+            mCompositeDisposable.clear();
+            if (dataMessage.isSuccess()) {
+                mRouter.replaceScreen(getString(R.string.fragment_menu));
+            } else {
+                Toast.makeText(getContext(),
+                        dataMessage.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+        loggingViewModel.subscribeOnIntentLiveData(this, intent -> {
+            mCompositeDisposable.clear();
+            startActivityForResult(intent, RC_GOOGLE_LOGIN);
+        });
     }
 
     @Nullable
@@ -75,31 +90,14 @@ public class LoggingFragment extends Fragment implements Observer<LiveDataMessag
 
     @OnClick(R.id.googleLoginButton)
     void clickGoogleLoginButton() {
-        Intent intent = loggingViewModel.getIntentForGoogle();
-        startActivityForResult(intent, RC_GOOGLE_LOGIN);
-    }
-
-    @Override
-    public void onChanged(@Nullable LiveDataMessage dataMessage) {
-        if (dataMessage == null) {
-            return;
-        }
-        mCompositeDisposable.clear();
-        if (dataMessage.isSuccess()) {
-            mRouter.replaceScreen(getString(R.string.fragment_menu));
-        } else {
-            Toast.makeText(getContext(),
-                    dataMessage.getMessage(),
-                    Toast.LENGTH_LONG
-            ).show();
-        }
+        mCompositeDisposable.add(loggingViewModel.getIntentForGoogle());
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case RC_GOOGLE_LOGIN: {
-
+                mCompositeDisposable.add(loggingViewModel.signInByGoogle(data));
                 break;
             }
             default:

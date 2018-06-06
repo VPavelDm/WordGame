@@ -2,6 +2,7 @@ package com.vpaveldm.wordgame.domainLayer.interactors;
 
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
+import com.vpaveldm.wordgame.dataLayer.model.LoggingModelInDataLayer;
 import com.vpaveldm.wordgame.domainLayer.model.LoggingModelInDomainLayer;
 import com.vpaveldm.wordgame.domainLayer.transform.DomainLayerTransformer;
 import com.vpaveldm.wordgame.presentationLayer.model.LoggingModelInPresentationLayer;
@@ -32,8 +33,10 @@ public class LoggingInteractor {
         return mRepository.signUp(domainModel);
     }
 
-    public void getGoogleIntent() {
-
-
+    public Single<LoggingModelInDomainLayer> getGoogleIntent() {
+        return Single.create(subscriber -> {
+            LoggingModelInDataLayer modelInDataLayer = mRepository.getGoogleIntent();
+            subscriber.onSuccess(mTransformer.transform(modelInDataLayer));
+        });
     }
 }

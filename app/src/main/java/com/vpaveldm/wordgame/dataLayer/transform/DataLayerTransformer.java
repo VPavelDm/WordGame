@@ -14,6 +14,10 @@ public class DataLayerTransformer {
     }
 
     public LoggingModelInDataLayer transform(LoggingModelInDomainLayer model){
-        return new LoggingModelInDataLayer(model.getEmail(), model.getPassword());
+        LoggingModelInDataLayer.Builder builder = new LoggingModelInDataLayer.Builder();
+        builder.addData(model.getData())
+                .addEmail(model.getEmail())
+                .addPassword(model.getPassword());
+        return builder.create();
     }
 }
