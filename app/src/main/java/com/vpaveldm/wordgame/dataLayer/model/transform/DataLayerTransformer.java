@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.dataLayer.transform;
+package com.vpaveldm.wordgame.dataLayer.model.transform;
 
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.model.LoggingModelInDataLayer;

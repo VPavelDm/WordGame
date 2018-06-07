@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.transform;
+package com.vpaveldm.wordgame.presentationLayer.model.transform;
 
 import android.content.Intent;
 

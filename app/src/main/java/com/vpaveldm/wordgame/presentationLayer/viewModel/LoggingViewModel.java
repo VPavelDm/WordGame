@@ -1,6 +1,5 @@
 package com.vpaveldm.wordgame.presentationLayer.viewModel;
 
-import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
@@ -8,15 +7,13 @@ import android.arch.lifecycle.ViewModel;
 import android.content.Intent;
 
 import com.vpaveldm.wordgame.domainLayer.interactors.LoggingInteractor;
-import com.vpaveldm.wordgame.domainLayer.model.LoggingModelInDomainLayer;
 import com.vpaveldm.wordgame.presentationLayer.model.LoggingModelInPresentationLayer;
-import com.vpaveldm.wordgame.presentationLayer.transform.PresentationLayerTransformer;
+import com.vpaveldm.wordgame.presentationLayer.model.transform.PresentationLayerTransformer;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 
 import javax.inject.Inject;
 
 import io.reactivex.Single;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;

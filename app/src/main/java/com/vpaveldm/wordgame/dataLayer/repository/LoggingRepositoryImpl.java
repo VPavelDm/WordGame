@@ -1,14 +1,12 @@
 package com.vpaveldm.wordgame.dataLayer.repository;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -17,7 +15,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
 import com.vpaveldm.wordgame.dataLayer.model.LoggingModelInDataLayer;
-import com.vpaveldm.wordgame.dataLayer.transform.DataLayerTransformer;
+import com.vpaveldm.wordgame.dataLayer.model.transform.DataLayerTransformer;
 import com.vpaveldm.wordgame.domainLayer.model.LoggingModelInDomainLayer;
 
 import java.net.ConnectException;
@@ -26,7 +24,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
 
 @ActivityScope
 public class LoggingRepositoryImpl implements ILoggingRepository {
