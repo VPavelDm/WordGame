@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.databinding.FragmentLoggingBinding;
+import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.LoggingViewModel;
 
 import javax.inject.Inject;
@@ -37,6 +38,12 @@ public class LoggingFragment extends Fragment {
     private FragmentLoggingBinding mBinding;
     private LoggingViewModel loggingViewModel;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ActivityComponentManager.getActivityComponent().inject(this);
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -65,7 +72,6 @@ public class LoggingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getLifecycle().addObserver(new LoggingComponentManager(this));
         mBinding = FragmentLoggingBinding.inflate(inflater, container, false);
         View view = mBinding.getRoot();
         ButterKnife.bind(this, view);
