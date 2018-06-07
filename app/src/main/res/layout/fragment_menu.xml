@@ -22,12 +22,12 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/label_rating"
-            app:layout_constraintBottom_toTopOf="@+id/outButton"
+            app:layout_constraintBottom_toTopOf="@+id/logOutButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <Button
-            android:id="@+id/outButton"
+            android:id="@+id/logOutButton"
             style="@android:style/Widget.Holo.Button.Small"
             android:layout_width="150dp"
             android:layout_height="wrap_content"

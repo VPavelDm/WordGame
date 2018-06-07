@@ -76,16 +76,14 @@ public class LoggingFragment extends Fragment {
     void clickRegisterButton() {
         String email = mBinding.emailET.getText().toString();
         String password = mBinding.passwordET.getText().toString();
-        Disposable disposable = loggingViewModel.signUp(email, password);
-        mCompositeDisposable.add(disposable);
+        loggingViewModel.signUp(email, password);
     }
 
     @OnClick(R.id.loginButton)
     void clickLoginButton() {
         String email = mBinding.emailET.getText().toString();
         String password = mBinding.passwordET.getText().toString();
-        Disposable disposable = loggingViewModel.signIn(email, password);
-        mCompositeDisposable.add(disposable);
+        loggingViewModel.signIn(email, password);
     }
 
     @OnClick(R.id.googleLoginButton)
@@ -97,7 +95,7 @@ public class LoggingFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case RC_GOOGLE_LOGIN: {
-                mCompositeDisposable.add(loggingViewModel.signInByGoogle(data));
+                loggingViewModel.signInByGoogle(data);
                 break;
             }
             default:

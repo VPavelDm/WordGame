@@ -5,10 +5,11 @@ import android.content.Intent;
 import com.vpaveldm.wordgame.dataLayer.model.LoggingModelInDataLayer;
 import com.vpaveldm.wordgame.domainLayer.model.LoggingModelInDomainLayer;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public interface ILoggingRepository {
-    Single<Boolean> signIn(LoggingModelInDomainLayer model);
-    Single<Boolean> signUp(LoggingModelInDomainLayer model);
+    Completable signIn(LoggingModelInDomainLayer model);
+    Completable signUp(LoggingModelInDomainLayer model);
     LoggingModelInDataLayer getGoogleIntent();
 }

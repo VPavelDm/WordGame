@@ -9,6 +9,7 @@ import com.vpaveldm.wordgame.presentationLayer.model.LoggingModelInPresentationL
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 @ActivityScope
@@ -23,12 +24,12 @@ public class LoggingInteractor {
         mRepository = repository;
     }
 
-    public Single<Boolean> signIn(LoggingModelInPresentationLayer model) {
+    public Completable signIn(LoggingModelInPresentationLayer model) {
         LoggingModelInDomainLayer domainModel = mTransformer.transform(model);
         return mRepository.signIn(domainModel);
     }
 
-    public Single<Boolean> signUp(LoggingModelInPresentationLayer model) {
+    public Completable signUp(LoggingModelInPresentationLayer model) {
         LoggingModelInDomainLayer domainModel = mTransformer.transform(model);
         return mRepository.signUp(domainModel);
     }

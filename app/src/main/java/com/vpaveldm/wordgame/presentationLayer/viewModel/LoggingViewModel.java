@@ -13,6 +13,8 @@ import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentMa
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -48,30 +50,54 @@ public class LoggingViewModel extends ViewModel {
         }
     }
 
-    public Disposable signIn(String email, String password) {
+    public void signIn(String email, String password) {
         LoggingModelInPresentationLayer.Builder builder = new LoggingModelInPresentationLayer.Builder();
         builder.addEmail(email)
                 .addPassword(password);
-        Single<Boolean> subject = mLoggingInteractor.signIn(builder.create());
-        return subject.subscribeOn(Schedulers.io())
+        Completable subject = mLoggingInteractor.signIn(builder.create());
+        subject.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        item -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
-                        throwable -> mMessageLiveData.setValue(new LiveDataMessage(false, throwable.getMessage()))
-                );
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mMessageLiveData.setValue(new LiveDataMessage(true, null));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()));
+                    }
+                });
     }
 
-    public Disposable signUp(String email, String password) {
+    public void signUp(String email, String password) {
         LoggingModelInPresentationLayer.Builder builder = new LoggingModelInPresentationLayer.Builder();
         builder.addEmail(email)
                 .addPassword(password);
-        Single<Boolean> subject = mLoggingInteractor.signUp(builder.create());
-        return subject.subscribeOn(Schedulers.io())
+        Completable subject = mLoggingInteractor.signUp(builder.create());
+        subject.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        item -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
-                        throwable -> mMessageLiveData.setValue(new LiveDataMessage(false, throwable.getMessage()))
-                );
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mMessageLiveData.setValue(new LiveDataMessage(true, null));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()));
+                    }
+                });
     }
 
     public Disposable getIntentForGoogle() {
@@ -79,15 +105,27 @@ public class LoggingViewModel extends ViewModel {
                 subscribe(item -> mIntentLiveData.setValue(mTransformer.transform(item).getData()));
     }
 
-    public Disposable signInByGoogle(Intent data) {
+    public void signInByGoogle(Intent data) {
         LoggingModelInPresentationLayer.Builder builder = new LoggingModelInPresentationLayer.Builder();
         builder.addData(data);
-        Single<Boolean> subject = mLoggingInteractor.signIn(builder.create());
-        return subject.subscribeOn(Schedulers.io())
+        Completable subject = mLoggingInteractor.signIn(builder.create());
+        subject.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        item -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
-                        throwable -> mMessageLiveData.setValue(new LiveDataMessage(false, throwable.getMessage()))
-                );
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mMessageLiveData.setValue(new LiveDataMessage(true, null));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()));
+                    }
+                });
     }
 }

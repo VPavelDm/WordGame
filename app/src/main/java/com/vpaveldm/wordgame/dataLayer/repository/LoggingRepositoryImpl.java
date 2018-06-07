@@ -22,6 +22,8 @@ import java.net.ConnectException;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 
@@ -40,8 +42,8 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
     }
 
     @Override
-    public Single<Boolean> signIn(LoggingModelInDomainLayer model) {
-        return Single.create(subscriber -> {
+    public Completable signIn(LoggingModelInDomainLayer model) {
+        return Completable.create(subscriber -> {
             LoggingModelInDataLayer dataModel = mTransformer.transform(model);
             if (dataModel.getEmail() != null && dataModel.getPassword() != null) {
                 signInByEmailAndPassword(subscriber, dataModel);
@@ -52,30 +54,10 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
     }
 
     @Override
-    public Single<Boolean> signUp(LoggingModelInDomainLayer model) {
-        return Single.create(subscriber -> {
+    public Completable signUp(LoggingModelInDomainLayer model) {
+        return Completable.create(subscriber -> {
             LoggingModelInDataLayer dataModel = mTransformer.transform(model);
-            String email = dataModel.getEmail();
-            String password = dataModel.getPassword();
-            if (email.equals("") || password.equals("")) {
-                subscriber.onError(new IllegalArgumentException("Entry email or password field"));
-                return;
-            }
-            Task<AuthResult> task = mAuth.createUserWithEmailAndPassword(email, password);
-            task.addOnCompleteListener(resultTask -> {
-                if (resultTask.isSuccessful()) {
-                    subscriber.onSuccess(true);
-                } else {
-                    Exception exception = resultTask.getException();
-                    String message;
-                    if (exception == null) {
-                        message = "Unknown error";
-                    } else {
-                        message = exception.getMessage();
-                    }
-                    subscriber.onError(new IllegalArgumentException(message));
-                }
-            });
+            signUpByEmailAndPassword(subscriber, dataModel);
         });
     }
 
@@ -86,7 +68,7 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         return builder.addData(intent).create();
     }
 
-    private void signInByEmailAndPassword(SingleEmitter<Boolean> subscriber, LoggingModelInDataLayer model) {
+    private void signInByEmailAndPassword(CompletableEmitter subscriber, LoggingModelInDataLayer model) {
         String email = model.getEmail();
         String password = model.getPassword();
         if (email.equals("") || password.equals("")) {
@@ -96,7 +78,7 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         Task<AuthResult> task = mAuth.signInWithEmailAndPassword(email, password);
         task.addOnCompleteListener(authResultTask -> {
             if (authResultTask.isSuccessful()) {
-                subscriber.onSuccess(true);
+                subscriber.onComplete();
             } else {
                 Exception exception = authResultTask.getException();
                 String message;
@@ -110,7 +92,7 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         });
     }
 
-    private void signInByGoogleIntent(SingleEmitter<Boolean> subscriber, LoggingModelInDataLayer model) {
+    private void signInByGoogleIntent(CompletableEmitter subscriber, LoggingModelInDataLayer model) {
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(model.getData());
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -118,7 +100,7 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
             mAuth.signInWithCredential(credential)
                     .addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
-                            subscriber.onSuccess(true);
+                            subscriber.onComplete();
                         } else {
                             Exception exception = task1.getException();
                             if (exception == null) {
@@ -131,5 +113,29 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         } catch (ApiException e) {
             subscriber.onError(new ConnectException(e.getMessage()));
         }
+    }
+
+    private void signUpByEmailAndPassword(CompletableEmitter subscriber, LoggingModelInDataLayer model) {
+        String email = model.getEmail();
+        String password = model.getPassword();
+        if (email.equals("") || password.equals("")) {
+            subscriber.onError(new IllegalArgumentException("Entry email or password field"));
+            return;
+        }
+        Task<AuthResult> task = mAuth.createUserWithEmailAndPassword(email, password);
+        task.addOnCompleteListener(resultTask -> {
+            if (resultTask.isSuccessful()) {
+                subscriber.onComplete();
+            } else {
+                Exception exception = resultTask.getException();
+                String message;
+                if (exception == null) {
+                    message = "Unknown error";
+                } else {
+                    message = exception.getMessage();
+                }
+                subscriber.onError(new IllegalArgumentException(message));
+            }
+        });
     }
 }
