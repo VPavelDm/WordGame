@@ -1,7 +1,6 @@
 package com.vpaveldm.wordgame.dataLayer.repository;
 
 import android.content.Intent;
-import android.util.Log;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -18,13 +17,13 @@ import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
 import com.vpaveldm.wordgame.dataLayer.model.LoggingModel;
 
 import java.net.ConnectException;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import io.reactivex.subjects.BehaviorSubject;
 
 @ActivityScope
@@ -51,8 +50,10 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
     }
 
     @Override
-    public Completable signUp(LoggingModel model) {
-        return Completable.create(subscriber -> signUpByEmailAndPassword(subscriber, model));
+    public Observable<Boolean> signUp(LoggingModel model) {
+        BehaviorSubject<Boolean> subject = BehaviorSubject.createDefault(false);
+        signUpByEmailAndPassword(subject, model);
+        return subject;
     }
 
     @Override
@@ -111,17 +112,18 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         }
     }
 
-    private void signUpByEmailAndPassword(CompletableEmitter subscriber, LoggingModel model) {
+    private void signUpByEmailAndPassword(BehaviorSubject<Boolean> subject, LoggingModel model) {
         String email = model.getEmail();
         String password = model.getPassword();
         if (email.equals("") || password.equals("")) {
-            subscriber.onError(new IllegalArgumentException("Entry email or password field"));
+            subject.onError(new IllegalArgumentException("Entry email or password field"));
             return;
         }
         Task<AuthResult> task = mAuth.createUserWithEmailAndPassword(email, password);
         task.addOnCompleteListener(resultTask -> {
             if (resultTask.isSuccessful()) {
-                subscriber.onComplete();
+                subject.onNext(true);
+                subject.onComplete();
             } else {
                 Exception exception = resultTask.getException();
                 String message;
@@ -130,7 +132,7 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
                 } else {
                     message = exception.getMessage();
                 }
-                subscriber.onError(new IllegalArgumentException(message));
+                subject.onError(new IllegalArgumentException(message));
             }
         });
     }

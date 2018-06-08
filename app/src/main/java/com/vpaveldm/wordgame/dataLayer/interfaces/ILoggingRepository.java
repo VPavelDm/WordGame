@@ -7,6 +7,6 @@ import io.reactivex.Observable;
 
 public interface ILoggingRepository {
     Observable<Boolean> signIn(LoggingModel model);
-    Completable signUp(LoggingModel model);
+    Observable<Boolean> signUp(LoggingModel model);
     LoggingModel getGoogleIntent();
 }

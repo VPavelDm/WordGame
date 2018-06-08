@@ -66,11 +66,12 @@ public class LoggingViewModel extends ViewModel {
         LoggingModel.Builder builder = new LoggingModel.Builder();
         builder.addEmail(email)
                 .addPassword(password);
-        Completable subject = mLoggingInteractor.signUp(builder.create());
+        Observable<Boolean> subject = mLoggingInteractor.signUp(builder.create());
         subject.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .filter(isConnected -> isConnected)
                 .subscribe(
-                        () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
+                        isConnected -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
                         e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
                 );
     }

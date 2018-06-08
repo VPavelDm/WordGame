@@ -24,7 +24,7 @@ public class LoggingInteractor {
         return mRepository.signIn(model);
     }
 
-    public Completable signUp(LoggingModel model) {
+    public Observable<Boolean> signUp(LoggingModel model) {
         return mRepository.signUp(model);
     }
 
