@@ -14,10 +14,8 @@ import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentMa
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 public class LoggingViewModel extends ViewModel {
@@ -48,29 +46,19 @@ public class LoggingViewModel extends ViewModel {
         }
     }
 
+    @SuppressLint("CheckResult")
     public void signIn(String email, String password) {
         LoggingModel.Builder builder = new LoggingModel.Builder();
         builder.addEmail(email)
                 .addPassword(password);
-        Completable subject = mLoggingInteractor.signIn(builder.create());
+        Observable<Boolean> subject = mLoggingInteractor.signIn(builder.create());
         subject.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CompletableObserver() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        mMessageLiveData.setValue(new LiveDataMessage(true, null));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()));
-                    }
-                });
+                .filter(isConnected -> isConnected)
+                .subscribe(
+                        isConnected -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
+                        e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
+                );
     }
 
     @SuppressLint("CheckResult")
@@ -97,11 +85,12 @@ public class LoggingViewModel extends ViewModel {
     public void signInByGoogle(Intent data) {
         LoggingModel.Builder builder = new LoggingModel.Builder();
         builder.addData(data);
-        Completable subject = mLoggingInteractor.signIn(builder.create());
+        Observable<Boolean> subject = mLoggingInteractor.signIn(builder.create());
         subject.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .filter(isConnected -> isConnected)
                 .subscribe(
-                        () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
+                        isConnected -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
                         e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
                 );
     }

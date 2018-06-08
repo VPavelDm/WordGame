@@ -1,6 +1,7 @@
 package com.vpaveldm.wordgame.dataLayer.repository;
 
 import android.content.Intent;
+import android.util.Log;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -17,11 +18,14 @@ import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
 import com.vpaveldm.wordgame.dataLayer.model.LoggingModel;
 
 import java.net.ConnectException;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 
 @ActivityScope
 public class LoggingRepositoryImpl implements ILoggingRepository {
@@ -36,14 +40,14 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
     }
 
     @Override
-    public Completable signIn(LoggingModel model) {
-        return Completable.create(subscriber -> {
-            if (model.getEmail() != null && model.getPassword() != null) {
-                signInByEmailAndPassword(subscriber, model);
-            } else if (model.getData() != null) {
-                signInByGoogleIntent(subscriber, model);
-            }
-        });
+    public Observable<Boolean> signIn(LoggingModel model) {
+        BehaviorSubject<Boolean> subject = BehaviorSubject.createDefault(false);
+        if (model.getEmail() != null && model.getPassword() != null) {
+            signInByEmailAndPassword(subject, model);
+        } else if (model.getData() != null) {
+            signInByGoogleIntent(subject, model);
+        }
+        return subject;
     }
 
     @Override
@@ -58,17 +62,18 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         return builder.addData(intent).create();
     }
 
-    private void signInByEmailAndPassword(CompletableEmitter subscriber, LoggingModel model) {
+    private void signInByEmailAndPassword(BehaviorSubject<Boolean> subject, LoggingModel model) {
         String email = model.getEmail();
         String password = model.getPassword();
         if (email.equals("") || password.equals("")) {
-            subscriber.onError(new IllegalArgumentException("Entry email or password field"));
+            subject.onError(new IllegalArgumentException("Entry email or password field"));
             return;
         }
         Task<AuthResult> task = mAuth.signInWithEmailAndPassword(email, password);
         task.addOnCompleteListener(authResultTask -> {
             if (authResultTask.isSuccessful()) {
-                subscriber.onComplete();
+                subject.onNext(true);
+                subject.onComplete();
             } else {
                 Exception exception = authResultTask.getException();
                 String message;
@@ -77,12 +82,12 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
                 } else {
                     message = exception.getMessage();
                 }
-                subscriber.onError(new IllegalArgumentException(message));
+                subject.onError(new IllegalArgumentException(message));
             }
         });
     }
 
-    private void signInByGoogleIntent(CompletableEmitter subscriber, LoggingModel model) {
+    private void signInByGoogleIntent(BehaviorSubject<Boolean> subject, LoggingModel model) {
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(model.getData());
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -90,18 +95,19 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
             mAuth.signInWithCredential(credential)
                     .addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
-                            subscriber.onComplete();
+                            subject.onNext(true);
+                            subject.onComplete();
                         } else {
                             Exception exception = task1.getException();
                             if (exception == null) {
-                                subscriber.onError(new ConnectException("Connection error"));
+                                subject.onError(new ConnectException("Connection error"));
                             } else {
-                                subscriber.onError(new ConnectException(exception.getMessage()));
+                                subject.onError(new ConnectException(exception.getMessage()));
                             }
                         }
                     });
         } catch (ApiException e) {
-            subscriber.onError(new ConnectException(e.getMessage()));
+            subject.onError(new ConnectException(e.getMessage()));
         }
     }
 

@@ -7,6 +7,7 @@ import com.vpaveldm.wordgame.dataLayer.model.LoggingModel;
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 @ActivityScope
@@ -19,7 +20,7 @@ public class LoggingInteractor {
         mRepository = repository;
     }
 
-    public Completable signIn(LoggingModel model) {
+    public Observable<Boolean> signIn(LoggingModel model) {
         return mRepository.signIn(model);
     }
 
