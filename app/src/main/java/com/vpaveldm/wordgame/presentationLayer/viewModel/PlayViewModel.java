@@ -6,9 +6,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 
+import com.vpaveldm.wordgame.dataLayer.model.PlayModel;
 import com.vpaveldm.wordgame.domainLayer.interactors.PlayInteractor;
-import com.vpaveldm.wordgame.presentationLayer.model.play.PlayModelInPresentationLayer;
-import com.vpaveldm.wordgame.presentationLayer.model.transform.PresentationLayerTransformer;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 
 import java.util.List;
@@ -16,19 +15,18 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class PlayViewModel extends ViewModel {
-    @Inject
-    PresentationLayerTransformer mTransformer;
+
     @Inject
     PlayInteractor mPlayInteractor;
 
-    private MutableLiveData<List<PlayModelInPresentationLayer>> mDeckLiveData;
+    private MutableLiveData<List<PlayModel>> mDeckLiveData;
 
     public PlayViewModel() {
         super();
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    public void subscribeOnDeckLiveData(LifecycleOwner owner, Observer<List<PlayModelInPresentationLayer>> listener) {
+    public void subscribeOnDeckLiveData(LifecycleOwner owner, Observer<List<PlayModel>> listener) {
         if (mDeckLiveData == null) {
             mDeckLiveData = new MutableLiveData<>();
         }
@@ -38,6 +36,6 @@ public class PlayViewModel extends ViewModel {
     @SuppressLint("CheckResult")
     public void getDecks() {
         mPlayInteractor.getDecks()
-                .subscribe(decks -> mDeckLiveData.setValue(mTransformer.transform(decks)));
+                .subscribe(decks -> mDeckLiveData.setValue(decks));
     }
 }

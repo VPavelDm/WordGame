@@ -19,6 +19,7 @@ public class Application extends android.app.Application {
                 .build();
     }
 
+
     public static AppComponent getAppComponent() {
         return sAppComponent;
     }
