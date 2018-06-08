@@ -1,14 +1,13 @@
-package com.vpaveldm.wordgame.presentationLayer.model.logging;
+package com.vpaveldm.wordgame.dataLayer.model;
 
 import android.content.Intent;
 
-public class LoggingModelInPresentationLayer {
-
+public class LoggingModel {
     private String email;
     private String password;
     private Intent data;
 
-    private LoggingModelInPresentationLayer(String email, String password, Intent data) {
+    private LoggingModel(String email, String password, Intent data) {
         this.email = email;
         this.password = password;
         this.data = data;
@@ -31,23 +30,23 @@ public class LoggingModelInPresentationLayer {
         private String password;
         private Intent data;
 
-        public Builder addEmail(String email) {
+        public LoggingModel.Builder addEmail(String email) {
             this.email = email;
             return this;
         }
 
-        public Builder addPassword(String password) {
+        public LoggingModel.Builder addPassword(String password) {
             this.password = password;
             return this;
         }
 
-        public Builder addData(Intent data) {
+        public LoggingModel.Builder addData(Intent data) {
             this.data = data;
             return this;
         }
 
-        public LoggingModelInPresentationLayer create() {
-            return new LoggingModelInPresentationLayer(email, password, data);
+        public LoggingModel create() {
+            return new LoggingModel(email, password, data);
         }
     }
 }

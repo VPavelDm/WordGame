@@ -37,7 +37,6 @@ public class LoggingFragment extends Fragment {
 
     private FragmentLoggingBinding mBinding;
     private LoggingViewModel loggingViewModel;
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +52,6 @@ public class LoggingFragment extends Fragment {
             if (dataMessage == null) {
                 return;
             }
-            mCompositeDisposable.clear();
             if (dataMessage.isSuccess()) {
                 mRouter.replaceScreen(getString(R.string.fragment_menu));
             } else {
@@ -63,10 +61,7 @@ public class LoggingFragment extends Fragment {
                 ).show();
             }
         });
-        loggingViewModel.subscribeOnIntentLiveData(this, intent -> {
-            mCompositeDisposable.clear();
-            startActivityForResult(intent, RC_GOOGLE_LOGIN);
-        });
+        loggingViewModel.subscribeOnIntentLiveData(this, intent -> startActivityForResult(intent, RC_GOOGLE_LOGIN));
     }
 
     @Nullable
@@ -94,7 +89,7 @@ public class LoggingFragment extends Fragment {
 
     @OnClick(R.id.googleLoginButton)
     void clickGoogleLoginButton() {
-        mCompositeDisposable.add(loggingViewModel.getIntentForGoogle());
+        loggingViewModel.getIntentForGoogle();
     }
 
     @Override

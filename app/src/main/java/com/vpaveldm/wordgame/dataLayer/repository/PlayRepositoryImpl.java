@@ -2,8 +2,7 @@ package com.vpaveldm.wordgame.dataLayer.repository;
 
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
-import com.vpaveldm.wordgame.dataLayer.model.PlayModelInDataLayer;
-import com.vpaveldm.wordgame.domainLayer.model.PlayModelInDomainLayer;
+import com.vpaveldm.wordgame.dataLayer.model.PlayModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +19,14 @@ public class PlayRepositoryImpl implements IPlayRepository {
     }
 
     @Override
-    public Single<List<PlayModelInDataLayer>> getDecks() {
+    public Single<List<PlayModel>> getDecks() {
         return Single.create(subscriber -> {
-            List<PlayModelInDataLayer> list = new ArrayList<>();
-            list.add(new PlayModelInDataLayer("Animals", 10));
-            list.add(new PlayModelInDataLayer("People", 13));
-            list.add(new PlayModelInDataLayer("Cities", 17));
-            list.add(new PlayModelInDataLayer("Countries", 23));
-            list.add(new PlayModelInDataLayer("Days", 123));
+            List<PlayModel> list = new ArrayList<>();
+            list.add(new PlayModel("Animals", 10));
+            list.add(new PlayModel("People", 13));
+            list.add(new PlayModel("Cities", 17));
+            list.add(new PlayModel("Countries", 23));
+            list.add(new PlayModel("Days", 123));
             subscriber.onSuccess(list);
         });
     }

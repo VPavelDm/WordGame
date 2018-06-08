@@ -14,9 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
-import com.vpaveldm.wordgame.dataLayer.model.LoggingModelInDataLayer;
-import com.vpaveldm.wordgame.dataLayer.model.transform.DataLayerTransformer;
-import com.vpaveldm.wordgame.domainLayer.model.LoggingModelInDomainLayer;
+import com.vpaveldm.wordgame.dataLayer.model.LoggingModel;
 
 import java.net.ConnectException;
 
@@ -24,51 +22,43 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 
 @ActivityScope
 public class LoggingRepositoryImpl implements ILoggingRepository {
 
-    private DataLayerTransformer mTransformer;
     private FirebaseAuth mAuth;
     private GoogleApiClient mApiClient;
 
     @Inject
-    LoggingRepositoryImpl(DataLayerTransformer transformer, FirebaseAuth auth, GoogleApiClient client) {
-        mTransformer = transformer;
+    LoggingRepositoryImpl(FirebaseAuth auth, GoogleApiClient client) {
         mAuth = auth;
         mApiClient = client;
     }
 
     @Override
-    public Completable signIn(LoggingModelInDomainLayer model) {
+    public Completable signIn(LoggingModel model) {
         return Completable.create(subscriber -> {
-            LoggingModelInDataLayer dataModel = mTransformer.transform(model);
-            if (dataModel.getEmail() != null && dataModel.getPassword() != null) {
-                signInByEmailAndPassword(subscriber, dataModel);
-            } else if (dataModel.getData() != null) {
-                signInByGoogleIntent(subscriber, dataModel);
+            if (model.getEmail() != null && model.getPassword() != null) {
+                signInByEmailAndPassword(subscriber, model);
+            } else if (model.getData() != null) {
+                signInByGoogleIntent(subscriber, model);
             }
         });
     }
 
     @Override
-    public Completable signUp(LoggingModelInDomainLayer model) {
-        return Completable.create(subscriber -> {
-            LoggingModelInDataLayer dataModel = mTransformer.transform(model);
-            signUpByEmailAndPassword(subscriber, dataModel);
-        });
+    public Completable signUp(LoggingModel model) {
+        return Completable.create(subscriber -> signUpByEmailAndPassword(subscriber, model));
     }
 
     @Override
-    public LoggingModelInDataLayer getGoogleIntent() {
-        LoggingModelInDataLayer.Builder builder = new LoggingModelInDataLayer.Builder();
+    public LoggingModel getGoogleIntent() {
+        LoggingModel.Builder builder = new LoggingModel.Builder();
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(mApiClient);
         return builder.addData(intent).create();
     }
 
-    private void signInByEmailAndPassword(CompletableEmitter subscriber, LoggingModelInDataLayer model) {
+    private void signInByEmailAndPassword(CompletableEmitter subscriber, LoggingModel model) {
         String email = model.getEmail();
         String password = model.getPassword();
         if (email.equals("") || password.equals("")) {
@@ -92,7 +82,7 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         });
     }
 
-    private void signInByGoogleIntent(CompletableEmitter subscriber, LoggingModelInDataLayer model) {
+    private void signInByGoogleIntent(CompletableEmitter subscriber, LoggingModel model) {
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(model.getData());
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -115,7 +105,7 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         }
     }
 
-    private void signUpByEmailAndPassword(CompletableEmitter subscriber, LoggingModelInDataLayer model) {
+    private void signUpByEmailAndPassword(CompletableEmitter subscriber, LoggingModel model) {
         String email = model.getEmail();
         String password = model.getPassword();
         if (email.equals("") || password.equals("")) {

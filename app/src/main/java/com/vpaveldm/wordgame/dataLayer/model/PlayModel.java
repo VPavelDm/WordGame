@@ -1,10 +1,10 @@
 package com.vpaveldm.wordgame.dataLayer.model;
 
-public class PlayModelInDataLayer {
+public class PlayModel {
     private String deckName;
     private int wordCount;
 
-    public PlayModelInDataLayer(String deckName, int wordCount) {
+    public PlayModel(String deckName, int wordCount) {
         this.deckName = deckName;
         this.wordCount = wordCount;
     }
