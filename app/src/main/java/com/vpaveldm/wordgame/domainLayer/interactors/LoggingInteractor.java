@@ -5,7 +5,7 @@ import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
 import com.vpaveldm.wordgame.dataLayer.model.LoggingModelInDataLayer;
 import com.vpaveldm.wordgame.domainLayer.model.LoggingModelInDomainLayer;
 import com.vpaveldm.wordgame.domainLayer.model.transform.DomainLayerTransformer;
-import com.vpaveldm.wordgame.presentationLayer.model.LoggingModelInPresentationLayer;
+import com.vpaveldm.wordgame.presentationLayer.model.logging.LoggingModelInPresentationLayer;
 
 import javax.inject.Inject;
 

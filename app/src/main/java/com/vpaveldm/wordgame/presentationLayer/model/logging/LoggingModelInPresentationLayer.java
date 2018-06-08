@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.model;
+package com.vpaveldm.wordgame.presentationLayer.model.logging;
 
 import android.content.Intent;
 

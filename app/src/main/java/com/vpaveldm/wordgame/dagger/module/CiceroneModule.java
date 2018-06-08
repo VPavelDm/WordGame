@@ -10,6 +10,7 @@ import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.logging.LoggingFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.menu.MenuFragment;
+import com.vpaveldm.wordgame.presentationLayer.view.fragments.play.PlayFragment;
 
 import javax.inject.Named;
 
@@ -56,6 +57,9 @@ public class CiceroneModule {
                     }
                     case "MENU_FRAGMENT": {
                         return new MenuFragment();
+                    }
+                    case "PLAY_FRAGMENT": {
+                        return new PlayFragment();
                     }
                     default: {
                         String error = context.getString(R.string.illegal_argument, "screen key");

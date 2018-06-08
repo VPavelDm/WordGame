@@ -39,6 +39,11 @@ public class MenuFragment extends Fragment {
         return view;
     }
 
+    @OnClick(R.id.playButton)
+    void clickPlayButton() {
+        mRouter.navigateTo(getString(R.string.fragment_play));
+    }
+
     @OnClick(R.id.logOutButton)
     void clickLogOutButton() {
         mAuth.signOut();

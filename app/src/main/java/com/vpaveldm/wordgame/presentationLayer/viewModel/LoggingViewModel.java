@@ -7,7 +7,7 @@ import android.arch.lifecycle.ViewModel;
 import android.content.Intent;
 
 import com.vpaveldm.wordgame.domainLayer.interactors.LoggingInteractor;
-import com.vpaveldm.wordgame.presentationLayer.model.LoggingModelInPresentationLayer;
+import com.vpaveldm.wordgame.presentationLayer.model.logging.LoggingModelInPresentationLayer;
 import com.vpaveldm.wordgame.presentationLayer.model.transform.PresentationLayerTransformer;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 
@@ -15,7 +15,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -39,8 +38,8 @@ public class LoggingViewModel extends ViewModel {
     public void subscribeOnMessageLiveData(LifecycleOwner owner, Observer<LiveDataMessage> listener) {
         if (mMessageLiveData == null) {
             mMessageLiveData = new MutableLiveData<>();
-            mMessageLiveData.observe(owner, listener);
         }
+        mMessageLiveData.observe(owner, listener);
     }
 
     public void subscribeOnIntentLiveData(LifecycleOwner owner, Observer<Intent> listener) {
