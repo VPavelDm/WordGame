@@ -1,5 +1,13 @@
 package com.vpaveldm.wordgame.dataLayer.repository;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
 import com.vpaveldm.wordgame.dataLayer.model.PlayModel;
@@ -9,7 +17,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 
 @ActivityScope
 public class PlayRepositoryImpl implements IPlayRepository {
@@ -19,15 +29,43 @@ public class PlayRepositoryImpl implements IPlayRepository {
     }
 
     @Override
-    public Single<List<PlayModel>> getDecks() {
-        return Single.create(subscriber -> {
-            List<PlayModel> list = new ArrayList<>();
-            list.add(new PlayModel("Animals", 10));
-            list.add(new PlayModel("People", 13));
-            list.add(new PlayModel("Cities", 17));
-            list.add(new PlayModel("Countries", 23));
-            list.add(new PlayModel("Days", 123));
-            subscriber.onSuccess(list);
+    public Observable<List<PlayModel>> getDecks() {
+        List<PlayModel> decks = new ArrayList<>();
+        BehaviorSubject<List<PlayModel>> subject = BehaviorSubject.createDefault(decks);
+        DatabaseReference decksRef = FirebaseDatabase.getInstance().getReference("decks");
+        decksRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                decks.clear();
+                Iterable<DataSnapshot> iterator = dataSnapshot.getChildren();
+                for (DataSnapshot snapshot : iterator) {
+                    PlayModel playModel = snapshot.getValue(PlayModel.class);
+                    decks.add(playModel);
+                }
+                subject.onNext(decks);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                subject.onError(databaseError.toException().getCause());
+            }
+        });
+
+        return subject;
+    }
+
+    @Override
+    public Completable addDeck(PlayModel model) {
+        return Completable.create(source -> {
+            DatabaseReference decksRef = FirebaseDatabase.getInstance().getReference("decks");
+            Task<Void> task = decksRef.push().setValue(model);
+            if (task.isSuccessful()) {
+                source.onComplete();
+            } else {
+                Exception e = task.getException();
+                if (e != null)
+                    source.onError(e.getCause());
+            }
         });
     }
 }

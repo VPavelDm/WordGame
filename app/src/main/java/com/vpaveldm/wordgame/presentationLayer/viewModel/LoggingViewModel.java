@@ -46,7 +46,7 @@ public class LoggingViewModel extends ViewModel {
         }
     }
 
-    @SuppressLint("CheckResult")
+    @SuppressLint("CheckResult") //signIn returns Observable that generates one value and then completed signal
     public void signIn(String email, String password) {
         LoggingModel.Builder builder = new LoggingModel.Builder();
         builder.addEmail(email)
@@ -61,7 +61,7 @@ public class LoggingViewModel extends ViewModel {
                 );
     }
 
-    @SuppressLint("CheckResult")
+    @SuppressLint("CheckResult") //signUp returns Observable that generates one value and then completed signal
     public void signUp(String email, String password) {
         LoggingModel.Builder builder = new LoggingModel.Builder();
         builder.addEmail(email)
@@ -76,13 +76,13 @@ public class LoggingViewModel extends ViewModel {
                 );
     }
 
-    @SuppressLint("CheckResult")
+    @SuppressLint("CheckResult") //getGoogleIntent returns Observable that generates one value and then completed signal
     public void getIntentForGoogle() {
         mLoggingInteractor.getGoogleIntent()
                 .subscribe(item -> mIntentLiveData.setValue(item.getData()));
     }
 
-    @SuppressLint("CheckResult")
+    @SuppressLint("CheckResult") //signIn returns Observable that generates one value and then completed signal
     public void signInByGoogle(Intent data) {
         LoggingModel.Builder builder = new LoggingModel.Builder();
         builder.addData(data);

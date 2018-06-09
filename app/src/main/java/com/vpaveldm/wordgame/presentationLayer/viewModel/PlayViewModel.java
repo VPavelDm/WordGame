@@ -14,12 +14,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.Disposable;
+
 public class PlayViewModel extends ViewModel {
 
     @Inject
     PlayInteractor mPlayInteractor;
 
     private MutableLiveData<List<PlayModel>> mDeckLiveData;
+    private MutableLiveData<LiveDataMessage> mMessageLiveData;
 
     public PlayViewModel() {
         super();
@@ -33,9 +36,24 @@ public class PlayViewModel extends ViewModel {
         mDeckLiveData.observe(owner, listener);
     }
 
-    @SuppressLint("CheckResult")
-    public void getDecks() {
-        mPlayInteractor.getDecks()
+    public void subscribeOnMessageLiveData(LifecycleOwner owner, Observer<LiveDataMessage> listener) {
+        if (mMessageLiveData == null) {
+            mMessageLiveData = new MutableLiveData<>();
+        }
+        mMessageLiveData.observe(owner, listener);
+    }
+
+    //getDecks returns hot observable
+    public Disposable getDecks() {
+        return mPlayInteractor.getDecks()
                 .subscribe(decks -> mDeckLiveData.setValue(decks));
+    }
+
+    @SuppressLint("CheckResult") //addDeck returns Completable
+    public void addDeck(String name) {
+        mPlayInteractor.addDeck(new PlayModel(name, 0)).subscribe(
+                () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
+                e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
+        );
     }
 }

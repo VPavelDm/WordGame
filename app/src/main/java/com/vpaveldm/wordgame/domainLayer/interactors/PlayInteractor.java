@@ -8,7 +8,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
 
 @ActivityScope
 public class PlayInteractor {
@@ -20,8 +21,12 @@ public class PlayInteractor {
         mRepository = repository;
     }
 
-    public Single<List<PlayModel>> getDecks() {
+    public Observable<List<PlayModel>> getDecks() {
         return mRepository.getDecks();
+    }
+
+    public Completable addDeck(PlayModel playModel) {
+        return mRepository.addDeck(playModel);
     }
 
 }

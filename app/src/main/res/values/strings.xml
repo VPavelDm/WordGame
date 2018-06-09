@@ -20,4 +20,5 @@
     <string name="label_play">Play</string>
     <string name="lavel_entry_google">Entry by google</string>
     <string name="label_word_count">Words count: %1$d</string>
+    <string name="label_entry_deck_name">Entry deck name</string>
 </resources>
