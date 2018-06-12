@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,10 +16,98 @@
             android:layout_margin="8dp"
             android:hint="@string/label_entry_deck_name"
             android:inputType="text"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+
+        <EditText
+            android:id="@+id/wordET"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/label_entry_word"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/deckNameET"/>
+
+        <EditText
+            android:id="@+id/translateET"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/label_entry_translate"
+            android:inputType="text"
+            app:layout_constraintEnd_toStartOf="@+id/autoTranslateBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wordET"/>
+
+        <Button
+            android:id="@+id/autoTranslateBtn"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_margin="8dp"
+            android:lines="2"
+            android:text="@string/label_auto_translate"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toStartOf="@+id/countTranslatesTV"
+            app:layout_constraintTop_toBottomOf="@+id/wordET"/>
+
+        <TextView
+            android:id="@+id/countTranslatesTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/label_count_translates"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wordET"
+            app:layout_constraintVertical_bias="0.18"/>
+
+        <EditText
+            android:id="@+id/wrongTranslateET"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/label_entry_wrong_translate"
+            android:inputType="text"
+            app:layout_constraintEnd_toStartOf="@+id/addWrongTranslate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/translateET"/>
+
+        <Button
+            android:id="@+id/addWrongTranslate"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_margin="8dp"
+            android:lines="2"
+            android:text="@string/label_add"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toStartOf="@+id/countTranslatesTV"
+            app:layout_constraintTop_toBottomOf="@+id/autoTranslateBtn"/>
+
+        <Button
+            android:id="@+id/createCardButton"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_margin="8dp"
+            android:lines="2"
+            android:text="@string/label_create_card"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toStartOf="@+id/countTranslatesTV"
+            app:layout_constraintTop_toBottomOf="@+id/addWrongTranslate"/>
+
+        <Button
+            android:id="@+id/createDeckButton"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Create"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

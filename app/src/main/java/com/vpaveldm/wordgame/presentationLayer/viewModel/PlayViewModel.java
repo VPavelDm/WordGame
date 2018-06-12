@@ -1,14 +1,13 @@
 package com.vpaveldm.wordgame.presentationLayer.viewModel;
 
-import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 
-import com.vpaveldm.wordgame.dataLayer.model.PlayModel;
 import com.vpaveldm.wordgame.domainLayer.interactors.PlayInteractor;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.dataLayer.model.Deck;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class PlayViewModel extends ViewModel {
     @Inject
     PlayInteractor mPlayInteractor;
 
-    private MutableLiveData<List<PlayModel>> mDeckLiveData;
+    private MutableLiveData<List<Deck>> mDeckLiveData;
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
 
     public PlayViewModel() {
@@ -29,7 +28,7 @@ public class PlayViewModel extends ViewModel {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    public void subscribeOnDeckLiveData(LifecycleOwner owner, Observer<List<PlayModel>> listener) {
+    public void subscribeOnDeckLiveData(LifecycleOwner owner, Observer<List<Deck>> listener) {
         if (mDeckLiveData == null) {
             mDeckLiveData = new MutableLiveData<>();
         }
@@ -47,13 +46,5 @@ public class PlayViewModel extends ViewModel {
     public Disposable getDecks() {
         return mPlayInteractor.getDecks()
                 .subscribe(decks -> mDeckLiveData.setValue(decks));
-    }
-
-    @SuppressLint("CheckResult") //addDeck returns Completable
-    public void addDeck(String name) {
-        mPlayInteractor.addDeck(new PlayModel(name, 0)).subscribe(
-                () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
-                e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
-        );
     }
 }

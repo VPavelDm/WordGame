@@ -2,13 +2,12 @@ package com.vpaveldm.wordgame.domainLayer.interactors;
 
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
-import com.vpaveldm.wordgame.dataLayer.model.PlayModel;
+import com.vpaveldm.wordgame.dataLayer.model.Deck;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 @ActivityScope
@@ -21,12 +20,8 @@ public class PlayInteractor {
         mRepository = repository;
     }
 
-    public Observable<List<PlayModel>> getDecks() {
+    public Observable<List<Deck>> getDecks() {
         return mRepository.getDecks();
-    }
-
-    public Completable addDeck(PlayModel playModel) {
-        return mRepository.addDeck(playModel);
     }
 
 }

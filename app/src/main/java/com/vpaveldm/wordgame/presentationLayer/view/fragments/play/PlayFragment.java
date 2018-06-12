@@ -1,12 +1,10 @@
 package com.vpaveldm.wordgame.presentationLayer.view.fragments.play;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,23 +13,29 @@ import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.databinding.FragmentPlayBinding;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.LiveDataMessage;
+import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.PlayViewModel;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import ru.terrakok.cicerone.Router;
 
 public class PlayFragment extends Fragment {
 
+    @Inject
+    Router mRouter;
     private PlayViewModel mPlayViewModel;
     private DeckAdapter adapter;
-    private CompositeDisposable mCompositeDisposable;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ActivityComponentManager.getActivityComponent().inject(this);
         mPlayViewModel = ViewModelProviders.of(this).get(PlayViewModel.class);
         mPlayViewModel.subscribeOnDeckLiveData(this, decks -> adapter.swapList(decks));
         mPlayViewModel.subscribeOnMessageLiveData(this, dataMessage -> {
@@ -77,8 +81,6 @@ public class PlayFragment extends Fragment {
 
     @OnClick(R.id.addDeckButton)
     void clickAddDeckButton() {
-        AddDeckDialog addDeckDialog = new AddDeckDialog();
-        assert getFragmentManager() != null;
-        addDeckDialog.show(getFragmentManager(), null);
+        mRouter.navigateTo(getString(R.string.fragment_add_deck));
     }
 }

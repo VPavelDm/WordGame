@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
+import com.vpaveldm.wordgame.presentationLayer.view.fragments.add_deck.AddDeckFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.logging.LoggingFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.menu.MenuFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.play.PlayFragment;
@@ -60,6 +61,9 @@ public class CiceroneModule {
                     }
                     case "PLAY_FRAGMENT": {
                         return new PlayFragment();
+                    }
+                    case "ADD_DECK_FRAGMENT":{
+                        return new AddDeckFragment();
                     }
                     default: {
                         String error = context.getString(R.string.illegal_argument, "screen key");

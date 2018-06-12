@@ -18,7 +18,19 @@
     <string name="label_logout">Log out</string>
     <string name="label_rating">Rating</string>
     <string name="label_play">Play</string>
-    <string name="lavel_entry_google">Entry by google</string>
+    <string name="label_entry_google">Entry by google</string>
     <string name="label_word_count">Words count: %1$d</string>
     <string name="label_entry_deck_name">Entry deck name</string>
+    <string name="label_entry_word">Entry word</string>
+    <string name="label_entry_translate">Entry translate</string>
+    <string name="label_auto_translate">Auto</string>
+    <string name="label_add">Add</string>
+    <string name="label_count_translates">%1$d/4</string>
+    <string name="fragment_add_deck">ADD_DECK_FRAGMENT</string>
+    <string name="label_word">Word: %1$s</string>
+    <string name="label_translate">Translate: %1$s</string>
+    <string name="label_wrong_translate">%2$d: %1$s</string>
+    <string name="label_entry_wrong_translate">Entry wrong translate</string>
+    <string name="label_create_card">Create card</string>
+    <string name="label_add_wrong_translate_error">All wrong words are added</string>
 </resources>

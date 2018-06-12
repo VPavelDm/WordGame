@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vpaveldm.wordgame.R;
-import com.vpaveldm.wordgame.dataLayer.model.PlayModel;
+import com.vpaveldm.wordgame.dataLayer.model.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
 
-    private List<PlayModel> mDecks;
+    private List<Deck> mDecks;
 
     DeckAdapter() {
         mDecks = new ArrayList<>();
@@ -40,7 +40,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
         return mDecks.size();
     }
 
-    public void swapList(List<PlayModel> decks) {
+    public void swapList(List<Deck> decks) {
         if (decks == null) {
             mDecks = new ArrayList<>();
         } else {
@@ -65,9 +65,9 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
             wordCountTV = itemView.findViewById(R.id.deckWordCountTV);
         }
 
-        void bind(PlayModel model) {
+        void bind(Deck model) {
             deckNameTV.setText(model.getDeckName());
-            wordCountTV.setText(mContext.getString(R.string.label_word_count, model.getWordCount()));
+            wordCountTV.setText(mContext.getString(R.string.label_word_count, model.getCards().size()));
         }
     }
 }
