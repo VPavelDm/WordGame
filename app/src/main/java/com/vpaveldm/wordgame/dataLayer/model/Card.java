@@ -7,9 +7,9 @@ import java.util.List;
 
 @IgnoreExtraProperties
 public class Card {
-    public String word;
-    public String translate;
-    public List<String> wrongTranslates = new ArrayList<>();
+    private String word;
+    private String translate;
+    private List<String> wrongTranslates = new ArrayList<>();
 
     public String getWord() {
         return word;

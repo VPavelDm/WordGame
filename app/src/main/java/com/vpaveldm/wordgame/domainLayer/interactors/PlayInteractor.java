@@ -13,7 +13,7 @@ import io.reactivex.Observable;
 @ActivityScope
 public class PlayInteractor {
 
-    private IPlayRepository mRepository;
+    private final IPlayRepository mRepository;
 
     @Inject
     PlayInteractor(IPlayRepository repository) {

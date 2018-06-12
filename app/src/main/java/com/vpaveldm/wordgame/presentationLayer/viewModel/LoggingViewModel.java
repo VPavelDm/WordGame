@@ -13,7 +13,6 @@ import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentMa
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;

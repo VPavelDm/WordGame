@@ -11,7 +11,7 @@ import io.reactivex.Completable;
 @ActivityScope
 public class AddDeckInteractor {
 
-    private IAddDeckRepository mRepository;
+    private final IAddDeckRepository mRepository;
 
     @Inject
     AddDeckInteractor(IAddDeckRepository repository) {

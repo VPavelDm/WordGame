@@ -17,7 +17,7 @@ import dagger.Provides;
 @Module
 public class GoogleAuthModule {
 
-    private FragmentActivity mActivity;
+    private final FragmentActivity mActivity;
 
     public GoogleAuthModule(FragmentActivity activity) {
         mActivity = activity;

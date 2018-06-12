@@ -3,9 +3,9 @@ package com.vpaveldm.wordgame.dataLayer.model;
 import android.content.Intent;
 
 public class LoggingModel {
-    private String email;
-    private String password;
-    private Intent data;
+    private final String email;
+    private final String password;
+    private final Intent data;
 
     private LoggingModel(String email, String password, Intent data) {
         this.email = email;

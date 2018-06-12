@@ -25,7 +25,7 @@ import ru.terrakok.cicerone.android.SupportFragmentNavigator;
 @Module
 public class CiceroneModule {
 
-    private FragmentManager mManager;
+    private final FragmentManager mManager;
 
     public CiceroneModule(FragmentManager manager) {
         mManager = manager;

@@ -51,9 +51,9 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView deckNameTV;
-        private TextView wordCountTV;
-        private Context mContext;
+        private final TextView deckNameTV;
+        private final TextView wordCountTV;
+        private final Context mContext;
 
         ViewHolder(View itemView) {
             super(itemView);

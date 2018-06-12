@@ -6,14 +6,13 @@ import com.vpaveldm.wordgame.dataLayer.model.LoggingModel;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
 @ActivityScope
 public class LoggingInteractor {
 
-    private ILoggingRepository mRepository;
+    private final ILoggingRepository mRepository;
 
     @Inject
     LoggingInteractor(ILoggingRepository repository) {

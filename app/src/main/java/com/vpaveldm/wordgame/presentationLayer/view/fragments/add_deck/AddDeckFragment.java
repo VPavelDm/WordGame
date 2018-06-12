@@ -104,6 +104,7 @@ public class AddDeckFragment extends Fragment {
         mAddDeckViewModel.addCard(mCard);
         currentWrongTranslate = 1;
         refreshCardWidgets();
+        mCard = new Card();
     }
 
     @OnClick(R.id.createDeckButton)

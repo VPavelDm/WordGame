@@ -17,7 +17,7 @@ public class AddDeckViewModel extends ViewModel {
 
     @Inject
     AddDeckInteractor mAddDeckInteractor;
-    private Deck mDeck;
+    private final Deck mDeck;
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
 
     public AddDeckViewModel() {

@@ -3,18 +3,12 @@
     <string name="label_email">E-mail</string>
     <string name="label_password">Password</string>
     <string name="label_login">Login</string>
-    <string name="label_other_way_login">or login by</string>
     <string name="label_register">Register</string>
-    <string name="label_forget_password">Forget Password</string>
-    <string name="label_no_user_found">The user with this E-mail and password was not found</string>
-    <string name="label_registration_denied">Registration failed</string>
     <string name="fragment_login">LOGIN_FRAGMENT</string>
     <string name="fragment_menu">MENU_FRAGMENT</string>
     <string name="fragment_play">PLAY_FRAGMENT</string>
     <string name="unsupported_operation">%1$s is not supported operation</string>
     <string name="illegal_argument">%1$s is not supported argument</string>
-    <string name="label_ok">OK</string>
-    <string name="illegal_access">Arguments are not initialized</string>
     <string name="label_logout">Log out</string>
     <string name="label_rating">Rating</string>
     <string name="label_play">Play</string>
@@ -27,10 +21,8 @@
     <string name="label_add">Add</string>
     <string name="label_count_translates">%1$d/4</string>
     <string name="fragment_add_deck">ADD_DECK_FRAGMENT</string>
-    <string name="label_word">Word: %1$s</string>
-    <string name="label_translate">Translate: %1$s</string>
-    <string name="label_wrong_translate">%2$d: %1$s</string>
     <string name="label_entry_wrong_translate">Entry wrong translate</string>
     <string name="label_create_card">Create card</string>
     <string name="label_add_wrong_translate_error">All wrong words are added</string>
+    <string name="label_create">Create</string>
 </resources>

@@ -20,17 +20,14 @@ import java.net.ConnectException;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.subjects.BehaviorSubject;
 
 @ActivityScope
 public class LoggingRepositoryImpl implements ILoggingRepository {
 
-    private FirebaseAuth mAuth;
-    private GoogleApiClient mApiClient;
+    private final FirebaseAuth mAuth;
+    private final GoogleApiClient mApiClient;
 
     @Inject
     LoggingRepositoryImpl(FirebaseAuth auth, GoogleApiClient client) {

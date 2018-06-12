@@ -7,8 +7,8 @@ import java.util.List;
 
 @IgnoreExtraProperties
 public class Deck {
-    public String deckName;
-    public List<Card> mCards;
+    private String deckName;
+    private List<Card> mCards;
 
     public Deck() {
         super();

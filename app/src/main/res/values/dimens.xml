@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="hint_edit_text_size">15sp</dimen>
-    <dimen name="other_way_login_top_dimen">16dp</dimen>
-    <dimen name="other_way_size_dimen">32dp</dimen>
-    <dimen name="lr_margin_button_dimen">90dp</dimen>
 </resources>
