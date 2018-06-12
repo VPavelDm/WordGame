@@ -11,7 +11,7 @@ import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.add_deck.AddDeckFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.logging.LoggingFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.menu.MenuFragment;
-import com.vpaveldm.wordgame.presentationLayer.view.fragments.play.PlayFragment;
+import com.vpaveldm.wordgame.presentationLayer.view.fragments.choose_deck.ChooseDeckFragment;
 
 import javax.inject.Named;
 
@@ -59,11 +59,14 @@ public class CiceroneModule {
                     case "MENU_FRAGMENT": {
                         return new MenuFragment();
                     }
-                    case "PLAY_FRAGMENT": {
-                        return new PlayFragment();
+                    case "CHOOSE_DECK_FRAGMENT": {
+                        return new ChooseDeckFragment();
                     }
-                    case "ADD_DECK_FRAGMENT":{
+                    case "ADD_DECK_FRAGMENT": {
                         return new AddDeckFragment();
+                    }
+                    case "PLAY_FRAGMENT": {
+
                     }
                     default: {
                         String error = context.getString(R.string.illegal_argument, "screen key");

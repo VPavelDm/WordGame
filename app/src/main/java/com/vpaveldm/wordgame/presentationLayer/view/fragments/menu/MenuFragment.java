@@ -41,7 +41,7 @@ public class MenuFragment extends Fragment {
 
     @OnClick(R.id.playButton)
     void clickPlayButton() {
-        mRouter.navigateTo(getString(R.string.fragment_play));
+        mRouter.navigateTo(getString(R.string.fragment_choose_deck));
     }
 
     @OnClick(R.id.logOutButton)

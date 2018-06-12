@@ -8,7 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
-import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
+import com.vpaveldm.wordgame.dataLayer.interfaces.IChooseDeckRepository;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
 @ActivityScope
-public class PlayRepositoryImpl implements IPlayRepository {
+public class ChooseDeckRepositoryImpl implements IChooseDeckRepository {
 
     @Inject
-    PlayRepositoryImpl() {
+    ChooseDeckRepositoryImpl() {
     }
 
     @Override

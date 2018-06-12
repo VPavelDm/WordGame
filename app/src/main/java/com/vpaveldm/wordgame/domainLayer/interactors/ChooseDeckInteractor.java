@@ -1,7 +1,7 @@
 package com.vpaveldm.wordgame.domainLayer.interactors;
 
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
-import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
+import com.vpaveldm.wordgame.dataLayer.interfaces.IChooseDeckRepository;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
 import java.util.List;
@@ -11,12 +11,12 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 
 @ActivityScope
-public class PlayInteractor {
+public class ChooseDeckInteractor {
 
-    private final IPlayRepository mRepository;
+    private final IChooseDeckRepository mRepository;
 
     @Inject
-    PlayInteractor(IPlayRepository repository) {
+    ChooseDeckInteractor(IChooseDeckRepository repository) {
         mRepository = repository;
     }
 

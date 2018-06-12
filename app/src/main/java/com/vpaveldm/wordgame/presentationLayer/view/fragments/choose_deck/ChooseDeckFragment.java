@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.fragments.play;
+package com.vpaveldm.wordgame.presentationLayer.view.fragments.choose_deck;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.databinding.FragmentPlayBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.PlayViewModel;
+import com.vpaveldm.wordgame.presentationLayer.viewModel.ChooseDeckViewModel;
 
 import javax.inject.Inject;
 
@@ -24,11 +24,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import ru.terrakok.cicerone.Router;
 
-public class PlayFragment extends Fragment {
+public class ChooseDeckFragment extends Fragment {
 
     @Inject
     Router mRouter;
-    private PlayViewModel mPlayViewModel;
+    private ChooseDeckViewModel mChooseDeckViewModel;
     private DeckRecyclerAdapter adapter;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
@@ -36,9 +36,9 @@ public class PlayFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ActivityComponentManager.getActivityComponent().inject(this);
-        mPlayViewModel = ViewModelProviders.of(this).get(PlayViewModel.class);
-        mPlayViewModel.subscribeOnDeckLiveData(this, decks -> adapter.swapList(decks));
-        mPlayViewModel.subscribeOnMessageLiveData(this, dataMessage -> {
+        mChooseDeckViewModel = ViewModelProviders.of(this).get(ChooseDeckViewModel.class);
+        mChooseDeckViewModel.subscribeOnDeckLiveData(this, decks -> adapter.swapList(decks));
+        mChooseDeckViewModel.subscribeOnMessageLiveData(this, dataMessage -> {
             if (dataMessage == null) {
                 return;
             }
@@ -69,7 +69,7 @@ public class PlayFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Disposable disposable = mPlayViewModel.getDecks();
+        Disposable disposable = mChooseDeckViewModel.getDecks();
         mCompositeDisposable.add(disposable);
     }
 

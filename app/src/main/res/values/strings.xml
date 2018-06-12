@@ -6,7 +6,7 @@
     <string name="label_register">Register</string>
     <string name="fragment_login">LOGIN_FRAGMENT</string>
     <string name="fragment_menu">MENU_FRAGMENT</string>
-    <string name="fragment_play">PLAY_FRAGMENT</string>
+    <string name="fragment_choose_deck">CHOOSE_DECK_FRAGMENT</string>
     <string name="unsupported_operation">%1$s is not supported operation</string>
     <string name="illegal_argument">%1$s is not supported argument</string>
     <string name="label_logout">Log out</string>

@@ -6,6 +6,6 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-public interface IPlayRepository {
+public interface IChooseDeckRepository {
     Observable<List<Deck>> getDecks();
 }

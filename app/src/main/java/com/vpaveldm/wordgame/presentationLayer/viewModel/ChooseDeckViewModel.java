@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 
-import com.vpaveldm.wordgame.domainLayer.interactors.PlayInteractor;
+import com.vpaveldm.wordgame.domainLayer.interactors.ChooseDeckInteractor;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
@@ -15,15 +15,15 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 
-public class PlayViewModel extends ViewModel {
+public class ChooseDeckViewModel extends ViewModel {
 
     @Inject
-    PlayInteractor mPlayInteractor;
+    ChooseDeckInteractor mChooseDeckInteractor;
 
     private MutableLiveData<List<Deck>> mDeckLiveData;
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
 
-    public PlayViewModel() {
+    public ChooseDeckViewModel() {
         super();
         ActivityComponentManager.getActivityComponent().inject(this);
     }
@@ -44,7 +44,7 @@ public class PlayViewModel extends ViewModel {
 
     //getDecks returns hot observable
     public Disposable getDecks() {
-        return mPlayInteractor.getDecks()
+        return mChooseDeckInteractor.getDecks()
                 .subscribe(decks -> mDeckLiveData.setValue(decks));
     }
 }

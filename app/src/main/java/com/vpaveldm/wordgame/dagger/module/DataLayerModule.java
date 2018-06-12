@@ -3,10 +3,10 @@ package com.vpaveldm.wordgame.dagger.module;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.interfaces.IAddDeckRepository;
 import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
-import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
+import com.vpaveldm.wordgame.dataLayer.interfaces.IChooseDeckRepository;
 import com.vpaveldm.wordgame.dataLayer.repository.AddDeckRepositoryImpl;
+import com.vpaveldm.wordgame.dataLayer.repository.ChooseDeckRepositoryImpl;
 import com.vpaveldm.wordgame.dataLayer.repository.LoggingRepositoryImpl;
-import com.vpaveldm.wordgame.dataLayer.repository.PlayRepositoryImpl;
 
 import dagger.Module;
 import dagger.Provides;
@@ -22,7 +22,7 @@ public class DataLayerModule {
 
     @Provides
     @ActivityScope
-    public IPlayRepository providePlayRepository(PlayRepositoryImpl repository) {
+    public IChooseDeckRepository providePlayRepository(ChooseDeckRepositoryImpl repository) {
         return repository;
     }
 
