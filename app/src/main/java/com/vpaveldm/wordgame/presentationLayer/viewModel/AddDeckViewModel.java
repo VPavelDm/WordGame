@@ -8,8 +8,8 @@ import android.arch.lifecycle.ViewModel;
 
 import com.vpaveldm.wordgame.domainLayer.interactors.AddDeckInteractor;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.dataLayer.model.Card;
-import com.vpaveldm.wordgame.dataLayer.model.Deck;
+import com.vpaveldm.wordgame.dataLayer.store.model.Card;
+import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
 import javax.inject.Inject;
 
@@ -18,18 +18,26 @@ public class AddDeckViewModel extends ViewModel {
     @Inject
     AddDeckInteractor mAddDeckInteractor;
     private final Deck mDeck;
-    private MutableLiveData<LiveDataMessage> mMessageLiveData;
+    private MutableLiveData<LiveDataMessage> mDeckLiveData;
+    private MutableLiveData<LiveDataMessage> mTranslateLiveData;
 
     public AddDeckViewModel() {
         mDeck = new Deck();
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    public void subscribeOnMessageLiveData(LifecycleOwner owner, Observer<LiveDataMessage> listener) {
-        if (mMessageLiveData == null) {
-            mMessageLiveData = new MutableLiveData<>();
+    public void subscribeOnDeckLiveData(LifecycleOwner owner, Observer<LiveDataMessage> listener) {
+        if (mDeckLiveData == null) {
+            mDeckLiveData = new MutableLiveData<>();
         }
-        mMessageLiveData.observe(owner, listener);
+        mDeckLiveData.observe(owner, listener);
+    }
+
+    public void subscribeOnTranslateLiveData(LifecycleOwner owner, Observer<LiveDataMessage> listener) {
+        if (mTranslateLiveData == null) {
+            mTranslateLiveData = new MutableLiveData<>();
+        }
+        mTranslateLiveData.observe(owner, listener);
     }
 
     public void addCard(Card card) {
@@ -41,8 +49,8 @@ public class AddDeckViewModel extends ViewModel {
         mDeck.setDeckName(name);
         mAddDeckInteractor.addDeck(mDeck)
                 .subscribe(
-                        () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
-                        e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
+                        () -> mDeckLiveData.setValue(new LiveDataMessage(true, null)),
+                        e -> mDeckLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
                 );
     }
 
@@ -50,4 +58,11 @@ public class AddDeckViewModel extends ViewModel {
         return mDeck.getCards().size();
     }
 
+    @SuppressLint("CheckResult") //It returns Single
+    public void getAutoTranslate(String word) {
+        mAddDeckInteractor.getAutoTranslate(word).subscribe(
+                success -> mTranslateLiveData.setValue(new LiveDataMessage(true, success)),
+                e -> mTranslateLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
+        );
+    }
 }

@@ -7,7 +7,7 @@ import android.arch.lifecycle.ViewModel;
 
 import com.vpaveldm.wordgame.domainLayer.interactors.PlayInteractor;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.dataLayer.model.Deck;
+import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
 import java.util.List;
 

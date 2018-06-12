@@ -1,6 +1,6 @@
 package com.vpaveldm.wordgame.dataLayer.interfaces;
 
-import com.vpaveldm.wordgame.dataLayer.model.LoggingModel;
+import com.vpaveldm.wordgame.dataLayer.store.model.LoggingModel;
 
 import io.reactivex.Observable;
 

@@ -25,4 +25,5 @@
     <string name="label_create_card">Create card</string>
     <string name="label_add_wrong_translate_error">All wrong words are added</string>
     <string name="label_create">Create</string>
+    <string name="yandex_key">trnsl.1.1.20180612T074102Z.764e033bcf9c41d5.31f4cc9bada282d09a89fb14561d84e3ff50c5e5</string>
 </resources>

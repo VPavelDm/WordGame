@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.dataLayer.model;
+package com.vpaveldm.wordgame.dataLayer.store.model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

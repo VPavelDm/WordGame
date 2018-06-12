@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
-import com.vpaveldm.wordgame.dataLayer.model.Deck;
+import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
 import java.util.ArrayList;
 import java.util.List;

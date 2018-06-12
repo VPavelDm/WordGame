@@ -1,5 +1,6 @@
 package com.vpaveldm.wordgame.presentationLayer.view.fragments.add_deck;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,10 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
-import com.vpaveldm.wordgame.dataLayer.model.Card;
+import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.databinding.FragmentAddDeckBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.AddDeckViewModel;
+import com.vpaveldm.wordgame.presentationLayer.viewModel.LiveDataMessage;
 
 import javax.inject.Inject;
 
@@ -42,12 +44,24 @@ public class AddDeckFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAddDeckViewModel = ViewModelProviders.of(this).get(AddDeckViewModel.class);
-        mAddDeckViewModel.subscribeOnMessageLiveData(this, dataMessage -> {
+        mAddDeckViewModel.subscribeOnDeckLiveData(this, dataMessage -> {
             if (dataMessage == null) {
                 return;
             }
             if (dataMessage.isSuccess()) {
                 mRouter.exit();
+            } else {
+                Toast.makeText(getContext(),
+                        dataMessage.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        mAddDeckViewModel.subscribeOnTranslateLiveData(this, dataMessage -> {
+            if (dataMessage == null) {
+                return;
+            }
+            if (dataMessage.isSuccess()) {
+                mBinding.translateET.setText(dataMessage.getMessage());
             } else {
                 Toast.makeText(getContext(),
                         dataMessage.getMessage(),
@@ -125,5 +139,10 @@ public class AddDeckFragment extends Fragment {
         mBinding.wordET.setText("");
         mBinding.translateET.setText("");
         mBinding.wrongTranslateET.setText("");
+    }
+
+    @OnClick(R.id.autoTranslateBtn)
+    void clickAutoTranslateBtn() {
+        mAddDeckViewModel.getAutoTranslate(mBinding.wordET.getText().toString());
     }
 }

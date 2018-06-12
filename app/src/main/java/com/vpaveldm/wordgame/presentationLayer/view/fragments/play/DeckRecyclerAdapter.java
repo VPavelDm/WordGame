@@ -9,16 +9,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vpaveldm.wordgame.R;
-import com.vpaveldm.wordgame.dataLayer.model.Deck;
+import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
+public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapter.ViewHolder> {
 
     private List<Deck> mDecks;
 
-    DeckAdapter() {
+    DeckRecyclerAdapter() {
         mDecks = new ArrayList<>();
     }
 

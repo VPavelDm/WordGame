@@ -2,7 +2,7 @@ package com.vpaveldm.wordgame.domainLayer.interactors;
 
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
-import com.vpaveldm.wordgame.dataLayer.model.LoggingModel;
+import com.vpaveldm.wordgame.dataLayer.store.model.LoggingModel;
 
 import javax.inject.Inject;
 

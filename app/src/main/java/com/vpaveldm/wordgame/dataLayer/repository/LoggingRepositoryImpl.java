@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
-import com.vpaveldm.wordgame.dataLayer.model.LoggingModel;
+import com.vpaveldm.wordgame.dataLayer.store.model.LoggingModel;
 
 import java.net.ConnectException;
 

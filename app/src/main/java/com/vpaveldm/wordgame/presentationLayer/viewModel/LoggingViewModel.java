@@ -7,7 +7,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.content.Intent;
 
-import com.vpaveldm.wordgame.dataLayer.model.LoggingModel;
+import com.vpaveldm.wordgame.dataLayer.store.model.LoggingModel;
 import com.vpaveldm.wordgame.domainLayer.interactors.LoggingInteractor;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 

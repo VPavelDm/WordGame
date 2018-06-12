@@ -29,7 +29,7 @@ public class PlayFragment extends Fragment {
     @Inject
     Router mRouter;
     private PlayViewModel mPlayViewModel;
-    private DeckAdapter adapter;
+    private DeckRecyclerAdapter adapter;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
@@ -61,7 +61,7 @@ public class PlayFragment extends Fragment {
         FragmentPlayBinding binding = FragmentPlayBinding.inflate(inflater, container, false);
         ButterKnife.bind(this, binding.getRoot());
         binding.deckRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        adapter = new DeckAdapter();
+        adapter = new DeckRecyclerAdapter();
         binding.deckRecyclerView.setAdapter(adapter);
         return binding.getRoot();
     }
