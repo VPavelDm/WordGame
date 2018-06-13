@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
-import com.vpaveldm.wordgame.databinding.FragmentPlayBinding;
+import com.vpaveldm.wordgame.databinding.FragmentChooseDeckBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.ChooseDeckViewModel;
 
@@ -36,29 +36,15 @@ public class ChooseDeckFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ActivityComponentManager.getActivityComponent().inject(this);
-        mChooseDeckViewModel = ViewModelProviders.of(this).get(ChooseDeckViewModel.class);
+        assert getActivity() != null;
+        mChooseDeckViewModel = ViewModelProviders.of(getActivity()).get(ChooseDeckViewModel.class);
         mChooseDeckViewModel.subscribeOnDeckLiveData(this, decks -> adapter.swapList(decks));
-        mChooseDeckViewModel.subscribeOnMessageLiveData(this, dataMessage -> {
-            if (dataMessage == null) {
-                return;
-            }
-            if (dataMessage.isSuccess()) {
-                Toast.makeText(getContext(),
-                        "Word is added",
-                        Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getContext(),
-                        dataMessage.getMessage(),
-                        Toast.LENGTH_LONG
-                ).show();
-            }
-        });
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentPlayBinding binding = FragmentPlayBinding.inflate(inflater, container, false);
+        FragmentChooseDeckBinding binding = FragmentChooseDeckBinding.inflate(inflater, container, false);
         ButterKnife.bind(this, binding.getRoot());
         binding.deckRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         adapter = new DeckRecyclerAdapter();

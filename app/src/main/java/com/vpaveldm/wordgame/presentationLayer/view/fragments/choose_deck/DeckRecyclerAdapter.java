@@ -14,6 +14,7 @@ import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentMa
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -37,7 +38,13 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(mDecks.get(position));
+        mDecks.get(position).setId(getItemId(position));
+        holder.bind(mDecks.get(position), getItemId(position));
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
@@ -58,6 +65,7 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
 
         @Inject
         Router mRouter;
+        private long id;
         private final TextView deckNameTV;
         private final TextView wordCountTV;
         private final Context mContext;
@@ -66,14 +74,16 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
             super(itemView);
             ActivityComponentManager.getActivityComponent().inject(this);
             itemView.setOnClickListener(v -> {
-                mRouter.navigateTo(itemView.getContext().getString(R.string.fragment_choose_deck));
+                Object data = id;
+                mRouter.navigateTo(itemView.getContext().getString(R.string.fragment_play), data);
             });
             mContext = itemView.getContext().getApplicationContext();
             deckNameTV = itemView.findViewById(R.id.deckNameTV);
             wordCountTV = itemView.findViewById(R.id.deckWordCountTV);
         }
 
-        void bind(Deck model) {
+        void bind(Deck model, long id) {
+            this.id = id;
             deckNameTV.setText(model.getDeckName());
             wordCountTV.setText(mContext.getString(R.string.label_word_count, model.getCards().size()));
         }

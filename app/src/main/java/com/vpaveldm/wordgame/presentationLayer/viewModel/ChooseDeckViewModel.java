@@ -21,7 +21,6 @@ public class ChooseDeckViewModel extends ViewModel {
     ChooseDeckInteractor mChooseDeckInteractor;
 
     private MutableLiveData<List<Deck>> mDeckLiveData;
-    private MutableLiveData<LiveDataMessage> mMessageLiveData;
 
     public ChooseDeckViewModel() {
         super();
@@ -33,13 +32,6 @@ public class ChooseDeckViewModel extends ViewModel {
             mDeckLiveData = new MutableLiveData<>();
         }
         mDeckLiveData.observe(owner, listener);
-    }
-
-    public void subscribeOnMessageLiveData(LifecycleOwner owner, Observer<LiveDataMessage> listener) {
-        if (mMessageLiveData == null) {
-            mMessageLiveData = new MutableLiveData<>();
-        }
-        mMessageLiveData.observe(owner, listener);
     }
 
     //getDecks returns hot observable

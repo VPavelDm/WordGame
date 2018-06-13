@@ -7,6 +7,7 @@ import java.util.List;
 
 @IgnoreExtraProperties
 public class Deck {
+    private long id;
     private String deckName;
     private List<Card> mCards;
 
@@ -30,4 +31,13 @@ public class Deck {
     public void setCards(List<Card> cards) {
         mCards = cards;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }
+

@@ -12,6 +12,7 @@ import com.vpaveldm.wordgame.presentationLayer.view.fragments.add_deck.AddDeckFr
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.logging.LoggingFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.menu.MenuFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.choose_deck.ChooseDeckFragment;
+import com.vpaveldm.wordgame.presentationLayer.view.fragments.play.PlayFragment;
 
 import javax.inject.Named;
 
@@ -66,7 +67,9 @@ public class CiceroneModule {
                         return new AddDeckFragment();
                     }
                     case "PLAY_FRAGMENT": {
-
+                        if (data instanceof Long) {
+                            return PlayFragment.newInstance((Long) data);
+                        }
                     }
                     default: {
                         String error = context.getString(R.string.illegal_argument, "screen key");
