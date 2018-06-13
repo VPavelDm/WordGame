@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 
 @ActivityScope
 public class ChooseDeckInteractor {
@@ -20,7 +20,7 @@ public class ChooseDeckInteractor {
         mRepository = repository;
     }
 
-    public Observable<List<Deck>> getDecks() {
+    public Flowable<List<Deck>> getDecks() {
         return mRepository.getDecks();
     }
 

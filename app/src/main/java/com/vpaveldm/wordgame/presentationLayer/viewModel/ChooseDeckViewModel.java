@@ -5,14 +5,15 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 
+import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.domainLayer.interactors.ChooseDeckInteractor;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class ChooseDeckViewModel extends ViewModel {
@@ -37,6 +38,7 @@ public class ChooseDeckViewModel extends ViewModel {
     //getDecks returns hot observable
     public Disposable getDecks() {
         return mChooseDeckInteractor.getDecks()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(decks -> mDeckLiveData.setValue(decks));
     }
 }

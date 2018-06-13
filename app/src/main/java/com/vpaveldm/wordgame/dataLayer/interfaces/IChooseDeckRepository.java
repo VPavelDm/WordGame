@@ -4,8 +4,8 @@ import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 
 public interface IChooseDeckRepository {
-    Observable<List<Deck>> getDecks();
+    Flowable<List<Deck>> getDecks();
 }

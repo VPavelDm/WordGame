@@ -1,43 +1,23 @@
 package com.vpaveldm.wordgame.dataLayer.store.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @IgnoreExtraProperties
+@Entity(tableName = "decks")
 public class Deck {
-    private long id;
-    private String deckName;
-    private List<Card> mCards;
-
-    public Deck() {
-        super();
-        mCards = new ArrayList<>();
-    }
-
-    public String getDeckName() {
-        return deckName;
-    }
-
-    public void setDeckName(String deckName) {
-        this.deckName = deckName;
-    }
-
-    public List<Card> getCards() {
-        return mCards;
-    }
-
-    public void setCards(List<Card> cards) {
-        mCards = cards;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    @PrimaryKey
+    @NonNull
+    public String id = "";
+    public String deckName;
+    @Ignore
+    public List<Card> cards = new ArrayList<>();
 }
 

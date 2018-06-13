@@ -14,7 +14,6 @@ import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentMa
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -38,8 +37,7 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        mDecks.get(position).setId(getItemId(position));
-        holder.bind(mDecks.get(position), getItemId(position));
+        holder.bind(mDecks.get(position));
     }
 
     @Override
@@ -65,7 +63,7 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
 
         @Inject
         Router mRouter;
-        private long id;
+        private String id;
         private final TextView deckNameTV;
         private final TextView wordCountTV;
         private final Context mContext;
@@ -82,10 +80,10 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
             wordCountTV = itemView.findViewById(R.id.deckWordCountTV);
         }
 
-        void bind(Deck model, long id) {
-            this.id = id;
-            deckNameTV.setText(model.getDeckName());
-            wordCountTV.setText(mContext.getString(R.string.label_word_count, model.getCards().size()));
+        void bind(Deck model) {
+            id = model.id;
+            deckNameTV.setText(model.deckName);
+            wordCountTV.setText(mContext.getString(R.string.label_word_count, model.cards.size()));
         }
     }
 }

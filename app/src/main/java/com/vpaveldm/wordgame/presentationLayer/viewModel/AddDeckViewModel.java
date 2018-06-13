@@ -41,12 +41,12 @@ public class AddDeckViewModel extends ViewModel {
     }
 
     public void addCard(Card card) {
-        mDeck.getCards().add(card);
+        mDeck.cards.add(card);
     }
 
     @SuppressLint("CheckResult") //addDeck returns Completable
     public void createDeck(String name) {
-        mDeck.setDeckName(name);
+        mDeck.deckName = name;
         mAddDeckInteractor.addDeck(mDeck)
                 .subscribe(
                         () -> mDeckLiveData.setValue(new LiveDataMessage(true, null)),
@@ -55,7 +55,7 @@ public class AddDeckViewModel extends ViewModel {
     }
 
     public int getCardSize() {
-        return mDeck.getCards().size();
+        return mDeck.cards.size();
     }
 
     @SuppressLint("CheckResult") //It returns Single

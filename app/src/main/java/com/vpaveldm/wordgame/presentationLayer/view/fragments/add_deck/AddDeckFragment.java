@@ -1,6 +1,5 @@
 package com.vpaveldm.wordgame.presentationLayer.view.fragments.add_deck;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,7 +15,6 @@ import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.databinding.FragmentAddDeckBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.AddDeckViewModel;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.LiveDataMessage;
 
 import javax.inject.Inject;
 
@@ -92,7 +90,7 @@ public class AddDeckFragment extends Fragment {
             Toast.makeText(getContext(), "Entry text in wrong translate field", Toast.LENGTH_LONG).show();
             return;
         }
-        mCard.addWrongTranslate(mBinding.wrongTranslateET.getText().toString());
+        mCard.wrongTranslates.add(mBinding.wrongTranslateET.getText().toString());
         //increase currentWrongTranslate
         mBinding.wrongTranslateET.setText("");
         mBinding.countTranslatesTV.setText(getString(R.string.label_count_translates, currentWrongTranslate));
@@ -109,12 +107,12 @@ public class AddDeckFragment extends Fragment {
             Toast.makeText(getContext(), "Entry translate", Toast.LENGTH_LONG).show();
             return;
         }
-        if (mCard.getWrongTranslates().size() != 4) {
+        if (mCard.wrongTranslates.size() != 4) {
             Toast.makeText(getContext(), "Entry wrong translates", Toast.LENGTH_LONG).show();
             return;
         }
-        mCard.setWord(mBinding.wordET.getText().toString());
-        mCard.setTranslate(mBinding.translateET.getText().toString());
+        mCard.word = mBinding.wordET.getText().toString();
+        mCard.translate = mBinding.translateET.getText().toString();
         mAddDeckViewModel.addCard(mCard);
         currentWrongTranslate = 1;
         refreshCardWidgets();

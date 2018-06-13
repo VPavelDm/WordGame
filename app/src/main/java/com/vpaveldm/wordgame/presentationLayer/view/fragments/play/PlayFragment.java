@@ -14,7 +14,6 @@ import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.databinding.FragmentPlayingBinding;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.ChooseDeckViewModel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -39,11 +38,11 @@ public class PlayFragment extends Fragment {
             if (args == null) {
                 return;
             }
-            long id = args.getLong(KEY_ID);
+            String id = args.getString(KEY_ID);
             for (Deck deck : decks) {
-                if (deck.getId() == id) {
+                if (deck.id.equals(id)) {
                     mDeck = deck;
-                    initWidgets(mDeck.getCards().get(currentCard));
+                    initWidgets(mDeck.cards.get(currentCard));
                     return;
                 }
             }
@@ -57,10 +56,10 @@ public class PlayFragment extends Fragment {
         return binding.getRoot();
     }
 
-    public static PlayFragment newInstance(Long id) {
+    public static PlayFragment newInstance(String id) {
 
         Bundle args = new Bundle();
-        args.putLong(KEY_ID, id);
+        args.putString(KEY_ID, id);
 
         PlayFragment fragment = new PlayFragment();
         fragment.setArguments(args);
@@ -68,14 +67,14 @@ public class PlayFragment extends Fragment {
     }
 
     private void initWidgets(Card card) {
-        List<String> answers = Arrays.asList(new String[card.getWrongTranslates().size() + 1]);
-        Collections.copy(answers, card.getWrongTranslates());
-        answers.set(answers.size() - 1, card.getTranslate());
+        List<String> answers = Arrays.asList(new String[card.wrongTranslates.size() + 1]);
+        Collections.copy(answers, card.wrongTranslates);
+        answers.set(answers.size() - 1, card.translate);
         Collections.shuffle(answers);
         binding.firstAnswerButton.setText(answers.get(0));
         binding.secondAnswerButton.setText(answers.get(1));
         binding.thirdAnswerButton.setText(answers.get(2));
         binding.fourthAnswerButton.setText(answers.get(3));
-        binding.QuestionWordTV.setText(card.getWord());
+        binding.QuestionWordTV.setText(card.word);
     }
 }

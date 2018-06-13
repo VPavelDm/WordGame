@@ -1,41 +1,24 @@
 package com.vpaveldm.wordgame.dataLayer.store.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @IgnoreExtraProperties
+@Entity(tableName = "cards")
 public class Card {
-    private String word;
-    private String translate;
-    private List<String> wrongTranslates = new ArrayList<>();
-
-    public String getWord() {
-        return word;
-    }
-
-    public void setWord(String word) {
-        this.word = word;
-    }
-
-    public String getTranslate() {
-        return translate;
-    }
-
-    public void setTranslate(String translate) {
-        this.translate = translate;
-    }
-
-    public List<String> getWrongTranslates() {
-        return wrongTranslates;
-    }
-
-    public void setWrongTranslates(List<String> wrongTranslates) {
-        this.wrongTranslates = wrongTranslates;
-    }
-
-    public void addWrongTranslate(String wrongTranslate) {
-        wrongTranslates.add(wrongTranslate);
-    }
+    @PrimaryKey
+    @NonNull
+    public String id = "";
+    public String word;
+    public String translate;
+    @TypeConverters({CardConverter.class})
+    public List<String> wrongTranslates = new ArrayList<>();
+    public String deck_id;
 }

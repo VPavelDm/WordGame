@@ -67,8 +67,8 @@ public class CiceroneModule {
                         return new AddDeckFragment();
                     }
                     case "PLAY_FRAGMENT": {
-                        if (data instanceof Long) {
-                            return PlayFragment.newInstance((Long) data);
+                        if (data instanceof String) {
+                            return PlayFragment.newInstance((String) data);
                         }
                     }
                     default: {
