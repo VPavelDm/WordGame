@@ -5,6 +5,7 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.widget.Toast;
 
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
@@ -12,6 +13,8 @@ import com.vpaveldm.wordgame.domainLayer.interactors.PlayInteractor;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 
 import javax.inject.Inject;
+
+import io.reactivex.disposables.Disposable;
 
 public class PlayViewModel extends ViewModel {
     @Inject
@@ -38,24 +41,31 @@ public class PlayViewModel extends ViewModel {
         mMessageLiveData.observe(owner, messageObserver);
     }
 
-    @SuppressLint("CheckResult")
-    public void startGame(Deck deck) {
+    public Disposable startGame(Deck deck) {
         mDeck = deck;
-        mInteractor.startGame().subscribe(t -> time = t);
+        Disposable d = mInteractor.startGame().subscribe(t -> time = t);
         mCardLiveData.setValue(mDeck.cards.get(currentCard));
+        return d;
     }
 
-    public void checkAnswer(String answer) {
+    public Disposable checkAnswer(String answer) {
         Card card = mDeck.cards.get(currentCard);
-        if (card.translate.equals(answer)) {
+        if (card.translate.equals(answer)) { //If answer is correct turn next card
             ++currentCard;
             if (currentCard != mDeck.cards.size()) {
                 mCardLiveData.setValue(mDeck.cards.get(currentCard));
-            } else {
+            } else { //If there isn't any cards
+                Disposable d = mInteractor.updateTopList(mDeck, time).subscribe(
+                        () -> {
+                        },
+                        e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
+                );
                 mMessageLiveData.setValue(new LiveDataMessage(true, null));
+                return d;
             }
-        } else {
+        } else { //If answer isn't correct
             mMessageLiveData.setValue(new LiveDataMessage(false, String.valueOf(currentCard)));
         }
+        return null;
     }
 }

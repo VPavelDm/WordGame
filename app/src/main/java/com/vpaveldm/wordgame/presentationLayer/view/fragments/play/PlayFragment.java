@@ -25,6 +25,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import ru.terrakok.cicerone.Router;
 
 public class PlayFragment extends Fragment implements View.OnClickListener {
@@ -35,6 +37,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
 
     private FragmentPlayingBinding binding;
     private PlayViewModel mPlayViewModel;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,7 +85,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
                 String id = args.getString(KEY_ID);
                 for (Deck deck : decks) {
                     if (deck.id.equals(id)) {
-                        mPlayViewModel.startGame(deck);
+                        mCompositeDisposable.add(mPlayViewModel.startGame(deck));
                         return;
                     }
                 }
@@ -100,6 +103,12 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         binding.thirdAnswerButton.setOnClickListener(this);
         binding.fourthAnswerButton.setOnClickListener(this);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mCompositeDisposable.clear();
     }
 
     public static PlayFragment newInstance(String id) {
@@ -128,7 +137,10 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v instanceof Button) {
             Button button = (Button) v;
-            mPlayViewModel.checkAnswer(button.getText().toString());
+            Disposable d = mPlayViewModel.checkAnswer(button.getText().toString());
+            if (d != null) {
+                mCompositeDisposable.add(d);
+            }
         }
     }
 }

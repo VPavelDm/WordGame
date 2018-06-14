@@ -10,4 +10,5 @@ import io.reactivex.Flowable;
 public interface IFirebaseRepository {
     Flowable<List<Deck>> getDecks();
     Completable addDeck(Deck model);
+    Completable updateTopList(Deck deck, long time);
 }

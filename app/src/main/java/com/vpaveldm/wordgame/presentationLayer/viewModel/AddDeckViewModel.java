@@ -13,6 +13,8 @@ import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.Disposable;
+
 public class AddDeckViewModel extends ViewModel {
 
     @Inject
@@ -44,10 +46,9 @@ public class AddDeckViewModel extends ViewModel {
         mDeck.cards.add(card);
     }
 
-    @SuppressLint("CheckResult") //addDeck returns Completable
-    public void createDeck(String name) {
+    public Disposable createDeck(String name) {
         mDeck.deckName = name;
-        mAddDeckInteractor.addDeck(mDeck)
+        return mAddDeckInteractor.addDeck(mDeck)
                 .subscribe(
                         () -> mDeckLiveData.setValue(new LiveDataMessage(true, null)),
                         e -> mDeckLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
@@ -58,9 +59,8 @@ public class AddDeckViewModel extends ViewModel {
         return mDeck.cards.size();
     }
 
-    @SuppressLint("CheckResult") //It returns Single
-    public void getAutoTranslate(String word) {
-        mAddDeckInteractor.getAutoTranslate(word).subscribe(
+    public Disposable getAutoTranslate(String word) {
+        return mAddDeckInteractor.getAutoTranslate(word).subscribe(
                 success -> mTranslateLiveData.setValue(new LiveDataMessage(true, success)),
                 e -> mTranslateLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
         );

@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.disposables.CompositeDisposable;
 import ru.terrakok.cicerone.Router;
 
 public class AddDeckFragment extends Fragment {
@@ -31,6 +32,7 @@ public class AddDeckFragment extends Fragment {
     private AddDeckViewModel mAddDeckViewModel;
     private int currentWrongTranslate = 1;
     private Card mCard;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +80,12 @@ public class AddDeckFragment extends Fragment {
         refreshCardWidgets();
 
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mCompositeDisposable.clear();
     }
 
     @OnClick(R.id.addWrongTranslate)
@@ -129,7 +137,12 @@ public class AddDeckFragment extends Fragment {
             Toast.makeText(getContext(), "Add at least 10 words", Toast.LENGTH_LONG).show();
             return;
         }
-        mAddDeckViewModel.createDeck(mBinding.deckNameET.getText().toString());
+        mCompositeDisposable.add(mAddDeckViewModel.createDeck(mBinding.deckNameET.getText().toString()));
+    }
+
+    @OnClick(R.id.autoTranslateBtn)
+    void clickAutoTranslateBtn() {
+        mCompositeDisposable.add(mAddDeckViewModel.getAutoTranslate(mBinding.wordET.getText().toString()));
     }
 
     private void refreshCardWidgets() {
@@ -137,10 +150,5 @@ public class AddDeckFragment extends Fragment {
         mBinding.wordET.setText("");
         mBinding.translateET.setText("");
         mBinding.wrongTranslateET.setText("");
-    }
-
-    @OnClick(R.id.autoTranslateBtn)
-    void clickAutoTranslateBtn() {
-        mAddDeckViewModel.getAutoTranslate(mBinding.wordET.getText().toString());
     }
 }
