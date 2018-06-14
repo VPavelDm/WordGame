@@ -9,6 +9,8 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 @ActivityScope
 public class AddDeckInteractor {
@@ -23,7 +25,9 @@ public class AddDeckInteractor {
     }
 
     public Completable addDeck(Deck deck) {
-        return mFirebaseRepository.addDeck(deck);
+        return mFirebaseRepository.addDeck(deck)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread());
     }
 
     public Single<String> getAutoTranslate(String word) {

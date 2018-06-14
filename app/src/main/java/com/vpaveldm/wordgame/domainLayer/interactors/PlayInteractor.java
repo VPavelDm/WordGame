@@ -5,7 +5,7 @@ import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -19,7 +19,7 @@ public class PlayInteractor {
         mRepository = repository;
     }
 
-    public Completable startGame() {
+    public Observable<Long> startGame() {
         return mRepository.startGame()
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread());

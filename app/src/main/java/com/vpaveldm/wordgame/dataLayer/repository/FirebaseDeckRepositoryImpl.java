@@ -82,7 +82,7 @@ public class FirebaseDeckRepositoryImpl implements IFirebaseRepository {
                     if (cardId == null) {
                         card.id = "No_ID";
                     } else {
-                        card.id = cardRef.getKey();
+                        card.id = cardId;
                     }
                 }
             }

@@ -7,8 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
+import io.reactivex.Observable;
 
 @ActivityScope
 public class PlayRepositoryImpl implements IPlayRepository {
@@ -18,7 +17,7 @@ public class PlayRepositoryImpl implements IPlayRepository {
     }
 
     @Override
-    public Completable startGame() {
-        return Completable.create(CompletableEmitter::onComplete).delay(5, TimeUnit.SECONDS);
+    public Observable<Long> startGame() {
+        return Observable.interval(1, TimeUnit.SECONDS);
     }
 }

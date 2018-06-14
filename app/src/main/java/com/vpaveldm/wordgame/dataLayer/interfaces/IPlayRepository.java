@@ -1,7 +1,7 @@
 package com.vpaveldm.wordgame.dataLayer.interfaces;
 
-import io.reactivex.Completable;
+import io.reactivex.Observable;
 
 public interface IPlayRepository {
-    Completable startGame();
+    Observable<Long> startGame();
 }

@@ -20,6 +20,7 @@ public class PlayViewModel extends ViewModel {
     private int currentCard = 0;
     private MutableLiveData<Card> mCardLiveData;
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
+    private long time;
 
     public PlayViewModel() {
         super();
@@ -40,8 +41,7 @@ public class PlayViewModel extends ViewModel {
     @SuppressLint("CheckResult")
     public void startGame(Deck deck) {
         mDeck = deck;
-        mInteractor.startGame().subscribe(
-                () -> mMessageLiveData.setValue(new LiveDataMessage(false, "Time out!")));
+        mInteractor.startGame().subscribe(t -> time = t);
         mCardLiveData.setValue(mDeck.cards.get(currentCard));
     }
 

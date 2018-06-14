@@ -59,8 +59,8 @@ public class ChooseDeckFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         mCompositeDisposable.clear();
     }
 
