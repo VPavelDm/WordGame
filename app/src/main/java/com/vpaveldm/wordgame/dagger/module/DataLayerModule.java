@@ -1,12 +1,12 @@
 package com.vpaveldm.wordgame.dagger.module;
 
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
-import com.vpaveldm.wordgame.dataLayer.interfaces.IAddDeckRepository;
+import com.vpaveldm.wordgame.dataLayer.interfaces.IYandexTranslateRepository;
+import com.vpaveldm.wordgame.dataLayer.interfaces.IFirebaseRepository;
 import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
-import com.vpaveldm.wordgame.dataLayer.interfaces.IChooseDeckRepository;
 import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
-import com.vpaveldm.wordgame.dataLayer.repository.AddDeckRepositoryImpl;
-import com.vpaveldm.wordgame.dataLayer.repository.ChooseDeckRepositoryImpl;
+import com.vpaveldm.wordgame.dataLayer.repository.YandexTranslateRepositoryImpl;
+import com.vpaveldm.wordgame.dataLayer.repository.FirebaseDeckRepositoryImpl;
 import com.vpaveldm.wordgame.dataLayer.repository.LoggingRepositoryImpl;
 import com.vpaveldm.wordgame.dataLayer.repository.PlayRepositoryImpl;
 
@@ -24,13 +24,13 @@ public class DataLayerModule {
 
     @Provides
     @ActivityScope
-    public IChooseDeckRepository provideChooseDeckRepository(ChooseDeckRepositoryImpl repository) {
+    public IFirebaseRepository provideChooseDeckRepository(FirebaseDeckRepositoryImpl repository) {
         return repository;
     }
 
     @Provides
     @ActivityScope
-    public IAddDeckRepository provideAddDeckRepository(AddDeckRepositoryImpl repository) {
+    public IYandexTranslateRepository provideAddDeckRepository(YandexTranslateRepositoryImpl repository) {
         return repository;
     }
 
