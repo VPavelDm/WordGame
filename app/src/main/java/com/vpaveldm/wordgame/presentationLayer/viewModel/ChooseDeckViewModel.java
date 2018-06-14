@@ -28,11 +28,15 @@ public class ChooseDeckViewModel extends ViewModel {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    public void subscribeOnDeckLiveData(LifecycleOwner owner, Observer<List<Deck>> listener) {
+    public void subscribe(LifecycleOwner owner, Observer<List<Deck>> listener) {
         if (mDeckLiveData == null) {
             mDeckLiveData = new MutableLiveData<>();
         }
         mDeckLiveData.observe(owner, listener);
+    }
+
+    public void unsubscribe(Observer<List<Deck>> listener) {
+        mDeckLiveData.removeObserver(listener);
     }
 
     //getDecks returns hot observable

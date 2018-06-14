@@ -5,7 +5,7 @@ import android.arch.persistence.room.TypeConverter;
 import java.util.Arrays;
 import java.util.List;
 
-public class CardConverter {
+public class Converter {
 
     @TypeConverter
     public List<String> toList(String cards) {

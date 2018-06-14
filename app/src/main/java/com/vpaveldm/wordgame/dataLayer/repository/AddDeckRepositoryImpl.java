@@ -62,7 +62,6 @@ public class AddDeckRepositoryImpl implements IAddDeckRepository {
                         card.id = cardRef.getKey();
                     }
                 }
-
             }
             modelRef.setValue(model, (databaseError, databaseReference) -> {
                 if (databaseError != null) {

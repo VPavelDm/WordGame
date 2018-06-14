@@ -18,7 +18,7 @@ public class Card {
     public String id = "";
     public String word;
     public String translate;
-    @TypeConverters({CardConverter.class})
+    @TypeConverters({Converter.class})
     public List<String> wrongTranslates = new ArrayList<>();
     public String deck_id;
 }

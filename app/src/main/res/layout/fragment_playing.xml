@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent">
+
+        <android.support.v7.widget.CardView
+            contentPadding="20dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="75dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="75dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/firstAnswerButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/QuestionWordTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:lines="7"
+                android:padding="20dp"
+                android:textSize="24sp"
+                tools:text="Hello, World.. "/>
+        </android.support.v7.widget.CardView>
+
+        <Button
+            android:id="@+id/firstAnswerButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:ellipsize="end"
+            android:lines="1"
+            app:layout_constraintBottom_toTopOf="@+id/thirdAnswerButton"
+            app:layout_constraintEnd_toStartOf="@+id/secondAnswerButton"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Hello"/>
+
+        <Button
+            android:id="@+id/secondAnswerButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:ellipsize="end"
+            android:lines="1"
+            app:layout_constraintBottom_toTopOf="@+id/fourthAnswerButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/firstAnswerButton"
+            tools:text="Hello"/>
+
+        <Button
+            android:id="@+id/thirdAnswerButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:ellipsize="end"
+            android:lines="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/fourthAnswerButton"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Hello"/>
+
+        <Button
+            android:id="@+id/fourthAnswerButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:ellipsize="end"
+            android:lines="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/thirdAnswerButton"
+            tools:text="Hello"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

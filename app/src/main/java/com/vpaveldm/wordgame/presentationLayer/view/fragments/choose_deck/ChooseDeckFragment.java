@@ -9,7 +9,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.databinding.FragmentChooseDeckBinding;
@@ -38,7 +37,7 @@ public class ChooseDeckFragment extends Fragment {
         ActivityComponentManager.getActivityComponent().inject(this);
         assert getActivity() != null;
         mChooseDeckViewModel = ViewModelProviders.of(getActivity()).get(ChooseDeckViewModel.class);
-        mChooseDeckViewModel.subscribeOnDeckLiveData(this, decks -> adapter.swapList(decks));
+        mChooseDeckViewModel.subscribe(this, decks -> adapter.swapList(decks));
     }
 
     @Nullable
