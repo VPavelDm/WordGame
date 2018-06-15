@@ -41,6 +41,10 @@ public class PlayViewModel extends ViewModel {
         mMessageLiveData.observe(owner, messageObserver);
     }
 
+    public Deck getDeck() {
+        return mDeck;
+    }
+
     public Disposable startGame(Deck deck) {
         mDeck = deck;
         Disposable d = mInteractor.startGame().subscribe(t -> time = t);
@@ -55,13 +59,10 @@ public class PlayViewModel extends ViewModel {
             if (currentCard != mDeck.cards.size()) {
                 mCardLiveData.setValue(mDeck.cards.get(currentCard));
             } else { //If there isn't any cards
-                Disposable d = mInteractor.updateTopList(mDeck, time).subscribe(
-                        () -> {
-                        },
+                return mInteractor.updateTopList(mDeck, time).subscribe(
+                        () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
                         e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
                 );
-                mMessageLiveData.setValue(new LiveDataMessage(true, null));
-                return d;
             }
         } else { //If answer isn't correct
             mMessageLiveData.setValue(new LiveDataMessage(false, String.valueOf(currentCard)));

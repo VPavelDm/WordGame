@@ -13,6 +13,7 @@ import com.vpaveldm.wordgame.presentationLayer.view.fragments.logging.LoggingFra
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.menu.MenuFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.choose_deck.ChooseDeckFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.play.PlayFragment;
+import com.vpaveldm.wordgame.presentationLayer.view.fragments.rating.RatingFragment;
 
 import javax.inject.Named;
 
@@ -69,6 +70,11 @@ public class CiceroneModule {
                     case "PLAY_FRAGMENT": {
                         if (data instanceof String) {
                             return PlayFragment.newInstance((String) data);
+                        }
+                    }
+                    case "RATING_FRAGMENT": {
+                        if (data instanceof String) {
+                            return RatingFragment.newInstance((String) data);
                         }
                     }
                     default: {

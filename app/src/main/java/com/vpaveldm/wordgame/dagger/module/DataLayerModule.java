@@ -6,7 +6,7 @@ import com.vpaveldm.wordgame.dataLayer.interfaces.IFirebaseRepository;
 import com.vpaveldm.wordgame.dataLayer.interfaces.ILoggingRepository;
 import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
 import com.vpaveldm.wordgame.dataLayer.repository.YandexTranslateRepositoryImpl;
-import com.vpaveldm.wordgame.dataLayer.repository.FirebaseDeckRepositoryImpl;
+import com.vpaveldm.wordgame.dataLayer.repository.FirebaseRepositoryImpl;
 import com.vpaveldm.wordgame.dataLayer.repository.LoggingRepositoryImpl;
 import com.vpaveldm.wordgame.dataLayer.repository.PlayRepositoryImpl;
 
@@ -24,7 +24,7 @@ public class DataLayerModule {
 
     @Provides
     @ActivityScope
-    public IFirebaseRepository provideChooseDeckRepository(FirebaseDeckRepositoryImpl repository) {
+    public IFirebaseRepository provideChooseDeckRepository(FirebaseRepositoryImpl repository) {
         return repository;
     }
 

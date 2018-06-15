@@ -35,8 +35,8 @@ public class ChooseDeckViewModel extends ViewModel {
         mDeckLiveData.observe(owner, listener);
     }
 
-    public void unsubscribe(Observer<List<Deck>> listener) {
-        mDeckLiveData.removeObserver(listener);
+    public void unsubscribe(LifecycleOwner owner) {
+        mDeckLiveData.removeObservers(owner);
     }
 
     //getDecks returns hot observable

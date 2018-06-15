@@ -23,6 +23,9 @@ import com.vpaveldm.wordgame.dataLayer.store.model.User;
 
 import java.net.ConnectException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +35,15 @@ import javax.inject.Named;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 
 @ActivityScope
-public class FirebaseDeckRepositoryImpl implements IFirebaseRepository {
+public class FirebaseRepositoryImpl implements IFirebaseRepository {
 
     private AppDatabase db;
 
     @Inject
-    FirebaseDeckRepositoryImpl(@Named("Application") Context context) {
+    FirebaseRepositoryImpl(@Named("Application") Context context) {
         db = Room.databaseBuilder(context, AppDatabase.class, "decks").build();
     }
 
@@ -134,29 +138,43 @@ public class FirebaseDeckRepositoryImpl implements IFirebaseRepository {
                     }
                     user.name = userName;
                     user.time = time;
-                    List<User> users = list.users;
-                    if (users.size() < 10) {
-                        users.add(user);
-                    } else if (users.get(9).time > time) {
-                        users.set(9, user);
-                        int i = 8;
-                        while (i >= 0 && users.get(i).time > time) {
-                            users.set(i + 1, users.get(i));
-                            i--;
-                        }
-                        users.set(i, user);
-                    } else {
-                        //if user is not in the top list return
-                        return;
+                    list.users.add(user);
+                    if (list.users.size() >= 10) {
+                        Collections.sort(list.users);
+                        list.users.remove(list.users.size() - 1);
                     }
                     Map<String, Object> childUpdates = new HashMap<>();
-                    childUpdates.put("users", users);
+                    childUpdates.put("users", list.users);
                     deckRef.updateChildren(childUpdates, (databaseError, databaseReference) -> {
                         if (databaseError != null) {
                             source.onError(databaseError.toException());
                         }
                         source.onComplete();
                     });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    source.onError(databaseError.toException());
+                }
+            });
+        });
+    }
+
+    @Override
+    public Single<TopUserList> getTopList(Deck deck) {
+        return Single.create(source -> {
+            DatabaseReference deckRef = FirebaseDatabase.getInstance().getReference("top_list").child(deck.id);
+            deckRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    TopUserList userList = dataSnapshot.getValue(TopUserList.class);
+                    if (userList == null) {
+                        source.onError(new ConnectException("Connect to firebase is lost"));
+                    } else {
+                        source.onSuccess(userList);
+                    }
+
                 }
 
                 @Override

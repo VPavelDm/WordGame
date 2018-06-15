@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.databinding.FragmentPlayingBinding;
@@ -33,7 +34,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
 
     @Inject
     Router mRouter;
-    public static final String KEY_ID = "com.vpaveldm.id";
+    private static final String KEY_ID = "com.vpaveldm.id";
 
     private FragmentPlayingBinding binding;
     private PlayViewModel mPlayViewModel;
@@ -64,34 +65,30 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
                 //#Добавить здесь диалоговое окно, которое выведет результат
                 mRouter.exit();
             } else {
-                Toast.makeText(getContext(), "You win!!!", Toast.LENGTH_LONG).show();
-                mRouter.exit();
+                Deck deck = mPlayViewModel.getDeck();
+                mRouter.replaceScreen(getString(R.string.fragment_rating), deck.id);
             }
         });
 
         assert getActivity() != null;
         ChooseDeckViewModel viewModel = ViewModelProviders.of(getActivity()).get(ChooseDeckViewModel.class);
-        Observer<List<Deck>> listener = new Observer<List<Deck>>() {
-            @Override
-            public void onChanged(@Nullable List<Deck> decks) {
-                if (decks == null) {
+        viewModel.subscribe(this, decks -> {
+            if (decks == null) {
+                return;
+            }
+            viewModel.unsubscribe(PlayFragment.this);
+            Bundle args = getArguments();
+            if (args == null) {
+                return;
+            }
+            String id = args.getString(KEY_ID);
+            for (Deck deck : decks) {
+                if (deck.id.equals(id)) {
+                    mCompositeDisposable.add(mPlayViewModel.startGame(deck));
                     return;
-                }
-                viewModel.unsubscribe(this);
-                Bundle args = getArguments();
-                if (args == null) {
-                    return;
-                }
-                String id = args.getString(KEY_ID);
-                for (Deck deck : decks) {
-                    if (deck.id.equals(id)) {
-                        mCompositeDisposable.add(mPlayViewModel.startGame(deck));
-                        return;
-                    }
                 }
             }
-        };
-        viewModel.subscribe(this, listener);
+        });
     }
 
     @Nullable

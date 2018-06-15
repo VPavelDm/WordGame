@@ -27,4 +27,9 @@
     <string name="label_create">Create</string>
     <string name="yandex_key">trnsl.1.1.20180612T074102Z.764e033bcf9c41d5.31f4cc9bada282d09a89fb14561d84e3ff50c5e5</string>
     <string name="fragment_play">PLAY_FRAGMENT</string>
+    <string name="fragment_rating">RATING_FRAGMENT</string>
+    <string name="label_next">Next</string>
+    <string name="label_user_position">%1$d.</string>
+    <string name="label_time">Time: %1$d</string>
+    <string name="label_name">%1$s</string>
 </resources>

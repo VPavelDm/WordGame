@@ -11,10 +11,13 @@ import com.vpaveldm.wordgame.presentationLayer.view.fragments.logging.LoggingFra
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.menu.MenuFragment;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.choose_deck.DeckRecyclerAdapter;
 import com.vpaveldm.wordgame.presentationLayer.view.fragments.play.PlayFragment;
+import com.vpaveldm.wordgame.presentationLayer.view.fragments.rating.RatingFragment;
+import com.vpaveldm.wordgame.presentationLayer.view.fragments.rating.UserRecyclerAdapter;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.AddDeckViewModel;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.ChooseDeckViewModel;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.LoggingViewModel;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.PlayViewModel;
+import com.vpaveldm.wordgame.presentationLayer.viewModel.RatingViewModel;
 
 import dagger.Subcomponent;
 
@@ -32,4 +35,6 @@ public interface ActivityComponent {
     void inject(DeckRecyclerAdapter.ViewHolder viewHolder);
     void inject(PlayFragment playFragment);
     void inject(PlayViewModel playViewModel);
+    void inject(RatingViewModel ratingViewModel);
+    void inject(RatingFragment ratingFragment);
 }
