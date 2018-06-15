@@ -5,14 +5,17 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 import android.widget.Toast;
 
+import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.domainLayer.interactors.PlayInteractor;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.disposables.Disposable;
 
@@ -58,15 +61,16 @@ public class PlayViewModel extends ViewModel {
             ++currentCard;
             if (currentCard != mDeck.cards.size()) {
                 mCardLiveData.setValue(mDeck.cards.get(currentCard));
+                return null;
             } else { //If there isn't any cards
                 return mInteractor.updateTopList(mDeck, time).subscribe(
                         () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
                         e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
                 );
             }
-        } else { //If answer isn't correct
-            mMessageLiveData.setValue(new LiveDataMessage(false, String.valueOf(currentCard)));
         }
+        //If answer isn't correct
+        mMessageLiveData.setValue(new LiveDataMessage(false, String.valueOf(currentCard)));
         return null;
     }
 }

@@ -13,10 +13,10 @@
             contentPadding="20dp"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="75dp"
+            android:layout_marginBottom="50dp"
             android:layout_marginEnd="50dp"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="75dp"
+            android:layout_marginTop="50dp"
             app:cardCornerRadius="5dp"
             app:cardElevation="5dp"
             app:layout_constraintBottom_toTopOf="@+id/firstAnswerButton"
@@ -67,7 +67,7 @@
             android:layout_margin="8dp"
             android:ellipsize="end"
             android:lines="1"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/noCorrectAnswerButton"
             app:layout_constraintEnd_toStartOf="@+id/fourthAnswerButton"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="Hello"/>
@@ -79,10 +79,21 @@
             android:layout_margin="8dp"
             android:ellipsize="end"
             android:lines="1"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/noCorrectAnswerButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/thirdAnswerButton"
             tools:text="Hello"/>
+
+        <Button
+            android:id="@+id/noCorrectAnswerButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/label_no_correct_answer"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

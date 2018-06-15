@@ -25,6 +25,7 @@ import ru.terrakok.cicerone.Router;
 
 public class AddDeckFragment extends Fragment {
 
+    public static final int MINIMUM_CARDS = 10;
     @Inject
     Router mRouter;
 
@@ -133,7 +134,7 @@ public class AddDeckFragment extends Fragment {
             Toast.makeText(getContext(), "Entry deck name", Toast.LENGTH_LONG).show();
             return;
         }
-        if (mAddDeckViewModel.getCardSize() < 1) {
+        if (mAddDeckViewModel.getCardSize() < MINIMUM_CARDS) {
             Toast.makeText(getContext(), "Add at least 10 words", Toast.LENGTH_LONG).show();
             return;
         }

@@ -32,6 +32,7 @@ import ru.terrakok.cicerone.Router;
 
 public class PlayFragment extends Fragment implements View.OnClickListener {
 
+    public static final int KEY = 1;
     @Inject
     Router mRouter;
     private static final String KEY_ID = "com.vpaveldm.id";
@@ -99,6 +100,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         binding.secondAnswerButton.setOnClickListener(this);
         binding.thirdAnswerButton.setOnClickListener(this);
         binding.fourthAnswerButton.setOnClickListener(this);
+        binding.noCorrectAnswerButton.setOnClickListener(this);
         return binding.getRoot();
     }
 
@@ -127,6 +129,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         binding.secondAnswerButton.setText(answers.get(1));
         binding.thirdAnswerButton.setText(answers.get(2));
         binding.fourthAnswerButton.setText(answers.get(3));
+        binding.noCorrectAnswerButton.setTag(answers.get(4));
         binding.QuestionWordTV.setText(card.word);
     }
 
@@ -134,7 +137,14 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v instanceof Button) {
             Button button = (Button) v;
-            Disposable d = mPlayViewModel.checkAnswer(button.getText().toString());
+            Object tag = button.getTag();
+            Disposable d;
+            //If correct answer is noCorrectAnswer send tag
+            if (tag != null) {
+                d = mPlayViewModel.checkAnswer(String.valueOf(tag));
+            } else {
+                d = mPlayViewModel.checkAnswer(button.getText().toString());
+            }
             if (d != null) {
                 mCompositeDisposable.add(d);
             }
