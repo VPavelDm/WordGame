@@ -17,6 +17,7 @@ import io.reactivex.disposables.Disposable;
 public class PlayViewModel extends ViewModel {
     @Inject
     PlayInteractor mInteractor;
+    public static final String INCORRECT_ANSWER = "Incorrect answer";
     private Deck mDeck;
     private int currentCard = 0;
     private MutableLiveData<Card> mCardLiveData;
@@ -61,12 +62,12 @@ public class PlayViewModel extends ViewModel {
                 return mInteractor.updateTopList(mDeck, time)
                         .subscribe(
                                 () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
-                                e -> mMessageLiveData.setValue(new LiveDataMessage(true, e.getMessage()))
+                                e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
                         );
             }
         }
         //If answer isn't correct
-        mMessageLiveData.setValue(new LiveDataMessage(false, String.valueOf(currentCard)));
+        mMessageLiveData.setValue(new LiveDataMessage(true, INCORRECT_ANSWER));
         return null;
     }
 }

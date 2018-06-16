@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.vpaveldm.wordgame.presentationLayer.viewModel.PlayViewModel;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -51,33 +53,31 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
 
         mPlayViewModel = ViewModelProviders.of(this).get(PlayViewModel.class);
-        mPlayViewModel.subscribe(this, card -> {
-            if (card == null) {
-                return;
-            }
-            initWidgets(card);
-        }, message -> {
-            if (message == null) {
-                return;
-            }
-            if (!message.isSuccess()) {
-                Toast.makeText(getContext(), "Count of correct words: " + message.getMessage(), Toast.LENGTH_LONG).show();
-            }
-            Deck deck = mPlayViewModel.getDeck();
-            mRouter.replaceScreen(getString(R.string.fragment_rating), deck.id);
-        });
+        mPlayViewModel.subscribe(this,
+                card -> initWidgets(Objects.requireNonNull(card)),
+                message -> {
+                    if (Objects.requireNonNull(message).isSuccess()) {
+                        Deck deck = mPlayViewModel.getDeck();
+                        Pair<String, String> args;
+                        if (message.getMessage() != null
+                                && message.getMessage().equals(PlayViewModel.INCORRECT_ANSWER)) {
+                            args = new Pair<>(deck.id, "You lost the game!");
+                        } else {
+                            args = new Pair<>(deck.id, "You won the game");
+                        }
+                        mRouter.replaceScreen(getString(R.string.fragment_rating), args);
+                    } else {
+                        Toast.makeText(getContext(), message.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
 
-        assert getActivity() != null;
-        ChooseDeckViewModel viewModel = ViewModelProviders.of(getActivity()).get(ChooseDeckViewModel.class);
+        ChooseDeckViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(ChooseDeckViewModel.class);
         viewModel.subscribe(this, decks -> {
             if (decks == null) {
                 return;
             }
             viewModel.unsubscribe(PlayFragment.this);
-            Bundle args = getArguments();
-            if (args == null) {
-                return;
-            }
+            Bundle args = Objects.requireNonNull(getArguments());
             String id = args.getString(KEY_ID);
             for (Deck deck : decks) {
                 if (deck.id.equals(id)) {

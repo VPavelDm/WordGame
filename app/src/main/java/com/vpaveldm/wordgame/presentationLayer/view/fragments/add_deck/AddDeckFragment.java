@@ -16,6 +16,8 @@ import com.vpaveldm.wordgame.databinding.FragmentAddDeckBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.AddDeckViewModel;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -46,10 +48,7 @@ public class AddDeckFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mAddDeckViewModel = ViewModelProviders.of(this).get(AddDeckViewModel.class);
         mAddDeckViewModel.subscribeOnDeckLiveData(this, dataMessage -> {
-            if (dataMessage == null) {
-                return;
-            }
-            if (dataMessage.isSuccess()) {
+            if (Objects.requireNonNull(dataMessage).isSuccess()) {
                 mRouter.exit();
             } else {
                 Toast.makeText(getContext(),
@@ -58,10 +57,7 @@ public class AddDeckFragment extends Fragment {
             }
         });
         mAddDeckViewModel.subscribeOnTranslateLiveData(this, dataMessage -> {
-            if (dataMessage == null) {
-                return;
-            }
-            if (dataMessage.isSuccess()) {
+            if (Objects.requireNonNull(dataMessage).isSuccess()) {
                 mBinding.translateET.setText(dataMessage.getMessage());
             } else {
                 Toast.makeText(getContext(),

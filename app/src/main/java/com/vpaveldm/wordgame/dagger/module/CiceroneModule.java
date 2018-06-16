@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.Pair;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
@@ -73,8 +74,11 @@ public class CiceroneModule {
                         }
                     }
                     case "RATING_FRAGMENT": {
-                        if (data instanceof String) {
-                            return RatingFragment.newInstance((String) data);
+                        if (data instanceof Pair) {
+                            return RatingFragment.newInstance(
+                                    ((String) ((Pair) data).first),
+                                    ((String) ((Pair) data).second)
+                            );
                         }
                     }
                     default: {

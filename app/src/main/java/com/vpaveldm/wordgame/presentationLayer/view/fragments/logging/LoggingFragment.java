@@ -16,6 +16,8 @@ import com.vpaveldm.wordgame.databinding.FragmentLoggingBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.LoggingViewModel;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -50,8 +52,7 @@ public class LoggingFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         loggingViewModel = ViewModelProviders.of(this).get(LoggingViewModel.class);
         loggingViewModel.subscribe(this, dataMessage -> {
-            assert dataMessage != null;
-            if (dataMessage.isSuccess()) {
+            if (Objects.requireNonNull(dataMessage).isSuccess()) {
                 mRouter.replaceScreen(getString(R.string.fragment_menu));
             } else {
                 Toast.makeText(getContext(),

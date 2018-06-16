@@ -39,7 +39,6 @@ public class ChooseDeckViewModel extends ViewModel {
         mDeckLiveData.removeObservers(owner);
     }
 
-    //getDecks returns hot observable
     public Disposable getDecks() {
         return mChooseDeckInteractor.getDecks()
                 .observeOn(AndroidSchedulers.mainThread())

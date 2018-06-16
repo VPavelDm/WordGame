@@ -182,7 +182,7 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
             }
         };
         deckRef.addListenerForSingleValueEvent(listener);
-        return source.doOnTerminate(
+        return source.doOnDispose(
                 () -> deckRef.removeEventListener(listener)
         );
     }

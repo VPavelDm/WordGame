@@ -15,6 +15,8 @@ import com.vpaveldm.wordgame.databinding.FragmentChooseDeckBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.ChooseDeckViewModel;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -35,8 +37,7 @@ public class ChooseDeckFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ActivityComponentManager.getActivityComponent().inject(this);
-        assert getActivity() != null;
-        mChooseDeckViewModel = ViewModelProviders.of(getActivity()).get(ChooseDeckViewModel.class);
+        mChooseDeckViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(ChooseDeckViewModel.class);
         mChooseDeckViewModel.subscribe(this, decks -> adapter.swapList(decks));
     }
 
@@ -46,8 +47,7 @@ public class ChooseDeckFragment extends Fragment {
         FragmentChooseDeckBinding binding = FragmentChooseDeckBinding.inflate(inflater, container, false);
         ButterKnife.bind(this, binding.getRoot());
         binding.deckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        assert getContext() != null;
-        binding.deckRecyclerView.addItemDecoration(new ItemDivider(getContext()));
+        binding.deckRecyclerView.addItemDecoration(new ItemDivider(Objects.requireNonNull(getContext())));
         adapter = new DeckRecyclerAdapter();
         binding.deckRecyclerView.setAdapter(adapter);
         return binding.getRoot();

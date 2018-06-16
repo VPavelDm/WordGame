@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
@@ -16,6 +17,8 @@ import com.vpaveldm.wordgame.databinding.FragmentRatingBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.ChooseDeckViewModel;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.RatingViewModel;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -26,6 +29,7 @@ import ru.terrakok.cicerone.Router;
 
 public class RatingFragment extends Fragment {
 
+    private static final String KEY_RESULT = "com.vpaveldm.result.game";
     @Inject
     Router mRouter;
     private static final String KEY_ID = "com.vpaveldm.id";
@@ -44,23 +48,21 @@ public class RatingFragment extends Fragment {
         RatingViewModel ratingViewModel = ViewModelProviders.of(this).get(RatingViewModel.class);
         ratingViewModel.subscribe(this, topUserList -> {
             if (topUserList == null) {
+                Toast.makeText(getContext(), "Internet connection is lost", Toast.LENGTH_LONG).show();
                 return;
             }
             ratingViewModel.unsubscribe(this);
+            mCompositeDisposable.clear();
             adapter.swapUsers(topUserList.users);
         });
 
-        assert getActivity() != null;
-        ChooseDeckViewModel viewModel = ViewModelProviders.of(getActivity()).get(ChooseDeckViewModel.class);
+        ChooseDeckViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(ChooseDeckViewModel.class);
         viewModel.subscribe(this, decks -> {
             if (decks == null) {
                 return;
             }
             viewModel.unsubscribe(RatingFragment.this);
-            Bundle args = getArguments();
-            if (args == null) {
-                return;
-            }
+            Bundle args = Objects.requireNonNull(getArguments());
             String id = args.getString(KEY_ID);
             for (Deck deck : decks) {
                 if (deck.id.equals(id)) {
@@ -71,6 +73,12 @@ public class RatingFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mCompositeDisposable.clear();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,13 +87,16 @@ public class RatingFragment extends Fragment {
         binding.topListRV.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new UserRecyclerAdapter();
         binding.topListRV.setAdapter(adapter);
+        Bundle args = Objects.requireNonNull(getArguments());
+        binding.resultGameTV.setText(args.getString(KEY_RESULT));
         return binding.getRoot();
     }
 
-    public static RatingFragment newInstance(String key) {
+    public static RatingFragment newInstance(String key, String resultGame) {
 
         Bundle args = new Bundle();
         args.putString(KEY_ID, key);
+        args.putString(KEY_RESULT, resultGame);
         RatingFragment fragment = new RatingFragment();
         fragment.setArguments(args);
         return fragment;
