@@ -16,10 +16,10 @@ import io.reactivex.Flowable;
 @Dao
 public abstract class DeckDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void insertCards(List<Card> cards);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void insertDeck(List<Deck> deck);
 
     @Query("SELECT * FROM decks")

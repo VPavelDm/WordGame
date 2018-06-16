@@ -2,11 +2,14 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@+id/countCardsTV"
+        app:layout_constraintTop_toBottomOf="@+id/countCardsTV">
 
         <EditText
             android:id="@+id/deckNameET"
@@ -43,6 +46,7 @@
 
         <Button
             android:id="@+id/autoTranslateBtn"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="100dp"
             android:layout_height="45dp"
             android:layout_margin="8dp"
@@ -56,13 +60,21 @@
             android:id="@+id/countTranslatesTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/label_count_translates"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@+id/addWrongTranslate"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/wordET"
-            app:layout_constraintVertical_bias="0.18"/>
+            tools:text="1/4"/>
+
+        <TextView
+            android:id="@+id/countCardsTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/label_count_cards"
+            app:layout_constraintBaseline_toBaselineOf="@+id/createCardButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="10/10"/>
 
         <EditText
             android:id="@+id/wrongTranslateET"
@@ -77,6 +89,7 @@
 
         <Button
             android:id="@+id/addWrongTranslate"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="100dp"
             android:layout_height="45dp"
             android:layout_margin="8dp"
@@ -88,17 +101,19 @@
 
         <Button
             android:id="@+id/createCardButton"
-            android:layout_width="100dp"
-            android:layout_height="45dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:lines="2"
             android:text="@string/label_create_card"
             android:textAllCaps="false"
-            app:layout_constraintEnd_toStartOf="@+id/countTranslatesTV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addWrongTranslate"/>
 
         <Button
             android:id="@+id/createDeckButton"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"

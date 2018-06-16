@@ -33,4 +33,5 @@
     <string name="label_time">Time: %1$d</string>
     <string name="label_name">%1$s</string>
     <string name="label_no_correct_answer">No correct answer</string>
+    <string name="label_count_cards">%1$d/10</string>
 </resources>

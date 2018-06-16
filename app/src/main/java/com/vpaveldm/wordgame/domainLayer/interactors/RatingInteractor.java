@@ -7,7 +7,7 @@ import com.vpaveldm.wordgame.dataLayer.store.model.TopUserList;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -20,7 +20,7 @@ public class RatingInteractor {
         mRepository = repository;
     }
 
-    public Single<TopUserList> getTopUsers(Deck deck) {
+    public Observable<TopUserList> getTopUsers(Deck deck) {
         return mRepository.getTopList(deck)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.single());

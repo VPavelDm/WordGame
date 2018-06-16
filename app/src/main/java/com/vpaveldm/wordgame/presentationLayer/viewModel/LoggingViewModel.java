@@ -1,6 +1,5 @@
 package com.vpaveldm.wordgame.presentationLayer.viewModel;
 
-import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
@@ -15,6 +14,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class LoggingViewModel extends ViewModel {
@@ -25,34 +25,28 @@ public class LoggingViewModel extends ViewModel {
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
     private MutableLiveData<Intent> mIntentLiveData;
 
-    @SuppressWarnings("WeakerAccess")
     public LoggingViewModel() {
         super();
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    public void subscribeOnMessageLiveData(LifecycleOwner owner, Observer<LiveDataMessage> listener) {
+    public void subscribe(LifecycleOwner owner, Observer<LiveDataMessage> messageListener, Observer<Intent> intentListener) {
         if (mMessageLiveData == null) {
             mMessageLiveData = new MutableLiveData<>();
         }
-        mMessageLiveData.observe(owner, listener);
-    }
-
-    public void subscribeOnIntentLiveData(LifecycleOwner owner, Observer<Intent> listener) {
         if (mIntentLiveData == null) {
             mIntentLiveData = new MutableLiveData<>();
-            mIntentLiveData.observe(owner, listener);
         }
+        mMessageLiveData.observe(owner, messageListener);
+        mIntentLiveData.observe(owner, intentListener);
     }
 
-    @SuppressLint("CheckResult") //signIn returns Observable that generates one value and then completed signal
-    public void signIn(String email, String password) {
+    public Disposable signIn(String email, String password) {
         LoggingModel.Builder builder = new LoggingModel.Builder();
         builder.addEmail(email)
                 .addPassword(password);
         Observable<Boolean> subject = mLoggingInteractor.signIn(builder.create());
-        subject.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        return subject
                 .filter(isConnected -> isConnected)
                 .subscribe(
                         isConnected -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
@@ -60,13 +54,12 @@ public class LoggingViewModel extends ViewModel {
                 );
     }
 
-    @SuppressLint("CheckResult") //signUp returns Observable that generates one value and then completed signal
-    public void signUp(String email, String password) {
+    public Disposable signUp(String email, String password) {
         LoggingModel.Builder builder = new LoggingModel.Builder();
         builder.addEmail(email)
                 .addPassword(password);
         Observable<Boolean> subject = mLoggingInteractor.signUp(builder.create());
-        subject.subscribeOn(Schedulers.io())
+        return subject.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(isConnected -> isConnected)
                 .subscribe(
@@ -75,19 +68,16 @@ public class LoggingViewModel extends ViewModel {
                 );
     }
 
-    @SuppressLint("CheckResult") //getGoogleIntent returns Observable that generates one value and then completed signal
-    public void getIntentForGoogle() {
-        mLoggingInteractor.getGoogleIntent()
+    public Disposable getIntentForGoogle() {
+        return mLoggingInteractor.getGoogleIntent()
                 .subscribe(item -> mIntentLiveData.setValue(item.getData()));
     }
 
-    @SuppressLint("CheckResult") //signIn returns Observable that generates one value and then completed signal
-    public void signInByGoogle(Intent data) {
+    public Disposable signInByGoogle(Intent data) {
         LoggingModel.Builder builder = new LoggingModel.Builder();
         builder.addData(data);
         Observable<Boolean> subject = mLoggingInteractor.signIn(builder.create());
-        subject.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        return subject
                 .filter(isConnected -> isConnected)
                 .subscribe(
                         isConnected -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),

@@ -78,9 +78,14 @@ public class AddDeckFragment extends Fragment {
         ButterKnife.bind(this, mBinding.getRoot());
 
         mCard = new Card();
-        refreshCardWidgets();
 
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshCardWidgets();
     }
 
     @Override
@@ -148,6 +153,7 @@ public class AddDeckFragment extends Fragment {
 
     private void refreshCardWidgets() {
         mBinding.countTranslatesTV.setText(getString(R.string.label_count_translates, currentWrongTranslate - 1));
+        mBinding.countCardsTV.setText(getString(R.string.label_count_cards, mAddDeckViewModel.getCardSize()));
         mBinding.wordET.setText("");
         mBinding.translateET.setText("");
         mBinding.wrongTranslateET.setText("");

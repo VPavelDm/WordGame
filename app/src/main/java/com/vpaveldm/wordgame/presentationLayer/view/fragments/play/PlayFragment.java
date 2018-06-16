@@ -1,6 +1,5 @@
 package com.vpaveldm.wordgame.presentationLayer.view.fragments.play;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -62,13 +61,10 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
                 return;
             }
             if (!message.isSuccess()) {
-                Toast.makeText(getContext(), message.getMessage(), Toast.LENGTH_LONG).show();
-                //#Добавить здесь диалоговое окно, которое выведет результат
-                mRouter.exit();
-            } else {
-                Deck deck = mPlayViewModel.getDeck();
-                mRouter.replaceScreen(getString(R.string.fragment_rating), deck.id);
+                Toast.makeText(getContext(), "Count of correct words: " + message.getMessage(), Toast.LENGTH_LONG).show();
             }
+            Deck deck = mPlayViewModel.getDeck();
+            mRouter.replaceScreen(getString(R.string.fragment_rating), deck.id);
         });
 
         assert getActivity() != null;

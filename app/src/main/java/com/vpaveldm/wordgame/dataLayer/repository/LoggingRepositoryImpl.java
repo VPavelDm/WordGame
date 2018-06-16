@@ -21,6 +21,7 @@ import java.net.ConnectException;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
 
 @ActivityScope
@@ -54,10 +55,12 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
     }
 
     @Override
-    public LoggingModel getGoogleIntent() {
-        LoggingModel.Builder builder = new LoggingModel.Builder();
-        Intent intent = Auth.GoogleSignInApi.getSignInIntent(mApiClient);
-        return builder.addData(intent).create();
+    public Single<LoggingModel> getGoogleIntent() {
+        return Single.create(source -> {
+            LoggingModel.Builder builder = new LoggingModel.Builder();
+            Intent intent = Auth.GoogleSignInApi.getSignInIntent(mApiClient);
+            source.onSuccess(builder.addData(intent).create());
+        });
     }
 
     private void signInByEmailAndPassword(BehaviorSubject<Boolean> subject, LoggingModel model) {

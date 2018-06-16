@@ -7,11 +7,11 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
+import io.reactivex.Observable;
 
 public interface IFirebaseRepository {
     Flowable<List<Deck>> getDecks();
     Completable addDeck(Deck model);
     Completable updateTopList(Deck deck, long time);
-    Single<TopUserList> getTopList(Deck deck);
+    Observable<TopUserList> getTopList(Deck deck);
 }

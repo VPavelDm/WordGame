@@ -1,6 +1,5 @@
 package com.vpaveldm.wordgame.presentationLayer.view.fragments.rating;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,10 +12,8 @@ import android.view.ViewGroup;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
-import com.vpaveldm.wordgame.dataLayer.store.model.TopUserList;
 import com.vpaveldm.wordgame.databinding.FragmentRatingBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.presentationLayer.view.fragments.play.PlayFragment;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.ChooseDeckViewModel;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.RatingViewModel;
 

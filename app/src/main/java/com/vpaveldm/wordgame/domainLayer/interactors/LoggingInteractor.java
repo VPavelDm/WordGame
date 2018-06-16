@@ -8,6 +8,8 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 @ActivityScope
 public class LoggingInteractor {
@@ -20,7 +22,10 @@ public class LoggingInteractor {
     }
 
     public Observable<Boolean> signIn(LoggingModel model) {
-        return mRepository.signIn(model);
+        return mRepository
+                .signIn(model)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<Boolean> signUp(LoggingModel model) {
@@ -28,9 +33,9 @@ public class LoggingInteractor {
     }
 
     public Single<LoggingModel> getGoogleIntent() {
-        return Single.create(subscriber -> {
-            LoggingModel model = mRepository.getGoogleIntent();
-            subscriber.onSuccess(model);
-        });
+        return mRepository
+                .getGoogleIntent()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

@@ -3,7 +3,6 @@ package com.vpaveldm.wordgame.dataLayer.repository;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,8 +22,6 @@ import com.vpaveldm.wordgame.dataLayer.store.model.User;
 
 import java.net.ConnectException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +32,8 @@ import javax.inject.Named;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 @ActivityScope
 public class FirebaseRepositoryImpl implements IFirebaseRepository {
@@ -162,27 +160,31 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
     }
 
     @Override
-    public Single<TopUserList> getTopList(Deck deck) {
-        return Single.create(source -> {
-            DatabaseReference deckRef = FirebaseDatabase.getInstance().getReference("top_list").child(deck.id);
-            deckRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    TopUserList userList = dataSnapshot.getValue(TopUserList.class);
-                    if (userList == null) {
-                        source.onError(new ConnectException("Connect to firebase is lost"));
-                    } else {
-                        source.onSuccess(userList);
-                    }
-
+    public Observable<TopUserList> getTopList(Deck deck) {
+        PublishSubject<TopUserList> source = PublishSubject.create();
+        DatabaseReference deckRef = FirebaseDatabase.getInstance().getReference("top_list").child(deck.id);
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                TopUserList userList = dataSnapshot.getValue(TopUserList.class);
+                if (userList == null) {
+                    source.onError(new ConnectException("Connect to firebase is lost"));
+                } else {
+                    source.onNext(userList);
+                    source.onComplete();
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    source.onError(databaseError.toException());
-                }
-            });
-        });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                source.onError(databaseError.toException());
+            }
+        };
+        deckRef.addListenerForSingleValueEvent(listener);
+        return source.doOnTerminate(
+                () -> deckRef.removeEventListener(listener)
+        );
     }
 
     private String getUserName() {

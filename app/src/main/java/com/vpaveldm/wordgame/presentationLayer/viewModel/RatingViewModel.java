@@ -37,7 +37,12 @@ public class RatingViewModel extends ViewModel {
     }
 
     public Disposable getUserTopList(Deck deck) {
-        return mInteractor.getTopUsers(deck).subscribe(topUserList -> mUserListLiveData.setValue(topUserList));
+        return mInteractor.getTopUsers(deck)
+                .subscribe(
+                        topUserList -> mUserListLiveData.setValue(topUserList),
+                        t -> mUserListLiveData.setValue(null),
+                        () -> mUserListLiveData.setValue(null)
+                );
     }
 
 }
