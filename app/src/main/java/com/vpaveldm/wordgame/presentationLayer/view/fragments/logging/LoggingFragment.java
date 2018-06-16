@@ -50,9 +50,7 @@ public class LoggingFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         loggingViewModel = ViewModelProviders.of(this).get(LoggingViewModel.class);
         loggingViewModel.subscribe(this, dataMessage -> {
-            if (dataMessage == null) {
-                return;
-            }
+            assert dataMessage != null;
             if (dataMessage.isSuccess()) {
                 mRouter.replaceScreen(getString(R.string.fragment_menu));
             } else {
@@ -61,12 +59,7 @@ public class LoggingFragment extends Fragment {
                         Toast.LENGTH_LONG
                 ).show();
             }
-        }, intent -> {
-            if (intent == null) {
-                return;
-            }
-            startActivityForResult(intent, RC_GOOGLE_LOGIN);
-        });
+        }, intent -> startActivityForResult(intent, RC_GOOGLE_LOGIN));
     }
 
     @Nullable
