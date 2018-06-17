@@ -118,45 +118,48 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
     }
 
     @Override
-    public Completable updateTopList(Deck deck, long time) {
-        return Completable.create(source -> {
-            DatabaseReference deckRef = FirebaseDatabase.getInstance().getReference("top_list").child(deck.id);
-            deckRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    TopUserList list = dataSnapshot.getValue(TopUserList.class);
-                    if (list == null) {
-                        source.onError(new NullPointerException("Connect to firebase is lost"));
-                        return;
-                    }
-                    User user = new User();
-                    String userName = getUserName();
-                    if (userName == null) {
-                        source.onError(new ConnectException("Connect to firebase is lost"));
-                    }
-                    user.name = userName;
-                    user.time = time;
-                    list.users.add(user);
-                    if (list.users.size() >= 10) {
-                        Collections.sort(list.users);
-                        list.users.remove(list.users.size() - 1);
-                    }
-                    Map<String, Object> childUpdates = new HashMap<>();
-                    childUpdates.put("users", list.users);
-                    deckRef.updateChildren(childUpdates, (databaseError, databaseReference) -> {
-                        if (databaseError != null) {
-                            source.onError(databaseError.toException());
-                        }
-                        source.onComplete();
-                    });
+    public Observable<Boolean> updateTopList(Deck deck, long time) {
+        PublishSubject<Boolean> subject = PublishSubject.create();
+        DatabaseReference deckRef = FirebaseDatabase.getInstance().getReference("top_list").child(deck.id);
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                TopUserList list = dataSnapshot.getValue(TopUserList.class);
+                if (list == null) {
+                    subject.onError(new NullPointerException("Connect to firebase is lost"));
+                    return;
                 }
+                User user = new User();
+                String userName = getUserName();
+                if (userName == null) {
+                    subject.onError(new ConnectException("Connect to firebase is lost"));
+                }
+                user.name = userName;
+                user.time = time;
+                list.users.add(user);
+                if (list.users.size() >= 10) {
+                    Collections.sort(list.users);
+                    list.users.remove(list.users.size() - 1);
+                }
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("users", list.users);
+                deckRef.updateChildren(childUpdates, (databaseError, databaseReference) -> {
+                    if (databaseError != null) {
+                        subject.onError(databaseError.toException());
+                    }
+                    subject.onComplete();
+                });
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    source.onError(databaseError.toException());
-                }
-            });
-        });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                subject.onError(databaseError.toException());
+            }
+        };
+        deckRef.addListenerForSingleValueEvent(listener);
+        return subject.doOnDispose(
+                () -> deckRef.removeEventListener(listener)
+        );
     }
 
     @Override

@@ -5,9 +5,11 @@ import com.vpaveldm.wordgame.dataLayer.interfaces.IFirebaseRepository;
 import com.vpaveldm.wordgame.dataLayer.interfaces.IPlayRepository;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
+import java.net.ConnectException;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -30,8 +32,9 @@ public class PlayInteractor {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Completable updateTopList(Deck deck, long time) {
+    public Observable<Boolean> updateTopList(Deck deck, long time) {
         return mFirebaseRepository.updateTopList(deck, time)
+                .timeout(1, TimeUnit.SECONDS, Observable.error(new ConnectException("No internet connection")))
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread());
     }

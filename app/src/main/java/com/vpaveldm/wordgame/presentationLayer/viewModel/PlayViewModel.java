@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.util.Log;
 
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
@@ -61,8 +62,10 @@ public class PlayViewModel extends ViewModel {
             } else { //If there isn't any cards
                 return mInteractor.updateTopList(mDeck, time)
                         .subscribe(
-                                () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
-                                e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
+                                ans -> {
+                                },
+                                e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage())),
+                                () -> mMessageLiveData.setValue(new LiveDataMessage(true, null))
                         );
             }
         }

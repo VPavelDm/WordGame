@@ -12,6 +12,6 @@ import io.reactivex.Observable;
 public interface IFirebaseRepository {
     Flowable<List<Deck>> getDecks();
     Completable addDeck(Deck model);
-    Completable updateTopList(Deck deck, long time);
+    Observable<Boolean> updateTopList(Deck deck, long time);
     Observable<TopUserList> getTopList(Deck deck);
 }

@@ -68,6 +68,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
                         mRouter.replaceScreen(getString(R.string.fragment_rating), args);
                     } else {
                         Toast.makeText(getContext(), message.getMessage(), Toast.LENGTH_LONG).show();
+                        mRouter.exit();
                     }
                 });
 
