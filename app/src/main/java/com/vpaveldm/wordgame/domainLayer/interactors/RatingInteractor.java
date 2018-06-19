@@ -5,6 +5,9 @@ import com.vpaveldm.wordgame.dataLayer.interfaces.IFirebaseRepository;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.dataLayer.store.model.TopUserList;
 
+import java.net.ConnectException;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -22,6 +25,7 @@ public class RatingInteractor {
 
     public Observable<TopUserList> getTopUsers(Deck deck) {
         return mRepository.getTopList(deck)
+                .timeout(1, TimeUnit.SECONDS, Observable.error(new ConnectException("No internet connection")))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.single());
     }

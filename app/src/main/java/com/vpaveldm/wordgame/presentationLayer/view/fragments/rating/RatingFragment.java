@@ -48,7 +48,8 @@ public class RatingFragment extends Fragment {
         RatingViewModel ratingViewModel = ViewModelProviders.of(this).get(RatingViewModel.class);
         ratingViewModel.subscribe(this, topUserList -> {
             if (topUserList == null) {
-                Toast.makeText(getContext(), "Internet connection is lost", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "No internet connection", Toast.LENGTH_LONG).show();
+                mRouter.exit();
                 return;
             }
             ratingViewModel.unsubscribe(this);
