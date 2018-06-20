@@ -3,6 +3,7 @@ package com.vpaveldm.wordgame.presentationLayer.viewModel;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
 
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.domainLayer.interactors.ChooseDeckInteractor;
@@ -15,7 +16,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
-public class ChooseDeckViewModel extends AbstractViewModel {
+public class ChooseDeckViewModel extends ViewModel {
 
     @Inject
     ChooseDeckInteractor mChooseDeckInteractor;

@@ -3,6 +3,7 @@ package com.vpaveldm.wordgame.presentationLayer.viewModel;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
 
 import com.vpaveldm.wordgame.domainLayer.interactors.AddDeckInteractor;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
@@ -13,7 +14,7 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 
-public class AddDeckViewModel extends AbstractViewModel {
+public class AddDeckViewModel extends ViewModel {
 
     @Inject
     AddDeckInteractor mAddDeckInteractor;
@@ -61,12 +62,5 @@ public class AddDeckViewModel extends AbstractViewModel {
                 success -> mTranslateLiveData.setValue(new LiveDataMessage(true, success)),
                 e -> mTranslateLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
         );
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mTranslateLiveData = null;
-        mMessageLiveData = null;
     }
 }
