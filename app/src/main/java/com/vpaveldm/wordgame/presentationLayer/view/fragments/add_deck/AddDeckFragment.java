@@ -27,7 +27,7 @@ import ru.terrakok.cicerone.Router;
 
 public class AddDeckFragment extends Fragment {
 
-    public static final int MINIMUM_CARDS = 1;
+    public static final int MINIMUM_CARDS = 10;
     @Inject
     Router mRouter;
 

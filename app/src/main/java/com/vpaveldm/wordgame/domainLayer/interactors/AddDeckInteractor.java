@@ -29,7 +29,6 @@ public class AddDeckInteractor {
 
     public Completable addDeck(Deck deck) {
         return mFirebaseRepository.addDeck(deck)
-                .timeout(1, TimeUnit.SECONDS, Completable.error(new ConnectException("No internet connection")))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread());
     }
