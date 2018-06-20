@@ -1,5 +1,6 @@
 package com.vpaveldm.wordgame.presentationLayer.viewModel;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
@@ -23,42 +24,34 @@ public class PlayViewModel extends ViewModel {
     private int currentCard = 0;
     private MutableLiveData<Card> mCardLiveData;
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
-    private MutableLiveData<Deck> mDeckLiveData;
-    private long time;
+    private long time = 0L;
 
     public PlayViewModel() {
         super();
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    public void subscribe(LifecycleOwner owner,
-                          Observer<Card> cardObserver,
-                          Observer<LiveDataMessage> messageObserver,
-                          Observer<Deck> deckListener) {
-        if (mCardLiveData == null) {
-            mCardLiveData = new MutableLiveData<>();
-        }
+    public void createLiveDataAndSubscribe(LifecycleOwner owner,
+                                           Observer<Card> cardObserver,
+                                           Observer<LiveDataMessage> messageObserver) {
+        mCardLiveData = new MutableLiveData<>();
+        mMessageLiveData = new MutableLiveData<>();
+
         mCardLiveData.observe(owner, cardObserver);
-        if (mMessageLiveData == null) {
-            mMessageLiveData = new MutableLiveData<>();
-        }
         mMessageLiveData.observe(owner, messageObserver);
-        if (mDeckLiveData == null) {
-            mDeckLiveData = new MutableLiveData<>();
-        }
-        mDeckLiveData.observe(owner, deckListener);
     }
 
-    public Disposable getDeck(String id) {
-        return mInteractor.getDeck(id)
-                .subscribe(deck -> mDeckLiveData.setValue(deck));
+    @SuppressLint("CheckResult")
+    public void getDeck(String id) {
+        mInteractor.getDeck(id)
+                .subscribe(deck -> {
+                    mDeck = deck;
+                    mCardLiveData.setValue(mDeck.cards.get(currentCard));
+                });
     }
 
-    public Disposable startGame(Deck deck) {
-        mDeck = deck;
-        Disposable d = mInteractor.startGame().subscribe(t -> time = t);
-        mCardLiveData.setValue(mDeck.cards.get(currentCard));
-        return d;
+    public Disposable startGame() {
+        return mInteractor.startGame().subscribe(t -> ++time);
     }
 
     public Disposable checkAnswer(String answer) {

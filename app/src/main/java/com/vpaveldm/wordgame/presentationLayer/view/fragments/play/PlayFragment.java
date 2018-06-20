@@ -46,12 +46,24 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentPlayingBinding.inflate(inflater, container, false);
+        binding.firstAnswerButton.setOnClickListener(this);
+        binding.secondAnswerButton.setOnClickListener(this);
+        binding.thirdAnswerButton.setOnClickListener(this);
+        binding.fourthAnswerButton.setOnClickListener(this);
+        binding.noCorrectAnswerButton.setOnClickListener(this);
+        return binding.getRoot();
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mPlayViewModel = ViewModelProviders.of(this).get(PlayViewModel.class);
-        mPlayViewModel.subscribe(this,
+
+        mPlayViewModel.createLiveDataAndSubscribe(this,
                 card -> initWidgets(Objects.requireNonNull(card)),
                 message -> {
                     if (Objects.requireNonNull(message).isSuccess()) {
@@ -67,28 +79,17 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(getContext(), message.getMessage(), Toast.LENGTH_LONG).show();
                         mRouter.exit();
                     }
-                },
-                deck -> mCompositeDisposable.add(mPlayViewModel.startGame(deck)));
+                });
+
+        Bundle args = Objects.requireNonNull(getArguments());
+        deckId = args.getString(KEY_ID);
+        mPlayViewModel.getDeck(deckId);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Bundle args = Objects.requireNonNull(getArguments());
-        deckId = args.getString(KEY_ID);
-        mCompositeDisposable.add(mPlayViewModel.getDeck(deckId));
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentPlayingBinding.inflate(inflater, container, false);
-        binding.firstAnswerButton.setOnClickListener(this);
-        binding.secondAnswerButton.setOnClickListener(this);
-        binding.thirdAnswerButton.setOnClickListener(this);
-        binding.fourthAnswerButton.setOnClickListener(this);
-        binding.noCorrectAnswerButton.setOnClickListener(this);
-        return binding.getRoot();
+        mCompositeDisposable.add(mPlayViewModel.startGame());
     }
 
     @Override
