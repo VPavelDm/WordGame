@@ -1,10 +1,8 @@
 package com.vpaveldm.wordgame.presentationLayer.viewModel;
 
-import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
 
 import com.vpaveldm.wordgame.domainLayer.interactors.AddDeckInteractor;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
@@ -15,12 +13,12 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 
-public class AddDeckViewModel extends ViewModel {
+public class AddDeckViewModel extends AbstractViewModel {
 
     @Inject
     AddDeckInteractor mAddDeckInteractor;
     private final Deck mDeck;
-    private MutableLiveData<LiveDataMessage> mDeckLiveData;
+    private MutableLiveData<LiveDataMessage> mMessageLiveData;
     private MutableLiveData<LiveDataMessage> mTranslateLiveData;
 
     public AddDeckViewModel() {
@@ -28,18 +26,17 @@ public class AddDeckViewModel extends ViewModel {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    public void subscribeOnDeckLiveData(LifecycleOwner owner, Observer<LiveDataMessage> listener) {
-        if (mDeckLiveData == null) {
-            mDeckLiveData = new MutableLiveData<>();
+    public void subscribe(LifecycleOwner owner,
+                          Observer<LiveDataMessage> messageListener,
+                          Observer<LiveDataMessage> translateListener) {
+        if (mMessageLiveData == null) {
+            mMessageLiveData = new MutableLiveData<>();
         }
-        mDeckLiveData.observe(owner, listener);
-    }
-
-    public void subscribeOnTranslateLiveData(LifecycleOwner owner, Observer<LiveDataMessage> listener) {
+        mMessageLiveData.observe(owner, messageListener);
         if (mTranslateLiveData == null) {
             mTranslateLiveData = new MutableLiveData<>();
         }
-        mTranslateLiveData.observe(owner, listener);
+        mTranslateLiveData.observe(owner, translateListener);
     }
 
     public void addCard(Card card) {
@@ -50,8 +47,8 @@ public class AddDeckViewModel extends ViewModel {
         mDeck.deckName = name;
         return mAddDeckInteractor.addDeck(mDeck)
                 .subscribe(
-                        () -> mDeckLiveData.setValue(new LiveDataMessage(true, null)),
-                        e -> mDeckLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
+                        () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
+                        e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
                 );
     }
 
@@ -64,5 +61,12 @@ public class AddDeckViewModel extends ViewModel {
                 success -> mTranslateLiveData.setValue(new LiveDataMessage(true, success)),
                 e -> mTranslateLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
         );
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mTranslateLiveData = null;
+        mMessageLiveData = null;
     }
 }

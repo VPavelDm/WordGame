@@ -27,7 +27,7 @@ import ru.terrakok.cicerone.Router;
 
 public class AddDeckFragment extends Fragment {
 
-    public static final int MINIMUM_CARDS = 10;
+    public static final int MINIMUM_CARDS = 1;
     @Inject
     Router mRouter;
 
@@ -47,7 +47,7 @@ public class AddDeckFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAddDeckViewModel = ViewModelProviders.of(this).get(AddDeckViewModel.class);
-        mAddDeckViewModel.subscribeOnDeckLiveData(this, dataMessage -> {
+        mAddDeckViewModel.subscribe(this, dataMessage -> {
             if (Objects.requireNonNull(dataMessage).isSuccess()) {
                 mRouter.exit();
             } else {
@@ -55,13 +55,12 @@ public class AddDeckFragment extends Fragment {
                         dataMessage.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
-        });
-        mAddDeckViewModel.subscribeOnTranslateLiveData(this, dataMessage -> {
-            if (Objects.requireNonNull(dataMessage).isSuccess()) {
-                mBinding.translateET.setText(dataMessage.getMessage());
+        }, translate -> {
+            if (Objects.requireNonNull(translate).isSuccess()) {
+                mBinding.translateET.setText(translate.getMessage());
             } else {
                 Toast.makeText(getContext(),
-                        dataMessage.getMessage(),
+                        translate.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });

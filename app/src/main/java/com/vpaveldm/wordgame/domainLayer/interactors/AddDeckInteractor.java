@@ -5,6 +5,9 @@ import com.vpaveldm.wordgame.dataLayer.interfaces.IFirebaseRepository;
 import com.vpaveldm.wordgame.dataLayer.interfaces.IYandexTranslateRepository;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
+import java.net.ConnectException;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
@@ -26,6 +29,7 @@ public class AddDeckInteractor {
 
     public Completable addDeck(Deck deck) {
         return mFirebaseRepository.addDeck(deck)
+                .timeout(1, TimeUnit.SECONDS, Completable.error(new ConnectException("No internet connection")))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread());
     }

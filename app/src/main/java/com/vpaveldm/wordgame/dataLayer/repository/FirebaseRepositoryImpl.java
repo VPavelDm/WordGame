@@ -101,19 +101,14 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
                 }
                 card.id = cardId;
             }
-            modelRef.setValue(deck, (databaseError, databaseReference) -> {
-                if (databaseError != null) {
-                    source.onError(databaseError.toException());
-                } else {
-                    source.onComplete();
-                }
-            });
+            modelRef.setValue(deck);
             //Init empty top list for deck
             TopUserList topUserList = new TopUserList();
             topUserList.deckName = deck.deckName;
             database.getReference("top_list")
                     .child(deck.id)
                     .setValue(topUserList);
+            source.onComplete();
         });
     }
 
