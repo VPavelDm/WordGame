@@ -28,6 +28,9 @@ public abstract class DeckDao {
     @Query("SELECT * FROM cards WHERE deck_id = :id")
     abstract List<Card> getCards(String id);
 
+    @Query("SELECT * FROM decks WHERE id = :id")
+    abstract Deck getDeckById(String id);
+
     @Transaction
     public void insertDecksWithCards(List<Deck> decks) {
         for (int i = 0; i < decks.size(); i++) {
@@ -45,5 +48,11 @@ public abstract class DeckDao {
             }
             return decks;
         });
+    }
+
+    public Deck getDeck(String id) {
+        Deck deck = getDeckById(id);
+        deck.cards = getCards(deck.id);
+        return deck;
     }
 }

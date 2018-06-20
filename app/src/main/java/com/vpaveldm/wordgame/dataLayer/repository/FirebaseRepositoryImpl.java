@@ -33,6 +33,7 @@ import javax.inject.Named;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 
 @ActivityScope
@@ -74,6 +75,11 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
         return flowable.doOnCancel(
                 () -> decksRef.removeEventListener(valueEventListener)
         );
+    }
+
+    @Override
+    public Single<Deck> getDeckById(String id) {
+        return Single.create(source -> source.onSuccess(db.deckDao().getDeck(id)));
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
-import android.util.Log;
 
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
@@ -19,10 +18,12 @@ public class PlayViewModel extends ViewModel {
     @Inject
     PlayInteractor mInteractor;
     public static final String INCORRECT_ANSWER = "Incorrect answer";
+
     private Deck mDeck;
     private int currentCard = 0;
     private MutableLiveData<Card> mCardLiveData;
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
+    private MutableLiveData<Deck> mDeckLiveData;
     private long time;
 
     public PlayViewModel() {
@@ -30,7 +31,10 @@ public class PlayViewModel extends ViewModel {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    public void subscribe(LifecycleOwner owner, Observer<Card> cardObserver, Observer<LiveDataMessage> messageObserver) {
+    public void subscribe(LifecycleOwner owner,
+                          Observer<Card> cardObserver,
+                          Observer<LiveDataMessage> messageObserver,
+                          Observer<Deck> deckListener) {
         if (mCardLiveData == null) {
             mCardLiveData = new MutableLiveData<>();
         }
@@ -39,10 +43,15 @@ public class PlayViewModel extends ViewModel {
             mMessageLiveData = new MutableLiveData<>();
         }
         mMessageLiveData.observe(owner, messageObserver);
+        if (mDeckLiveData == null) {
+            mDeckLiveData = new MutableLiveData<>();
+        }
+        mDeckLiveData.observe(owner, deckListener);
     }
 
-    public Deck getDeck() {
-        return mDeck;
+    public Disposable getDeck(String id) {
+        return mInteractor.getDeck(id)
+                .subscribe(deck -> mDeckLiveData.setValue(deck));
     }
 
     public Disposable startGame(Deck deck) {

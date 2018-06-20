@@ -14,10 +14,8 @@ import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
-import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.databinding.FragmentPlayingBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.ChooseDeckViewModel;
 import com.vpaveldm.wordgame.presentationLayer.viewModel.PlayViewModel;
 
 import java.util.Arrays;
@@ -33,7 +31,6 @@ import ru.terrakok.cicerone.Router;
 
 public class PlayFragment extends Fragment implements View.OnClickListener {
 
-    public static final int KEY = 1;
     @Inject
     Router mRouter;
     private static final String KEY_ID = "com.vpaveldm.id";
@@ -41,6 +38,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
     private FragmentPlayingBinding binding;
     private PlayViewModel mPlayViewModel;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private String deckId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,36 +55,28 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
                 card -> initWidgets(Objects.requireNonNull(card)),
                 message -> {
                     if (Objects.requireNonNull(message).isSuccess()) {
-                        Deck deck = mPlayViewModel.getDeck();
                         Pair<String, String> args;
                         if (message.getMessage() != null
                                 && message.getMessage().equals(PlayViewModel.INCORRECT_ANSWER)) {
-                            args = new Pair<>(deck.id, "You lost the game!");
+                            args = new Pair<>(deckId, "You lost the game!");
                         } else {
-                            args = new Pair<>(deck.id, "You won the game");
+                            args = new Pair<>(deckId, "You won the game");
                         }
                         mRouter.replaceScreen(getString(R.string.fragment_rating), args);
                     } else {
                         Toast.makeText(getContext(), message.getMessage(), Toast.LENGTH_LONG).show();
                         mRouter.exit();
                     }
-                });
+                },
+                deck -> mCompositeDisposable.add(mPlayViewModel.startGame(deck)));
+    }
 
-        ChooseDeckViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(ChooseDeckViewModel.class);
-        viewModel.subscribe(this, decks -> {
-            if (decks == null) {
-                return;
-            }
-            viewModel.unsubscribe(PlayFragment.this);
-            Bundle args = Objects.requireNonNull(getArguments());
-            String id = args.getString(KEY_ID);
-            for (Deck deck : decks) {
-                if (deck.id.equals(id)) {
-                    mCompositeDisposable.add(mPlayViewModel.startGame(deck));
-                    return;
-                }
-            }
-        });
+    @Override
+    public void onStart() {
+        super.onStart();
+        Bundle args = Objects.requireNonNull(getArguments());
+        deckId = args.getString(KEY_ID);
+        mCompositeDisposable.add(mPlayViewModel.getDeck(deckId));
     }
 
     @Nullable
