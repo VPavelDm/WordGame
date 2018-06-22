@@ -20,10 +20,6 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import ru.terrakok.cicerone.Router;
 
 /**
@@ -37,14 +33,21 @@ public class LoggingFragment extends Fragment {
     @Inject
     Router mRouter;
 
-    private FragmentLoggingBinding mBinding;
     private LoggingViewModel loggingViewModel;
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private FragmentLoggingBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityComponentManager.getActivityComponent().inject(this);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentLoggingBinding.inflate(inflater, container, false);
+        binding.setHandler(loggingViewModel);
+        return binding.getRoot();
     }
 
     @Override
@@ -61,50 +64,14 @@ public class LoggingFragment extends Fragment {
                 ).show();
             }
         }, intent -> startActivityForResult(intent, RC_GOOGLE_LOGIN));
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = FragmentLoggingBinding.inflate(inflater, container, false);
-        ButterKnife.bind(this, mBinding.getRoot());
-        return mBinding.getRoot();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mCompositeDisposable.clear();
-    }
-
-    @OnClick(R.id.registerButton)
-    void clickRegisterButton() {
-        String email = mBinding.emailET.getText().toString();
-        String password = mBinding.passwordET.getText().toString();
-        Disposable d = loggingViewModel.signUp(email, password);
-        mCompositeDisposable.add(d);
-    }
-
-    @OnClick(R.id.loginButton)
-    void clickLoginButton() {
-        String email = mBinding.emailET.getText().toString();
-        String password = mBinding.passwordET.getText().toString();
-        Disposable d = loggingViewModel.signIn(email, password);
-        mCompositeDisposable.add(d);
-    }
-
-    @OnClick(R.id.googleLoginButton)
-    void clickGoogleLoginButton() {
-        Disposable d = loggingViewModel.getIntentForGoogle();
-        mCompositeDisposable.add(d);
+        binding.setHandler(loggingViewModel);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case RC_GOOGLE_LOGIN: {
-                Disposable d = loggingViewModel.signInByGoogle(data);
-                mCompositeDisposable.add(d);
+                loggingViewModel.signInByGoogle(data);
                 break;
             }
             default:

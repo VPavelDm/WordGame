@@ -29,7 +29,10 @@ public class LoggingInteractor {
     }
 
     public Observable<Boolean> signUp(LoggingModel model) {
-        return mRepository.signUp(model);
+        return mRepository
+                .signUp(model)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Single<LoggingModel> getGoogleIntent() {

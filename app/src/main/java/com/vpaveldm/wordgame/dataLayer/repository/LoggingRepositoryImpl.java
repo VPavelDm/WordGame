@@ -39,9 +39,9 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
     @Override
     public Observable<Boolean> signIn(LoggingModel model) {
         BehaviorSubject<Boolean> subject = BehaviorSubject.createDefault(false);
-        if (model.getEmail() != null && model.getPassword() != null) {
+        if (model.email != null && model.password != null) {
             signInByEmailAndPassword(subject, model);
-        } else if (model.getData() != null) {
+        } else if (model.data != null) {
             signInByGoogleIntent(subject, model);
         }
         return subject;
@@ -57,15 +57,14 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
     @Override
     public Single<LoggingModel> getGoogleIntent() {
         return Single.create(source -> {
-            LoggingModel.Builder builder = new LoggingModel.Builder();
             Intent intent = Auth.GoogleSignInApi.getSignInIntent(mApiClient);
-            source.onSuccess(builder.addData(intent).create());
+            source.onSuccess(new LoggingModel(intent));
         });
     }
 
     private void signInByEmailAndPassword(BehaviorSubject<Boolean> subject, LoggingModel model) {
-        String email = model.getEmail();
-        String password = model.getPassword();
+        String email = model.email;
+        String password = model.password;
         if (email.equals("") || password.equals("")) {
             subject.onError(new IllegalArgumentException("Entry email or password field"));
             return;
@@ -89,7 +88,7 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
     }
 
     private void signInByGoogleIntent(BehaviorSubject<Boolean> subject, LoggingModel model) {
-        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(model.getData());
+        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(model.data);
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -113,8 +112,8 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
     }
 
     private void signUpByEmailAndPassword(BehaviorSubject<Boolean> subject, LoggingModel model) {
-        String email = model.getEmail();
-        String password = model.getPassword();
+        String email = model.email;
+        String password = model.password;
         if (email.equals("") || password.equals("")) {
             subject.onError(new IllegalArgumentException("Entry email or password field"));
             return;

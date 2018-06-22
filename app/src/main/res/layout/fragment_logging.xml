@@ -3,6 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="handler"
+            type="com.vpaveldm.wordgame.presentationLayer.viewModel.LoggingViewModel"/>
+    </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -43,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:onClick="@{()->handler.clickLogin(emailET.getText().toString(), passwordET.getText().toString())}"
             android:text="@string/label_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:onClick="@{()->handler.clickRegister(emailET.getText().toString(), passwordET.getText().toString())}"
             android:text="@string/label_register"
             app:layout_constraintBottom_toTopOf="@+id/googleLoginButton"
             app:layout_constraintEnd_toEndOf="parent"
@@ -68,6 +77,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:onClick="@{()->handler.clickEntryGoogle()}"
             android:text="@string/label_entry_google"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
