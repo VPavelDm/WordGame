@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.viewModel;
+package com.vpaveldm.wordgame.adapterLayer.viewModel;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleOwner;
@@ -9,7 +9,7 @@ import android.arch.lifecycle.ViewModel;
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.domainLayer.interactors.PlayInteractor;
-import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
 
 import javax.inject.Inject;
 

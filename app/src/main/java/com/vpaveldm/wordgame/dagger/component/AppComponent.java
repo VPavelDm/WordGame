@@ -5,7 +5,7 @@ import com.vpaveldm.wordgame.dagger.module.CiceroneModule;
 import com.vpaveldm.wordgame.dagger.module.FirebaseAuthModule;
 import com.vpaveldm.wordgame.dagger.module.GoogleAuthModule;
 import com.vpaveldm.wordgame.dagger.module.YandexTranslateModule;
-import com.vpaveldm.wordgame.presentationLayer.view.fragments.rating.UserRecyclerAdapter;
+import com.vpaveldm.wordgame.uiLayer.view.fragments.rating.UserRecyclerAdapter;
 
 import javax.inject.Singleton;
 

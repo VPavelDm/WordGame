@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.fragments.add_deck;
+package com.vpaveldm.wordgame.uiLayer.view.fragments.add_deck;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.databinding.FragmentAddDeckBinding;
-import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.AddDeckViewModel;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.adapterLayer.viewModel.AddDeckViewModel;
 
 import java.util.Objects;
 

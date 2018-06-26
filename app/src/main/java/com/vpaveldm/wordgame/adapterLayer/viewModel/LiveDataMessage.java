@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.viewModel;
+package com.vpaveldm.wordgame.adapterLayer.viewModel;
 
 public class LiveDataMessage {
     private final boolean isSuccess;

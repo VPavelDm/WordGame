@@ -7,7 +7,7 @@
 
         <variable
             name="handler"
-            type="com.vpaveldm.wordgame.presentationLayer.viewModel.LoggingViewModel"/>
+            type="com.vpaveldm.wordgame.adapterLayer.viewModel.LoggingViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

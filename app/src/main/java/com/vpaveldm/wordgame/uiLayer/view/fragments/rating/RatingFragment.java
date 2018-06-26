@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.fragments.rating;
+package com.vpaveldm.wordgame.uiLayer.view.fragments.rating;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -14,9 +14,9 @@ import android.widget.Toast;
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.databinding.FragmentRatingBinding;
-import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.ChooseDeckViewModel;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.RatingViewModel;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.adapterLayer.viewModel.ChooseDeckViewModel;
+import com.vpaveldm.wordgame.adapterLayer.viewModel.RatingViewModel;
 
 import java.util.Objects;
 

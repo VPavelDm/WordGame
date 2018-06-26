@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.fragments.logging;
+package com.vpaveldm.wordgame.uiLayer.view.fragments.logging;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.databinding.FragmentLoggingBinding;
-import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.LoggingViewModel;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.adapterLayer.viewModel.LoggingViewModel;
 
 import java.util.Objects;
 

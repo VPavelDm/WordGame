@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.fragments.choose_deck;
+package com.vpaveldm.wordgame.uiLayer.view.fragments.choose_deck;
 
 import android.content.Context;
 import android.graphics.Canvas;

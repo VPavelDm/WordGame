@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.fragments.menu;
+package com.vpaveldm.wordgame.uiLayer.view.fragments.menu;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.databinding.FragmentMenuBinding;
-import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
 
 import javax.inject.Inject;
 

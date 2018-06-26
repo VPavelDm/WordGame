@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.fragments.choose_deck;
+package com.vpaveldm.wordgame.uiLayer.view.fragments.choose_deck;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.databinding.FragmentChooseDeckBinding;
-import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.ChooseDeckViewModel;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.adapterLayer.viewModel.ChooseDeckViewModel;
 
 import java.util.Objects;
 

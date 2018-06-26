@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.fragments.rating;
+package com.vpaveldm.wordgame.uiLayer.view.fragments.rating;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dataLayer.store.model.User;
 import com.vpaveldm.wordgame.databinding.UserRatingViewBinding;
-import com.vpaveldm.wordgame.presentationLayer.Application;
+import com.vpaveldm.wordgame.uiLayer.Application;
 
 import java.util.ArrayList;
 import java.util.List;

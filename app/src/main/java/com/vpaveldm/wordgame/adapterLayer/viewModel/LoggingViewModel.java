@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.viewModel;
+package com.vpaveldm.wordgame.adapterLayer.viewModel;
 
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 
 import com.vpaveldm.wordgame.dataLayer.store.model.LoggingModel;
 import com.vpaveldm.wordgame.domainLayer.interactors.LoggingInteractor;
-import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
 
 import javax.inject.Inject;
 

@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.fragments.play;
+package com.vpaveldm.wordgame.uiLayer.view.fragments.play;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -15,8 +15,8 @@ import android.widget.Toast;
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.databinding.FragmentPlayingBinding;
-import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.presentationLayer.viewModel.PlayViewModel;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.adapterLayer.viewModel.PlayViewModel;
 
 import java.util.Arrays;
 import java.util.Collections;

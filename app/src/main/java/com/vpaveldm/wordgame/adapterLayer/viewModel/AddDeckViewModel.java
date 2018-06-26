@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.viewModel;
+package com.vpaveldm.wordgame.adapterLayer.viewModel;
 
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
@@ -6,7 +6,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 
 import com.vpaveldm.wordgame.domainLayer.interactors.AddDeckInteractor;
-import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 

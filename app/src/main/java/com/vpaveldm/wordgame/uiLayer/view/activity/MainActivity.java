@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.activity;
+package com.vpaveldm.wordgame.uiLayer.view.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;

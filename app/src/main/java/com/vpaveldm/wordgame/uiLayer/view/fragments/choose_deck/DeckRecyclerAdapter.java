@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.fragments.choose_deck;
+package com.vpaveldm.wordgame.uiLayer.view.fragments.choose_deck;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
-import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
 
 import java.util.ArrayList;
 import java.util.List;

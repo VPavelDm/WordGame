@@ -9,12 +9,12 @@ import android.util.Pair;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
-import com.vpaveldm.wordgame.presentationLayer.view.fragments.add_deck.AddDeckFragment;
-import com.vpaveldm.wordgame.presentationLayer.view.fragments.logging.LoggingFragment;
-import com.vpaveldm.wordgame.presentationLayer.view.fragments.menu.MenuFragment;
-import com.vpaveldm.wordgame.presentationLayer.view.fragments.choose_deck.ChooseDeckFragment;
-import com.vpaveldm.wordgame.presentationLayer.view.fragments.play.PlayFragment;
-import com.vpaveldm.wordgame.presentationLayer.view.fragments.rating.RatingFragment;
+import com.vpaveldm.wordgame.uiLayer.view.fragments.add_deck.AddDeckFragment;
+import com.vpaveldm.wordgame.uiLayer.view.fragments.logging.LoggingFragment;
+import com.vpaveldm.wordgame.uiLayer.view.fragments.menu.MenuFragment;
+import com.vpaveldm.wordgame.uiLayer.view.fragments.choose_deck.ChooseDeckFragment;
+import com.vpaveldm.wordgame.uiLayer.view.fragments.play.PlayFragment;
+import com.vpaveldm.wordgame.uiLayer.view.fragments.rating.RatingFragment;
 
 import javax.inject.Named;
 

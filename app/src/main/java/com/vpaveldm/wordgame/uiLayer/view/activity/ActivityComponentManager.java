@@ -1,4 +1,4 @@
-package com.vpaveldm.wordgame.presentationLayer.view.activity;
+package com.vpaveldm.wordgame.uiLayer.view.activity;
 
 
 import android.arch.lifecycle.Lifecycle;
@@ -7,7 +7,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v4.app.FragmentManager;
 
 import com.vpaveldm.wordgame.dagger.module.GoogleAuthModule;
-import com.vpaveldm.wordgame.presentationLayer.Application;
+import com.vpaveldm.wordgame.uiLayer.Application;
 import com.vpaveldm.wordgame.dagger.component.ActivityComponent;
 import com.vpaveldm.wordgame.dagger.component.AppComponent;
 import com.vpaveldm.wordgame.dagger.module.CiceroneModule;
