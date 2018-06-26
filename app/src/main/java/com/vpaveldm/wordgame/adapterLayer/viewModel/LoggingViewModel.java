@@ -23,7 +23,7 @@ public class LoggingViewModel extends ViewModel {
 
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
     private MutableLiveData<Intent> mIntentLiveData;
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     public LoggingViewModel() {
         super();

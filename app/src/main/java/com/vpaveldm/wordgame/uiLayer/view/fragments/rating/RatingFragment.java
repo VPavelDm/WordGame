@@ -33,7 +33,7 @@ public class RatingFragment extends Fragment {
     @Inject
     Router mRouter;
     private static final String KEY_ID = "com.vpaveldm.id";
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private UserRecyclerAdapter adapter;
 
     @Override

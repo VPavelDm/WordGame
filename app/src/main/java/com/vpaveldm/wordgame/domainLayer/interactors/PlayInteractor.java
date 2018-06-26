@@ -18,8 +18,8 @@ import io.reactivex.schedulers.Schedulers;
 @ActivityScope
 public class PlayInteractor {
 
-    private IPlayRepository mRepository;
-    private IFirebaseRepository mFirebaseRepository;
+    private final IPlayRepository mRepository;
+    private final IFirebaseRepository mFirebaseRepository;
 
     @Inject
     PlayInteractor(IPlayRepository repository, IFirebaseRepository firebaseRepository) {

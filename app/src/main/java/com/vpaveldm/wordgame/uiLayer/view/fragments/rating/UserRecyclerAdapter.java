@@ -58,7 +58,7 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         @Inject
         @Named("Application")
         Context mContext;
-        private UserRatingViewBinding mBinding;
+        private final UserRatingViewBinding mBinding;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -66,7 +66,7 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
             mBinding = UserRatingViewBinding.bind(itemView);
         }
 
-        public void bind(User user, int position) {
+        private void bind(User user, int position) {
             mBinding.userPositionTV.setText(mContext.getString(R.string.label_user_position, position));
             mBinding.userNameTV.setText(user.name);
             mBinding.timeTV.setText(mContext.getString(R.string.label_time, user.time));

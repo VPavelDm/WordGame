@@ -1,6 +1,5 @@
 package com.vpaveldm.wordgame.dagger.module;
 
-import com.vpaveldm.wordgame.dagger.scope.ActivityScope;
 import com.vpaveldm.wordgame.dataLayer.store.retrofit.IYandexTranslate;
 
 import javax.inject.Singleton;

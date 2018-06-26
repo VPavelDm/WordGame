@@ -8,5 +8,5 @@ import java.util.List;
 @IgnoreExtraProperties
 public class TopUserList {
     public String deckName;
-    public List<User> users = new ArrayList<>();
+    public final List<User> users = new ArrayList<>();
 }

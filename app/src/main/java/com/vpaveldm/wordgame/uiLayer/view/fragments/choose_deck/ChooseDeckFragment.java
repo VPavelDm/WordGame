@@ -31,7 +31,7 @@ public class ChooseDeckFragment extends Fragment {
     Router mRouter;
     private ChooseDeckViewModel mChooseDeckViewModel;
     private DeckRecyclerAdapter adapter;
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

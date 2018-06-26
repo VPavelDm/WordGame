@@ -39,7 +39,7 @@ import io.reactivex.subjects.PublishSubject;
 @ActivityScope
 public class FirebaseRepositoryImpl implements IFirebaseRepository {
 
-    private AppDatabase db;
+    private final AppDatabase db;
 
     @Inject
     FirebaseRepositoryImpl(@Named("Application") Context context) {

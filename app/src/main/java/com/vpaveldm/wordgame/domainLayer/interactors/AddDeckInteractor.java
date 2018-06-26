@@ -5,9 +5,6 @@ import com.vpaveldm.wordgame.dataLayer.interfaces.IFirebaseRepository;
 import com.vpaveldm.wordgame.dataLayer.interfaces.IYandexTranslateRepository;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 
-import java.net.ConnectException;
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import io.reactivex.Completable;

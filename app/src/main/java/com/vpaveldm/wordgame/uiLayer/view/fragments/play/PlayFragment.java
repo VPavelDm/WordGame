@@ -37,7 +37,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
 
     private FragmentPlayingBinding binding;
     private PlayViewModel mPlayViewModel;
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private String deckId;
 
     @Override

@@ -35,7 +35,7 @@ public class AddDeckFragment extends Fragment {
     private AddDeckViewModel mAddDeckViewModel;
     private int currentWrongTranslate = 1;
     private Card mCard;
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
