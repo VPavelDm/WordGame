@@ -10,16 +10,14 @@ import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.vpaveldm.wordgame.R;
+import com.vpaveldm.wordgame.databinding.FragmentMenuBinding;
 import com.vpaveldm.wordgame.presentationLayer.view.activity.ActivityComponentManager;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import ru.terrakok.cicerone.Router;
 
 public class MenuFragment extends Fragment {
-
     @Inject
     FirebaseAuth mAuth;
     @Inject
@@ -34,18 +32,16 @@ public class MenuFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menu, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        FragmentMenuBinding binding = FragmentMenuBinding.inflate(inflater, container, false);
+        binding.setHandler(this);
+        return binding.getRoot();
     }
 
-    @OnClick(R.id.playButton)
-    void clickPlayButton() {
+    public void clickPlay() {
         mRouter.navigateTo(getString(R.string.fragment_choose_deck));
     }
 
-    @OnClick(R.id.logOutButton)
-    void clickLogOutButton() {
+    public void clickLogOut() {
         mAuth.signOut();
         mRouter.replaceScreen(getString(R.string.fragment_login));
     }

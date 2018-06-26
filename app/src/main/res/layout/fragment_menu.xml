@@ -2,6 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <data>
+
+        <variable
+            name="handler"
+            type="com.vpaveldm.wordgame.presentationLayer.view.fragments.menu.MenuFragment"/>
+    </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -11,6 +19,7 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:onClick="@{()->handler.clickPlay()}"
             android:text="@string/label_play"
             app:layout_constraintBottom_toTopOf="@+id/logOutButton"
             app:layout_constraintEnd_toEndOf="parent"
@@ -22,6 +31,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="230dp"
+            android:onClick="@{()->handler.clickLogOut()}"
             android:text="@string/label_logout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
