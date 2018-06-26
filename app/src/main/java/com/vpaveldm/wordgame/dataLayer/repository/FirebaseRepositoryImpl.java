@@ -138,8 +138,8 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
                 user.name = userName;
                 user.time = time;
                 list.users.add(user);
+                Collections.sort(list.users);
                 if (list.users.size() >= 10) {
-                    Collections.sort(list.users);
                     list.users.remove(list.users.size() - 1);
                 }
                 Map<String, Object> childUpdates = new HashMap<>();

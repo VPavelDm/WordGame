@@ -67,7 +67,7 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         }
 
         private void bind(User user, int position) {
-            mBinding.userPositionTV.setText(mContext.getString(R.string.label_user_position, position));
+            mBinding.userPositionTV.setText(mContext.getString(R.string.label_user_position, position + 1));
             mBinding.userNameTV.setText(user.name);
             mBinding.timeTV.setText(mContext.getString(R.string.label_time, user.time));
         }
