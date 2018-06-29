@@ -16,6 +16,9 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 public class LoggingViewModel extends ViewModel {
 
     @Inject
@@ -30,6 +33,14 @@ public class LoggingViewModel extends ViewModel {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
+    /**
+     * The method that subscribes to updates
+     *
+     * @param owner           object that is used to handle lifecycle changes
+     * @param messageListener callback object that is used for notifications about login's,
+     *                        register's and login's by google result
+     * @param intentListener  callback object that is used for notifications when an intent is received
+     */
     public void subscribe(LifecycleOwner owner, Observer<LiveDataMessage> messageListener, Observer<Intent> intentListener) {
         if (mMessageLiveData == null) {
             mMessageLiveData = new MutableLiveData<>();
@@ -40,6 +51,12 @@ public class LoggingViewModel extends ViewModel {
         mIntentLiveData.observe(owner, intentListener);
     }
 
+    /**
+     * Processing a button press to login by email and password
+     *
+     * @param email    email address to login
+     * @param password password to login
+     */
     public void clickLogin(@NonNull String email, @NonNull String password) {
         LoggingModel model = new LoggingModel(email, password);
         Disposable d = mLoggingInteractor.signIn(model)
@@ -51,6 +68,12 @@ public class LoggingViewModel extends ViewModel {
         mCompositeDisposable.add(d);
     }
 
+    /**
+     * Processing a button press to register by email and password
+     *
+     * @param email    email address to register
+     * @param password password to register
+     */
     public void clickRegister(@NonNull String email, @NonNull String password) {
         LoggingModel model = new LoggingModel(email, password);
         Disposable d = mLoggingInteractor.signUp(model)
@@ -62,12 +85,20 @@ public class LoggingViewModel extends ViewModel {
         mCompositeDisposable.add(d);
     }
 
+    /**
+     * Processing a button press to entry by google
+     */
     public void clickEntryGoogle() {
         Disposable d = mLoggingInteractor.getGoogleIntent()
                 .subscribe(item -> mIntentLiveData.setValue(item.data));
         mCompositeDisposable.add(d);
     }
 
+    /**
+     * The sign in method
+     *
+     * @param data Google's intent
+     */
     public void signInByGoogle(Intent data) {
         LoggingModel model = new LoggingModel(data);
         Disposable d = mLoggingInteractor.signIn(model)
