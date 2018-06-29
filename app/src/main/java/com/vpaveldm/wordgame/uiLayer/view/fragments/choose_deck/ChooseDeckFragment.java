@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.vpaveldm.wordgame.R;
 import com.vpaveldm.wordgame.adapterLayer.viewModel.ChooseDeckViewModel;
@@ -19,10 +20,11 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import ru.terrakok.cicerone.Router;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 public class ChooseDeckFragment extends Fragment {
 
     @Inject
@@ -34,6 +36,27 @@ public class ChooseDeckFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mChooseDeckViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(ChooseDeckViewModel.class);
+        mChooseDeckViewModel.subscribe(this, liveDataMessage -> {
+            if (!Objects.requireNonNull(liveDataMessage).isSuccess()){
+                Toast.makeText(getContext(), liveDataMessage.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        FragmentChooseDeckBinding binding = FragmentChooseDeckBinding.inflate(inflater, container, false);
+        binding.setHandler(this);
+        binding.setViewmodel(mChooseDeckViewModel);
+
+        binding.deckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.deckRecyclerView.addItemDecoration(new ItemDivider(Objects.requireNonNull(getContext())));
+        adapter = new DeckAdapter();
+        mChooseDeckViewModel.decksList.observe(this, pagedList -> adapter.submitList(pagedList));
+        binding.deckRecyclerView.setAdapter(adapter);
+
+        return binding.getRoot();
     }
 
     @Override
@@ -42,21 +65,10 @@ public class ChooseDeckFragment extends Fragment {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentChooseDeckBinding binding = FragmentChooseDeckBinding.inflate(inflater, container, false);
-        ButterKnife.bind(this, binding.getRoot());
-        binding.deckRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.deckRecyclerView.addItemDecoration(new ItemDivider(Objects.requireNonNull(getContext())));
-        adapter = new DeckAdapter();
-        mChooseDeckViewModel.decksList.observe(this, pagedList -> adapter.submitList(pagedList));
-        binding.deckRecyclerView.setAdapter(adapter);
-        return binding.getRoot();
-    }
-
-    @OnClick(R.id.addDeckButton)
-    void clickAddDeckButton() {
+    /**
+     * Processing a button press to change Fragment to AddDeckFragment
+     */
+    public void clickAddDeckButton() {
         mRouter.navigateTo(getString(R.string.fragment_add_deck));
     }
 }

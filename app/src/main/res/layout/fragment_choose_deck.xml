@@ -3,6 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewmodel"
+            type="com.vpaveldm.wordgame.adapterLayer.viewModel.ChooseDeckViewModel"/>
+
+        <variable
+            name="handler"
+            type="com.vpaveldm.wordgame.uiLayer.view.fragments.choose_deck.ChooseDeckFragment"/>
+    </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,6 +28,7 @@
             android:layout_marginEnd="16dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="@{()->handler.clickAddDeckButton()}"
             android:src="@drawable/ic_plus"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -26,6 +40,15 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewmodel.visible ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

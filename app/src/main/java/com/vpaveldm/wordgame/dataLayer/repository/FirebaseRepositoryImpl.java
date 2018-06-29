@@ -32,9 +32,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 
 @ActivityScope
@@ -48,12 +48,13 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
     }
 
     @Override
-    public DataSource.Factory<Integer, Deck> getDeckDataSource() {
+    public DataSource.Factory<Integer, Deck> getDecks() {
         return db.deckDao().getDeckWithCardsDataSource();
     }
 
     @Override
     public Completable subscribeOnUpdate() {
+        BehaviorSubject<Boolean> subject = BehaviorSubject.create();
         DatabaseReference decksRef = FirebaseDatabase.getInstance().getReference("decks");
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
@@ -68,47 +69,16 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
                     Thread t = new Thread(() -> db.deckDao().insertDecksWithCards(decks));
                     t.start();
                 }
+                subject.onComplete();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                subject.onError(databaseError.toException());
             }
         };
         decksRef.addValueEventListener(valueEventListener);
-        return Completable.create(source -> {
-        }).doOnDispose(() -> decksRef.removeEventListener(valueEventListener));
-    }
-
-    @Override
-    public Flowable<List<Deck>> getDecks() {
-        Flowable<List<Deck>> flowable = db.deckDao().getDecksWithCards();
-        //Send asynchronous request to connect to firebase
-        DatabaseReference decksRef = FirebaseDatabase.getInstance().getReference("decks");
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Deck> decks = new ArrayList<>();
-                Iterable<DataSnapshot> iterator = dataSnapshot.getChildren();
-                for (DataSnapshot snapshot : iterator) {
-                    Deck deck = snapshot.getValue(Deck.class);
-                    decks.add(deck);
-                }
-                if (decks.size() != 0) {
-                    Thread t = new Thread(() -> db.deckDao().insertDecksWithCards(decks));
-                    t.start();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        decksRef.addValueEventListener(valueEventListener);
-        return flowable.doOnCancel(
-                () -> decksRef.removeEventListener(valueEventListener)
-        );
+        return subject.doOnDispose(() -> decksRef.removeEventListener(valueEventListener)).ignoreElements();
     }
 
     @Override
