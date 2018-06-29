@@ -35,7 +35,7 @@ public class ChooseDeckViewModel extends ViewModel {
     public ChooseDeckViewModel() {
         ActivityComponentManager.getActivityComponent().inject(this);
         DataSource.Factory<Integer, Deck> dataSource = mChooseDeckInteractor.getDeckDataSource();
-        decksList = new LivePagedListBuilder<>(dataSource, 20).build();
+        decksList = new LivePagedListBuilder<>(dataSource, 7).build();
     }
 
     /**

@@ -69,11 +69,13 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
                     Thread t = new Thread(() -> db.deckDao().insertDecksWithCards(decks));
                     t.start();
                 }
+                decksRef.removeEventListener(this);
                 subject.onComplete();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                decksRef.removeEventListener(this);
                 subject.onError(databaseError.toException());
             }
         };
