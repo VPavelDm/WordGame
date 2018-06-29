@@ -25,6 +25,9 @@ import butterknife.OnClick;
 import io.reactivex.disposables.CompositeDisposable;
 import ru.terrakok.cicerone.Router;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 public class AddDeckFragment extends Fragment {
 
     public static final int MINIMUM_CARDS = 10;
@@ -41,6 +44,17 @@ public class AddDeckFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityComponentManager.getActivityComponent().inject(this);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mBinding = FragmentAddDeckBinding.inflate(inflater, container, false);
+        ButterKnife.bind(this, mBinding.getRoot());
+
+        mCard = new Card();
+
+        return mBinding.getRoot();
     }
 
     @Override
@@ -64,17 +78,6 @@ public class AddDeckFragment extends Fragment {
                         Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = FragmentAddDeckBinding.inflate(inflater, container, false);
-        ButterKnife.bind(this, mBinding.getRoot());
-
-        mCard = new Card();
-
-        return mBinding.getRoot();
     }
 
     @Override
