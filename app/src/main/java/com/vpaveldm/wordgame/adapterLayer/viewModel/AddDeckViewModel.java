@@ -14,6 +14,9 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 public class AddDeckViewModel extends ViewModel {
 
     @Inject
@@ -27,6 +30,13 @@ public class AddDeckViewModel extends ViewModel {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
+    /**
+     * The method that subscribes to updates
+     *
+     * @param owner             object that is used to handle lifecycle changes
+     * @param messageListener   callback object that is used for notifications about creating deck
+     * @param translateListener callback object that is used for notifications about atu translating
+     */
     public void subscribe(LifecycleOwner owner,
                           Observer<LiveDataMessage> messageListener,
                           Observer<LiveDataMessage> translateListener) {
@@ -40,10 +50,21 @@ public class AddDeckViewModel extends ViewModel {
         mTranslateLiveData.observe(owner, translateListener);
     }
 
+    /**
+     * The method that adds a card to the deck
+     *
+     * @param card the object that is added to the deck cards
+     */
     public void addCard(Card card) {
         mDeck.cards.add(card);
     }
 
+    /**
+     * The method that creates a deck with cards
+     *
+     * @param name name of deck
+     * @return Disposable to manage the subscription
+     */
     public Disposable createDeck(String name) {
         mDeck.deckName = name;
         return mAddDeckInteractor.addDeck(mDeck)
@@ -53,10 +74,21 @@ public class AddDeckViewModel extends ViewModel {
                 );
     }
 
+    /**
+     * The method that returns cards' amount of Deck
+     *
+     * @return Integer value equal to the cards' amount of Deck
+     */
     public int getCardSize() {
         return mDeck.cards.size();
     }
 
+    /**
+     * The method that gets translate of word
+     *
+     * @param word the word to translate
+     * @return Disposable to manage the subscription
+     */
     public Disposable getAutoTranslate(String word) {
         return mAddDeckInteractor.getAutoTranslate(word).subscribe(
                 success -> mTranslateLiveData.setValue(new LiveDataMessage(true, success)),

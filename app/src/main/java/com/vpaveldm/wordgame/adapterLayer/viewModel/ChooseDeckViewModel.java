@@ -16,6 +16,9 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 public class ChooseDeckViewModel extends ViewModel {
 
     @Inject
@@ -28,6 +31,12 @@ public class ChooseDeckViewModel extends ViewModel {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
+    /**
+     * The method that subscribes to updates
+     *
+     * @param owner    object that is used to handle lifecycle changes
+     * @param listener callback object that is used for notification about getting decks
+     */
     public void subscribe(LifecycleOwner owner, Observer<List<Deck>> listener) {
         if (mDeckLiveData == null) {
             mDeckLiveData = new MutableLiveData<>();
@@ -35,10 +44,20 @@ public class ChooseDeckViewModel extends ViewModel {
         mDeckLiveData.observe(owner, listener);
     }
 
+    /**
+     * The method that unsubscribes from updates
+     *
+     * @param owner object that is used to handle lifecycle changes
+     */
     public void unsubscribe(LifecycleOwner owner) {
         mDeckLiveData.removeObservers(owner);
     }
 
+    /**
+     * The method that gets decks
+     *
+     * @return Disposable to manage the subscription
+     */
     public Disposable getDecks() {
         return mChooseDeckInteractor.getDecks()
                 .observeOn(AndroidSchedulers.mainThread())
