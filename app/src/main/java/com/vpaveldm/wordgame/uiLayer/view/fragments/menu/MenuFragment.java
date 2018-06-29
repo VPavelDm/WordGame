@@ -17,6 +17,9 @@ import javax.inject.Inject;
 
 import ru.terrakok.cicerone.Router;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 public class MenuFragment extends Fragment {
     @Inject
     FirebaseAuth mAuth;
@@ -37,10 +40,16 @@ public class MenuFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Processing a button press to change Fragment to ChooseDeckFragment
+     */
     public void clickPlay() {
         mRouter.navigateTo(getString(R.string.fragment_choose_deck));
     }
 
+    /**
+     * Processing a button press to logout
+     */
     public void clickLogOut() {
         mAuth.signOut();
         mRouter.replaceScreen(getString(R.string.fragment_login));
