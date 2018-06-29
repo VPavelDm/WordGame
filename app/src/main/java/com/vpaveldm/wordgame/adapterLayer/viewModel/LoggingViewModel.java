@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.content.Intent;
+import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
 import com.vpaveldm.wordgame.dataLayer.store.model.LoggingModel;
@@ -24,6 +25,8 @@ public class LoggingViewModel extends ViewModel {
     @Inject
     LoggingInteractor mLoggingInteractor;
 
+    public ObservableBoolean visible = new ObservableBoolean();
+
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
     private MutableLiveData<Intent> mIntentLiveData;
     private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
@@ -31,6 +34,7 @@ public class LoggingViewModel extends ViewModel {
     public LoggingViewModel() {
         super();
         ActivityComponentManager.getActivityComponent().inject(this);
+        visible.set(false);
     }
 
     /**
@@ -61,6 +65,8 @@ public class LoggingViewModel extends ViewModel {
         LoggingModel model = new LoggingModel(email, password);
         Disposable d = mLoggingInteractor.signIn(model)
                 .filter(isConnected -> isConnected)
+                .doOnEach(o -> visible.set(false))
+                .doOnSubscribe(s -> visible.set(true))
                 .subscribe(
                         isConnected -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
                         e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
@@ -78,6 +84,8 @@ public class LoggingViewModel extends ViewModel {
         LoggingModel model = new LoggingModel(email, password);
         Disposable d = mLoggingInteractor.signUp(model)
                 .filter(isConnected -> isConnected)
+                .doOnEach(o -> visible.set(false))
+                .doOnSubscribe(s -> visible.set(true))
                 .subscribe(
                         isConnected -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
                         e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
@@ -103,6 +111,8 @@ public class LoggingViewModel extends ViewModel {
         LoggingModel model = new LoggingModel(data);
         Disposable d = mLoggingInteractor.signIn(model)
                 .filter(isConnected -> isConnected)
+                .doOnEach(o -> visible.set(false))
+                .doOnSubscribe(s -> visible.set(true))
                 .subscribe(
                         isConnected -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
                         e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))

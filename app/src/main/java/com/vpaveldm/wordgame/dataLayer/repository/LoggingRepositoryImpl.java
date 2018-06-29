@@ -71,18 +71,20 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         }
         Task<AuthResult> task = mAuth.signInWithEmailAndPassword(email, password);
         task.addOnCompleteListener(authResultTask -> {
-            if (authResultTask.isSuccessful()) {
-                subject.onNext(true);
-                subject.onComplete();
-            } else {
-                Exception exception = authResultTask.getException();
-                String message;
-                if (exception == null) {
-                    message = "Unknown error";
+            if (subject.hasObservers()) {
+                if (authResultTask.isSuccessful()) {
+                    subject.onNext(true);
+                    subject.onComplete();
                 } else {
-                    message = exception.getMessage();
+                    Exception exception = authResultTask.getException();
+                    String message;
+                    if (exception == null) {
+                        message = "Unknown exception";
+                    } else {
+                        message = exception.getMessage();
+                    }
+                    subject.onError(new IllegalArgumentException(message));
                 }
-                subject.onError(new IllegalArgumentException(message));
             }
         });
     }
@@ -94,15 +96,17 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
             AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
             mAuth.signInWithCredential(credential)
                     .addOnCompleteListener(task1 -> {
-                        if (task1.isSuccessful()) {
-                            subject.onNext(true);
-                            subject.onComplete();
-                        } else {
-                            Exception exception = task1.getException();
-                            if (exception == null) {
-                                subject.onError(new ConnectException("Connection error"));
+                        if (subject.hasObservers()) {
+                            if (task1.isSuccessful()) {
+                                subject.onNext(true);
+                                subject.onComplete();
                             } else {
-                                subject.onError(new ConnectException(exception.getMessage()));
+                                Exception exception = task1.getException();
+                                if (exception == null) {
+                                    subject.onError(new ConnectException("Connection error"));
+                                } else {
+                                    subject.onError(new ConnectException(exception.getMessage()));
+                                }
                             }
                         }
                     });
@@ -120,18 +124,20 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         }
         Task<AuthResult> task = mAuth.createUserWithEmailAndPassword(email, password);
         task.addOnCompleteListener(resultTask -> {
-            if (resultTask.isSuccessful()) {
-                subject.onNext(true);
-                subject.onComplete();
-            } else {
-                Exception exception = resultTask.getException();
-                String message;
-                if (exception == null) {
-                    message = "Unknown error";
+            if (subject.hasObservers()) {
+                if (resultTask.isSuccessful()) {
+                    subject.onNext(true);
+                    subject.onComplete();
                 } else {
-                    message = exception.getMessage();
+                    Exception exception = resultTask.getException();
+                    String message;
+                    if (exception == null) {
+                        message = "Unknown error";
+                    } else {
+                        message = exception.getMessage();
+                    }
+                    subject.onError(new IllegalArgumentException(message));
                 }
-                subject.onError(new IllegalArgumentException(message));
             }
         });
     }
