@@ -1,20 +1,20 @@
 package com.vpaveldm.wordgame.adapterLayer.viewModel;
 
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
+import android.arch.paging.DataSource;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
+import android.util.Pair;
 
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.domainLayer.interactors.ChooseDeckInteractor;
 import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.Completable;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * @author Pavel Vaitsikhouski
@@ -24,43 +24,22 @@ public class ChooseDeckViewModel extends ViewModel {
     @Inject
     ChooseDeckInteractor mChooseDeckInteractor;
 
-    private MutableLiveData<List<Deck>> mDeckLiveData;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    public final LiveData<PagedList<Deck>> decksList;
 
     public ChooseDeckViewModel() {
         super();
         ActivityComponentManager.getActivityComponent().inject(this);
+        Pair<Completable, DataSource.Factory<Integer, Deck>> pair = mChooseDeckInteractor.getDeckDataSource();
+        decksList = new LivePagedListBuilder<>(
+                pair.second, 20
+        ).build();
+        mCompositeDisposable.add(pair.first.subscribe());
     }
 
-    /**
-     * The method that subscribes to updates
-     *
-     * @param owner    object that is used to handle lifecycle changes
-     * @param listener callback object that is used for notification about getting decks
-     */
-    public void subscribe(LifecycleOwner owner, Observer<List<Deck>> listener) {
-        if (mDeckLiveData == null) {
-            mDeckLiveData = new MutableLiveData<>();
-        }
-        mDeckLiveData.observe(owner, listener);
-    }
-
-    /**
-     * The method that unsubscribes from updates
-     *
-     * @param owner object that is used to handle lifecycle changes
-     */
-    public void unsubscribe(LifecycleOwner owner) {
-        mDeckLiveData.removeObservers(owner);
-    }
-
-    /**
-     * The method that gets decks
-     *
-     * @return Disposable to manage the subscription
-     */
-    public Disposable getDecks() {
-        return mChooseDeckInteractor.getDecks()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(decks -> mDeckLiveData.setValue(decks));
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        mCompositeDisposable.clear();
     }
 }

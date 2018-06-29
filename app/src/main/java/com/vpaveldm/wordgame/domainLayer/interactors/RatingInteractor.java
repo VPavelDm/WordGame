@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -28,5 +29,11 @@ public class RatingInteractor {
                 .timeout(1, TimeUnit.SECONDS, Observable.error(new ConnectException("No internet connection")))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.single());
+    }
+
+    public Single<Deck> getDeck(String id) {
+        return mRepository.getDeckById(id)
+                .subscribeOn(Schedulers.single())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

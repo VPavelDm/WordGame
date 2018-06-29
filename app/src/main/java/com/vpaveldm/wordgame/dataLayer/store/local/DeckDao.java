@@ -1,5 +1,6 @@
 package com.vpaveldm.wordgame.dataLayer.store.local;
 
+import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -25,6 +26,9 @@ public abstract class DeckDao {
     @Query("SELECT * FROM decks")
     abstract Flowable<List<Deck>> getDecks();
 
+    @Query("SELECT * FROM decks")
+    abstract DataSource.Factory<Integer, Deck> getDeckDataSource();
+
     @Query("SELECT * FROM cards WHERE deck_id = :id")
     abstract List<Card> getCards(String id);
 
@@ -47,6 +51,13 @@ public abstract class DeckDao {
                 deck.cards = getCards(deck.id);
             }
             return decks;
+        });
+    }
+
+    public DataSource.Factory<Integer, Deck> getDeckWithCardsDataSource() {
+        return getDeckDataSource().map(deck -> {
+            deck.cards = getCards(deck.id);
+            return deck;
         });
     }
 

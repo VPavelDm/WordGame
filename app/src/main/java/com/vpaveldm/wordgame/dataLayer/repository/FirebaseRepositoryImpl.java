@@ -1,5 +1,6 @@
 package com.vpaveldm.wordgame.dataLayer.repository;
 
+import android.arch.paging.DataSource;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -44,6 +45,39 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
     @Inject
     FirebaseRepositoryImpl(@Named("Application") Context context) {
         db = Room.databaseBuilder(context, AppDatabase.class, "decks").build();
+    }
+
+    @Override
+    public DataSource.Factory<Integer, Deck> getDeckDataSource() {
+        return db.deckDao().getDeckWithCardsDataSource();
+    }
+
+    @Override
+    public Completable subscribeOnUpdate() {
+        DatabaseReference decksRef = FirebaseDatabase.getInstance().getReference("decks");
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Deck> decks = new ArrayList<>();
+                Iterable<DataSnapshot> iterator = dataSnapshot.getChildren();
+                for (DataSnapshot snapshot : iterator) {
+                    Deck deck = snapshot.getValue(Deck.class);
+                    decks.add(deck);
+                }
+                if (decks.size() != 0) {
+                    Thread t = new Thread(() -> db.deckDao().insertDecksWithCards(decks));
+                    t.start();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        decksRef.addValueEventListener(valueEventListener);
+        return Completable.create(source -> {
+        }).doOnDispose(() -> decksRef.removeEventListener(valueEventListener));
     }
 
     @Override

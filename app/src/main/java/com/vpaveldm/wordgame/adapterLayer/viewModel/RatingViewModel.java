@@ -12,11 +12,13 @@ import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
 
 import javax.inject.Inject;
 
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class RatingViewModel extends ViewModel {
 
     private MutableLiveData<TopUserList> mUserListLiveData;
+    private MutableLiveData<Deck> mDeckLiveData;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     @Inject
     RatingInteractor mInteractor;
 
@@ -25,24 +27,39 @@ public class RatingViewModel extends ViewModel {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
-    public void subscribe(LifecycleOwner owner, Observer<TopUserList> listener) {
-        if (mUserListLiveData == null) {
+    public void subscribe(LifecycleOwner owner, Observer<TopUserList> listener, Observer<Deck> deckListener) {
+        if (mUserListLiveData == null || mDeckLiveData == null) {
             mUserListLiveData = new MutableLiveData<>();
+            mDeckLiveData = new MutableLiveData<>();
         }
         mUserListLiveData.observe(owner, listener);
+        mDeckLiveData.observe(owner, deckListener);
     }
 
     public void unsubscribe(LifecycleOwner owner) {
         mUserListLiveData.removeObservers(owner);
     }
 
-    public Disposable getUserTopList(Deck deck) {
-        return mInteractor.getTopUsers(deck)
-                .subscribe(
-                        topUserList -> mUserListLiveData.setValue(topUserList),
-                        t -> mUserListLiveData.setValue(null),
-                        () -> mUserListLiveData.setValue(null)
-                );
+    public void getUserTopList(Deck deck) {
+        mCompositeDisposable.add(
+                mInteractor.getTopUsers(deck)
+                        .doOnDispose(() -> mCompositeDisposable.clear())
+                        .subscribe(
+                                topUserList -> mUserListLiveData.setValue(topUserList),
+                                t -> mUserListLiveData.setValue(null),
+                                () -> mUserListLiveData.setValue(null)
+                        )
+        );
     }
 
+    public void getDeck(String id) {
+        mCompositeDisposable.add(mInteractor.getDeck(id)
+                .subscribe(deck -> mDeckLiveData.setValue(deck)));
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        mCompositeDisposable.clear();
+    }
 }
