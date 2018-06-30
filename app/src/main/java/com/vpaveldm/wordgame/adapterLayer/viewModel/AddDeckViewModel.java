@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 
@@ -31,6 +32,7 @@ public class AddDeckViewModel extends ViewModel {
     @Inject
     AddDeckInteractor mAddDeckInteractor;
 
+    public final ObservableBoolean visible = new ObservableBoolean();
     public final ObservableInt cardsCount = new ObservableInt();
     public final ObservableInt wrongWordsCount = new ObservableInt();
     public final ObservableField<String> wordET = new ObservableField<>();
@@ -65,6 +67,9 @@ public class AddDeckViewModel extends ViewModel {
         mMessageLiveData.observe(owner, messageListener);
     }
 
+    /**
+     * Processing a button press to add wrong translate
+     */
     public void clickAddWrongTranslate() {
         //Get last card's wrong translates
         List<String> wrongTranslates = mDeck.cards.get(mDeck.cards.size() - 1).wrongTranslates;
@@ -82,18 +87,29 @@ public class AddDeckViewModel extends ViewModel {
         wrongWordsCount.set(wrongTranslates.size());
     }
 
+    /**
+     * Processing a button press to get word's translate
+     *
+     * @param word Word to translate
+     */
     public void clickAutoTranslate(String word) {
         if (word.equals("")) {
             mMessageLiveData.setValue(new LiveDataMessage(false, "Entry text in word field"));
             return;
         }
-        Disposable d = mAddDeckInteractor.getAutoTranslate(word).subscribe(
-                translateET::set,
-                e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
-        );
+        Disposable d = mAddDeckInteractor.getAutoTranslate(word)
+                .doOnEvent((s, t) -> visible.set(false))
+                .doOnSubscribe(s -> visible.set(true))
+                .subscribe(
+                        translateET::set,
+                        e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
+                );
         mCompositeDisposable.add(d);
     }
 
+    /**
+     * Processing a button press to create card
+     */
     public void clickCreateCard() {
         if (Objects.equals(wordET.get(), "")) {
             mMessageLiveData.setValue(new LiveDataMessage(false, "Entry word"));
@@ -116,6 +132,11 @@ public class AddDeckViewModel extends ViewModel {
         mDeck.cards.add(new Card());
     }
 
+    /**
+     * Processing a button press to create deck
+     *
+     * @param deckName Deck's name
+     */
     public void clickCreateDeck(String deckName) {
         if (deckName.equals("")) {
             mMessageLiveData.setValue(new LiveDataMessage(false, "Entry deck name"));
