@@ -58,10 +58,8 @@ public class RatingFragment extends Fragment {
         ratingViewModel.subscribe(this, topUserList -> {
             if (topUserList == null) {
                 Toast.makeText(getContext(), "No internet connection", Toast.LENGTH_LONG).show();
-                mRouter.exit();
                 return;
             }
-            ratingViewModel.unsubscribe(this);
             adapter.swapUsers(topUserList.users);
         }, deck -> {
             if (deck == null) {

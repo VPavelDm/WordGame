@@ -13,6 +13,7 @@ import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public class RatingViewModel extends ViewModel {
 
@@ -36,10 +37,6 @@ public class RatingViewModel extends ViewModel {
         mDeckLiveData.observe(owner, deckListener);
     }
 
-    public void unsubscribe(LifecycleOwner owner) {
-        mUserListLiveData.removeObservers(owner);
-    }
-
     public void getUserTopList(Deck deck) {
         mCompositeDisposable.add(
                 mInteractor.getTopUsers(deck)
@@ -53,8 +50,8 @@ public class RatingViewModel extends ViewModel {
     }
 
     public void getDeck(String id) {
-        mCompositeDisposable.add(mInteractor.getDeck(id)
-                .subscribe(deck -> mDeckLiveData.setValue(deck)));
+        Disposable d = mInteractor.getDeck(id).subscribe(deck -> mDeckLiveData.setValue(deck));
+        mCompositeDisposable.add(d);
     }
 
     @Override

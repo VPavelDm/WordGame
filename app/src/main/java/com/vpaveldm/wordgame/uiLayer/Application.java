@@ -9,6 +9,7 @@ import com.vpaveldm.wordgame.dagger.module.FirebaseAuthModule;
 public class Application extends android.app.Application {
 
     private static AppComponent sAppComponent;
+    public static final String TAG = "wordGameTAG";
 
     @Override
     public void onCreate() {

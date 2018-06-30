@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +23,14 @@ import javax.inject.Inject;
 
 import ru.terrakok.cicerone.Router;
 
+import static com.vpaveldm.wordgame.uiLayer.Application.TAG;
+
 public class PlayFragment extends Fragment {
 
     @Inject
     Router mRouter;
 
     private static final String KEY_ID = "com.vpaveldm.id";
-    private PlayViewModel mPlayViewModel;
     private String deckId;
     private FragmentPlayingBinding mBinding;
 
@@ -48,12 +50,13 @@ public class PlayFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPlayViewModel = ViewModelProviders.of(this).get(PlayViewModel.class);
-        mBinding.setHandler(mPlayViewModel);
+        PlayViewModel playViewModel = ViewModelProviders.of(this).get(PlayViewModel.class);
+        mBinding.setHandler(playViewModel);
 
-        mPlayViewModel.createLiveDataAndSubscribe(this,
+        playViewModel.createLiveDataAndSubscribe(this,
                 message -> {
                     if (Objects.requireNonNull(message).isSuccess()) {
+                        Log.i(TAG, "onActivityCreated: success");
                         Pair<String, String> args;
                         if (message.getMessage() != null
                                 && message.getMessage().equals(PlayViewModel.INCORRECT_ANSWER)) {
@@ -63,6 +66,7 @@ public class PlayFragment extends Fragment {
                         }
                         mRouter.replaceScreen(getString(R.string.fragment_rating), args);
                     } else {
+                        Log.i(TAG, "onActivityCreated: failure");
                         Toast.makeText(getContext(), message.getMessage(), Toast.LENGTH_LONG).show();
                         mRouter.exit();
                     }
@@ -70,7 +74,7 @@ public class PlayFragment extends Fragment {
 
         Bundle args = Objects.requireNonNull(getArguments());
         deckId = args.getString(KEY_ID);
-        mPlayViewModel.startGame(deckId);
+        playViewModel.startGame(deckId);
     }
 
     public static PlayFragment newInstance(String id) {

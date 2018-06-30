@@ -4,14 +4,14 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.util.Log;
 
+import com.vpaveldm.wordgame.adapterLayer.dataBindingModel.Question;
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
 import com.vpaveldm.wordgame.domainLayer.interactors.PlayInteractor;
 import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
-import com.vpaveldm.wordgame.adapterLayer.dataBindingModel.Question;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,11 +23,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class PlayViewModel extends ViewModel {
-    private static final String TAG = "wordGameTAG";
     @Inject
     PlayInteractor mInteractor;
     public static final String INCORRECT_ANSWER = "Incorrect answer";
     public final ObservableField<Question> question = new ObservableField<>();
+    public final ObservableBoolean visible = new ObservableBoolean();
 
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private Deck mDeck;
@@ -46,9 +46,7 @@ public class PlayViewModel extends ViewModel {
     }
 
     public void startGame(String id) {
-        Disposable d = mInteractor.startGame()
-                .doOnNext(t -> Log.i(TAG, "startGame: time: " + t))
-                .subscribe(t -> ++time);
+        Disposable d = mInteractor.startGame().subscribe(t -> ++time);
         mCompositeDisposable.add(d);
 
         d = mInteractor.getDeck(id)
@@ -67,9 +65,11 @@ public class PlayViewModel extends ViewModel {
                 initWidgets(mDeck.cards.get(currentCard));
             } else { //If there isn't any cards
                 Disposable d = mInteractor.updateTopList(mDeck, time)
+                        .doOnSubscribe(s -> visible.set(true))
+                        .doOnEvent(t -> visible.set(false))
                         .subscribe(
                                 () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
-                                e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
+                                t -> mMessageLiveData.setValue(new LiveDataMessage(true, null))
                         );
                 mCompositeDisposable.add(d);
             }
