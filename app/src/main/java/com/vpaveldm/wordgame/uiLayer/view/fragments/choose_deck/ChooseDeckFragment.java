@@ -36,11 +36,6 @@ public class ChooseDeckFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mChooseDeckViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(ChooseDeckViewModel.class);
-        mChooseDeckViewModel.subscribe(this, liveDataMessage -> {
-            if (!Objects.requireNonNull(liveDataMessage).isSuccess()){
-                Toast.makeText(getContext(), liveDataMessage.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     @Nullable
@@ -63,6 +58,16 @@ public class ChooseDeckFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ActivityComponentManager.getActivityComponent().inject(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mChooseDeckViewModel.subscribe(this, liveDataMessage -> {
+            if (!Objects.requireNonNull(liveDataMessage).isSuccess()){
+                Toast.makeText(getContext(), liveDataMessage.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     /**

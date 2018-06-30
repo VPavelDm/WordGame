@@ -4,14 +4,20 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 
-import com.vpaveldm.wordgame.domainLayer.interactors.AddDeckInteractor;
-import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
 import com.vpaveldm.wordgame.dataLayer.store.model.Card;
 import com.vpaveldm.wordgame.dataLayer.store.model.Deck;
+import com.vpaveldm.wordgame.domainLayer.interactors.AddDeckInteractor;
+import com.vpaveldm.wordgame.uiLayer.view.activity.ActivityComponentManager;
+
+import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -19,80 +25,129 @@ import io.reactivex.disposables.Disposable;
  */
 public class AddDeckViewModel extends ViewModel {
 
+    private static final int MINIMUM_CARDS = 10;
+    private static final int COUNT_OF_WRONG_TRANSLATES = 4;
+
     @Inject
     AddDeckInteractor mAddDeckInteractor;
+
+    public final ObservableInt cardsCount = new ObservableInt();
+    public final ObservableInt wrongWordsCount = new ObservableInt();
+    public final ObservableField<String> wordET = new ObservableField<>();
+    public final ObservableField<String> translateET = new ObservableField<>();
+    public final ObservableField<String> wrongTranslateET = new ObservableField<>();
+
     private final Deck mDeck;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
-    private MutableLiveData<LiveDataMessage> mTranslateLiveData;
 
     public AddDeckViewModel() {
-        mDeck = new Deck();
         ActivityComponentManager.getActivityComponent().inject(this);
+
+        //Assign cardsCount to -1 'cause each time when resetObservableFields is called,
+        // cardsCount is incremented
+        cardsCount.set(-1);
+        resetObservableFields();
+
+        mDeck = new Deck();
+        mDeck.cards.add(new Card());
     }
 
     /**
      * The method that subscribes to updates
      *
-     * @param owner             object that is used to handle lifecycle changes
-     * @param messageListener   callback object that is used for notifications about creating deck
-     * @param translateListener callback object that is used for notifications about atu translating
+     * @param owner           object that is used to handle lifecycle changes
+     * @param messageListener callback object that is used for notifications about creating deck
      */
     public void subscribe(LifecycleOwner owner,
-                          Observer<LiveDataMessage> messageListener,
-                          Observer<LiveDataMessage> translateListener) {
-        if (mMessageLiveData == null) {
-            mMessageLiveData = new MutableLiveData<>();
-        }
+                          Observer<LiveDataMessage> messageListener) {
+        mMessageLiveData = new MutableLiveData<>();
         mMessageLiveData.observe(owner, messageListener);
-        if (mTranslateLiveData == null) {
-            mTranslateLiveData = new MutableLiveData<>();
+    }
+
+    public void clickAddWrongTranslate() {
+        //Get last card's wrong translates
+        List<String> wrongTranslates = mDeck.cards.get(mDeck.cards.size() - 1).wrongTranslates;
+        if (wrongTranslates.size() == COUNT_OF_WRONG_TRANSLATES) {
+            mMessageLiveData.setValue(new LiveDataMessage(false, "All wrong words are added"));
+            return;
         }
-        mTranslateLiveData.observe(owner, translateListener);
+        String wrongTranslate = Objects.requireNonNull(wrongTranslateET.get());
+        if (wrongTranslate.equals("")) {
+            mMessageLiveData.setValue(new LiveDataMessage(false, "Entry text in wrong translate field"));
+            return;
+        }
+        wrongTranslates.add(wrongTranslate);
+        wrongTranslateET.set("");
+        wrongWordsCount.set(wrongTranslates.size());
     }
 
-    /**
-     * The method that adds a card to the deck
-     *
-     * @param card the object that is added to the deck cards
-     */
-    public void addCard(Card card) {
-        mDeck.cards.add(card);
+    public void clickAutoTranslate(String word) {
+        if (word.equals("")) {
+            mMessageLiveData.setValue(new LiveDataMessage(false, "Entry text in word field"));
+            return;
+        }
+        Disposable d = mAddDeckInteractor.getAutoTranslate(word).subscribe(
+                translateET::set,
+                e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
+        );
+        mCompositeDisposable.add(d);
     }
 
-    /**
-     * The method that creates a deck with cards
-     *
-     * @param name name of deck
-     * @return Disposable to manage the subscription
-     */
-    public Disposable createDeck(String name) {
-        mDeck.deckName = name;
-        return mAddDeckInteractor.addDeck(mDeck)
+    public void clickCreateCard() {
+        if (Objects.equals(wordET.get(), "")) {
+            mMessageLiveData.setValue(new LiveDataMessage(false, "Entry word"));
+            return;
+        }
+        if (Objects.equals(translateET.get(), "")) {
+            mMessageLiveData.setValue(new LiveDataMessage(false, "Entry translate"));
+            return;
+        }
+        Card card = mDeck.cards.get(mDeck.cards.size() - 1);
+        if (card.wrongTranslates.size() != COUNT_OF_WRONG_TRANSLATES) {
+            mMessageLiveData.setValue(new LiveDataMessage(false,
+                    "Entry " + COUNT_OF_WRONG_TRANSLATES + " wrong translates"));
+            return;
+        }
+        card.word = wordET.get();
+        card.translate = translateET.get();
+        resetObservableFields();
+        //Add empty card
+        mDeck.cards.add(new Card());
+    }
+
+    public void clickCreateDeck(String deckName) {
+        if (deckName.equals("")) {
+            mMessageLiveData.setValue(new LiveDataMessage(false, "Entry deck name"));
+            return;
+        }
+        if (mDeck.cards.size() < MINIMUM_CARDS) {
+            mMessageLiveData.setValue(new LiveDataMessage(false,
+                    "Add at least " + MINIMUM_CARDS + " words"));
+            return;
+        }
+        mDeck.deckName = deckName;
+        //Remove last empty card
+        mDeck.cards.remove(mDeck.cards.size() - 1);
+        Disposable d = mAddDeckInteractor.addDeck(mDeck)
                 .subscribe(
                         () -> mMessageLiveData.setValue(new LiveDataMessage(true, null)),
                         e -> mMessageLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
                 );
+        mCompositeDisposable.add(d);
     }
 
-    /**
-     * The method that returns cards' amount of Deck
-     *
-     * @return Integer value equal to the cards' amount of Deck
-     */
-    public int getCardSize() {
-        return mDeck.cards.size();
+    private void resetObservableFields() {
+        wordET.set("");
+        translateET.set("");
+        wrongTranslateET.set("");
+        wrongWordsCount.set(0);
+        cardsCount.set(cardsCount.get() + 1);
     }
 
-    /**
-     * The method that gets translate of word
-     *
-     * @param word the word to translate
-     * @return Disposable to manage the subscription
-     */
-    public Disposable getAutoTranslate(String word) {
-        return mAddDeckInteractor.getAutoTranslate(word).subscribe(
-                success -> mTranslateLiveData.setValue(new LiveDataMessage(true, success)),
-                e -> mTranslateLiveData.setValue(new LiveDataMessage(false, e.getMessage()))
-        );
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        mCompositeDisposable.clear();
     }
 }

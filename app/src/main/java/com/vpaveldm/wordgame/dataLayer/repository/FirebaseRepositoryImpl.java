@@ -4,7 +4,6 @@ import android.arch.paging.DataSource;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -91,7 +90,6 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
     @Override
     public Completable addDeck(Deck deck) {
         return Completable.create(source -> {
-            Log.i("firebaseTAG", "addDeck: " + Thread.currentThread().getName());
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference decksRef = database.getReference("decks");
             //Create node for deck

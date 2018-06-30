@@ -2,14 +2,25 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.vpaveldm.wordgame.R"/>
+
+        <variable
+            name="context"
+            type="android.content.Context"/>
+
+        <variable
+            name="viewmodel"
+            type="com.vpaveldm.wordgame.adapterLayer.viewModel.AddDeckViewModel"/>
+
+    </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="@+id/countCardsTV"
-        app:layout_constraintTop_toBottomOf="@+id/countCardsTV">
+        android:layout_height="match_parent">
 
         <EditText
             android:id="@+id/deckNameET"
@@ -29,6 +40,7 @@
             android:layout_margin="8dp"
             android:hint="@string/label_entry_word"
             android:inputType="text"
+            android:text="@={viewmodel.wordET}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deckNameET"/>
@@ -40,6 +52,7 @@
             android:layout_margin="8dp"
             android:hint="@string/label_entry_translate"
             android:inputType="text"
+            android:text="@={viewmodel.translateET}"
             app:layout_constraintEnd_toStartOf="@+id/autoTranslateBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/wordET"/>
@@ -51,17 +64,30 @@
             android:layout_height="45dp"
             android:layout_margin="8dp"
             android:lines="2"
+            android:onClick="@{()->viewmodel.clickAutoTranslate(wordET.getText().toString())}"
             android:text="@string/label_auto_translate"
             android:textAllCaps="false"
             app:layout_constraintEnd_toStartOf="@+id/countTranslatesTV"
             app:layout_constraintTop_toBottomOf="@+id/wordET"/>
+
+        <ProgressBar
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/autoTranslateBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/autoTranslateBtn"
+            app:layout_constraintTop_toTopOf="@+id/autoTranslateBtn"
+            app:layout_constraintVertical_bias="0.8"/>
 
         <TextView
             android:id="@+id/countTranslatesTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@string/label_count_translates"
+            android:text="@{context.getString(R.string.label_count_translates, viewmodel.wrongWordsCount)}"
             app:layout_constraintBaseline_toBaselineOf="@+id/addWrongTranslate"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="1/4"/>
@@ -71,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@string/label_count_cards"
+            android:text="@{context.getString(R.string.label_count_cards, viewmodel.cardsCount)}"
             app:layout_constraintBaseline_toBaselineOf="@+id/createCardButton"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="10/10"/>
@@ -83,6 +109,7 @@
             android:layout_margin="8dp"
             android:hint="@string/label_entry_wrong_translate"
             android:inputType="text"
+            android:text="@={viewmodel.wrongTranslateET}"
             app:layout_constraintEnd_toStartOf="@+id/addWrongTranslate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/translateET"/>
@@ -94,6 +121,7 @@
             android:layout_height="45dp"
             android:layout_margin="8dp"
             android:lines="2"
+            android:onClick="@{()->viewmodel.clickAddWrongTranslate()}"
             android:text="@string/label_add"
             android:textAllCaps="false"
             app:layout_constraintEnd_toStartOf="@+id/countTranslatesTV"
@@ -105,6 +133,7 @@
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:onClick="@{()->viewmodel.clickCreateCard()}"
             android:text="@string/label_create_card"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,6 +146,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:onClick="@{()->viewmodel.clickCreateDeck(deckNameET.getText().toString())}"
             android:text="@string/label_create"
             android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"

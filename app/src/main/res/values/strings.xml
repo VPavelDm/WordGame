@@ -32,4 +32,5 @@
     <string name="label_time">Time: %1$d</string>
     <string name="label_no_correct_answer">No correct answer</string>
     <string name="label_count_cards">%1$d/10</string>
+    <string name="label_entry_text_in_wrong_translate_error">Entry text in wrong translate field</string>
 </resources>
