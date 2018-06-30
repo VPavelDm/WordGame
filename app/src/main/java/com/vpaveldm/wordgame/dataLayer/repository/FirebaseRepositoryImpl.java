@@ -123,8 +123,8 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
     }
 
     @Override
-    public Observable<Boolean> updateTopList(Deck deck, long time) {
-        PublishSubject<Boolean> subject = PublishSubject.create();
+    public Completable updateTopList(Deck deck, long time) {
+        BehaviorSubject<Boolean> subject = BehaviorSubject.create();
         DatabaseReference deckRef = FirebaseDatabase.getInstance().getReference("top_list").child(deck.id);
         ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -164,7 +164,7 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
         deckRef.addListenerForSingleValueEvent(listener);
         return subject.doOnDispose(
                 () -> deckRef.removeEventListener(listener)
-        );
+        ).ignoreElements();
     }
 
     @Override

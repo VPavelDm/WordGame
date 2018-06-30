@@ -4,6 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="handler"
+            type="com.vpaveldm.wordgame.adapterLayer.viewModel.PlayViewModel"/>
+
+    </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,6 +40,7 @@
                 android:gravity="center"
                 android:lines="7"
                 android:padding="20dp"
+                android:text="@{handler.question.word}"
                 android:textSize="24sp"
                 tools:text="Hello, World.. "/>
         </android.support.v7.widget.CardView>
@@ -44,6 +53,8 @@
             android:layout_margin="8dp"
             android:ellipsize="end"
             android:lines="1"
+            android:onClick="@{()->handler.clickAnswerBtn(firstAnswerButton.getText().toString())}"
+            android:text="@{handler.question.firstAnswer}"
             app:layout_constraintBottom_toTopOf="@+id/thirdAnswerButton"
             app:layout_constraintEnd_toStartOf="@+id/secondAnswerButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +68,8 @@
             android:layout_margin="8dp"
             android:ellipsize="end"
             android:lines="1"
+            android:onClick="@{()->handler.clickAnswerBtn(secondAnswerButton.getText().toString())}"
+            android:text="@{handler.question.secondAnswer}"
             app:layout_constraintBottom_toTopOf="@+id/fourthAnswerButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/firstAnswerButton"
@@ -70,6 +83,8 @@
             android:layout_margin="8dp"
             android:ellipsize="end"
             android:lines="1"
+            android:onClick="@{()->handler.clickAnswerBtn(thirdAnswerButton.getText().toString())}"
+            android:text="@{handler.question.thirdAnswer}"
             app:layout_constraintBottom_toTopOf="@+id/noCorrectAnswerButton"
             app:layout_constraintEnd_toStartOf="@+id/fourthAnswerButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,6 +98,8 @@
             android:layout_margin="8dp"
             android:ellipsize="end"
             android:lines="1"
+            android:onClick="@{()->handler.clickAnswerBtn(fourthAnswerButton.getText().toString())}"
+            android:text="@{handler.question.fourthAnswer}"
             app:layout_constraintBottom_toTopOf="@+id/noCorrectAnswerButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/thirdAnswerButton"
@@ -94,6 +111,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:onClick="@{()->handler.clickAnswerBtn(noCorrectAnswerButton.getTag().toString())}"
+            android:tag="@{handler.question.otherAnswer}"
             android:text="@string/label_no_correct_answer"
             android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"

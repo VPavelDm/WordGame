@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -33,9 +34,9 @@ public class PlayInteractor {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<Boolean> updateTopList(Deck deck, long time) {
+    public Completable updateTopList(Deck deck, long time) {
         return mFirebaseRepository.updateTopList(deck, time)
-                .timeout(1, TimeUnit.SECONDS, Observable.error(new ConnectException("No internet connection")))
+                .timeout(2, TimeUnit.SECONDS, Completable.error(new ConnectException("No internet connection")))
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread());
     }

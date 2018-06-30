@@ -12,7 +12,7 @@ import io.reactivex.Single;
 public interface IFirebaseRepository {
     Single<Deck> getDeckById(String id);
     Completable addDeck(Deck model);
-    Observable<Boolean> updateTopList(Deck deck, long time);
+    Completable updateTopList(Deck deck, long time);
     Observable<TopUserList> getTopList(Deck deck);
     Completable subscribeOnUpdate();
     DataSource.Factory<Integer, Deck> getDecks();
