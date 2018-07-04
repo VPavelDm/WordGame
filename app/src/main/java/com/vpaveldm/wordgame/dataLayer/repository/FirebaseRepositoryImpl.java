@@ -36,23 +36,41 @@ import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 @ActivityScope
 public class FirebaseRepositoryImpl implements IFirebaseRepository {
 
     private final AppDatabase db;
 
+    /**
+     * Constructs an object and gets database object
+     *
+     * @param context Application context to get database object
+     */
     @Inject
     FirebaseRepositoryImpl(@Named("Application") Context context) {
         db = Room.databaseBuilder(context, AppDatabase.class, "decks").build();
     }
 
+    /**
+     * Returns data source with decks to display
+     *
+     * @return data source with decks to display
+     */
     @Override
     public DataSource.Factory<Integer, Deck> getDecks() {
         return db.deckDao().getDeckWithCardsDataSource();
     }
 
+    /**
+     * Subscribes to decks updates
+     *
+     * @return Completable that notify about decks' update
+     */
     @Override
-    public Completable subscribeOnUpdate() {
+    public Completable subscribesToDecksSingleUpdates() {
         BehaviorSubject<Boolean> subject = BehaviorSubject.create();
         DatabaseReference decksRef = FirebaseDatabase.getInstance().getReference("decks");
         ValueEventListener valueEventListener = new ValueEventListener() {
@@ -82,11 +100,23 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
         return subject.doOnDispose(() -> decksRef.removeEventListener(valueEventListener)).ignoreElements();
     }
 
+    /**
+     * Gets deck by id from db
+     *
+     * @param id Deck's id to receive
+     * @return reactivex.Single that sends Deck by id
+     */
     @Override
     public Single<Deck> getDeckById(String id) {
         return Single.create(source -> source.onSuccess(db.deckDao().getDeck(id)));
     }
 
+    /**
+     * Send a request to the server to add deck
+     *
+     * @param deck Deck to add
+     * @return reactivex.Completable that sends end message
+     */
     @Override
     public Completable addDeck(Deck deck) {
         return Completable.create(source -> {
@@ -122,6 +152,13 @@ public class FirebaseRepositoryImpl implements IFirebaseRepository {
         });
     }
 
+    /**
+     * Send a request to the server to update user top list
+     *
+     * @param deck Deck where the users top list will be updated
+     * @param time User play time
+     * @return reactivex.Completable that sends end message
+     */
     @Override
     public Completable updateTopList(Deck deck, long time) {
         BehaviorSubject<Boolean> subject = BehaviorSubject.create();

@@ -30,7 +30,7 @@ public class ChooseDeckInteractor {
     }
 
     public Completable subscribeOnUpdate() {
-        return mRepository.subscribeOnUpdate()
+        return mRepository.subscribesToDecksSingleUpdates()
                 .timeout(2, TimeUnit.SECONDS, Completable.error(new ConnectException("Can not update decks")))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());

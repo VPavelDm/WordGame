@@ -2,6 +2,9 @@ package com.vpaveldm.wordgame.adapterLayer.dataBindingModel;
 
 import java.util.List;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 public class Question {
     public String firstAnswer;
     public String secondAnswer;
@@ -10,6 +13,12 @@ public class Question {
     public String otherAnswer;
     public String word;
 
+    /**
+     * Constructs an object with elements to display in the UI
+     *
+     * @param word    word to be translated
+     * @param answers four incorrect answer with one correct
+     */
     public Question(String word, List<String> answers) {
         this.word = word;
         this.firstAnswer = answers.get(0);

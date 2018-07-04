@@ -24,18 +24,33 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 @ActivityScope
 public class LoggingRepositoryImpl implements ILoggingRepository {
 
     private final FirebaseAuth mAuth;
     private final GoogleApiClient mApiClient;
 
+    /**
+     * Constructs a Logging Repository implementation
+     *
+     * @param auth   FirebaseAuth
+     * @param client GoogleApiClient
+     */
     @Inject
     LoggingRepositoryImpl(FirebaseAuth auth, GoogleApiClient client) {
         mAuth = auth;
         mApiClient = client;
     }
 
+    /**
+     * Send a request to the server to sign in
+     *
+     * @param model An object with data to sign in
+     * @return reactivex.Observable that notifies about sign in
+     */
     @Override
     public Observable<Boolean> signIn(LoggingModel model) {
         BehaviorSubject<Boolean> subject = BehaviorSubject.createDefault(false);
@@ -47,6 +62,12 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         return subject;
     }
 
+    /**
+     * Send a request to the server to sign up
+     *
+     * @param model An object with data to sign in
+     * @return reactivex.Observable that notifies about sign up
+     */
     @Override
     public Observable<Boolean> signUp(LoggingModel model) {
         BehaviorSubject<Boolean> subject = BehaviorSubject.createDefault(false);
@@ -54,6 +75,11 @@ public class LoggingRepositoryImpl implements ILoggingRepository {
         return subject;
     }
 
+    /**
+     * Get Intent to sign in by google
+     *
+     * @return reactivex.Single that returns Model with intent
+     */
     @Override
     public Single<LoggingModel> getGoogleIntent() {
         return Single.create(source -> {

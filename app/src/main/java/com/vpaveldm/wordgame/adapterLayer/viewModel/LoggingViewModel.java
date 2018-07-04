@@ -31,10 +31,11 @@ public class LoggingViewModel extends ViewModel {
     private MutableLiveData<Intent> mIntentLiveData;
     private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
+    /**
+     * Constructs view model
+     */
     public LoggingViewModel() {
-        super();
         ActivityComponentManager.getActivityComponent().inject(this);
-        visible.set(false);
     }
 
     /**

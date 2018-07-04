@@ -15,6 +15,9 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 public class RatingViewModel extends ViewModel {
 
     private MutableLiveData<TopUserList> mUserListLiveData;
@@ -23,11 +26,20 @@ public class RatingViewModel extends ViewModel {
     @Inject
     RatingInteractor mInteractor;
 
+    /**
+     * Constructs view model object
+     */
     public RatingViewModel() {
-        super();
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
+    /**
+     * Create live data and subscribe on it
+     *
+     * @param owner        object that is used to handle lifecycle changes
+     * @param listener     callback object that is used for notifications when top user list is received
+     * @param deckListener callback object that is used for notifications when deck is received
+     */
     public void subscribe(LifecycleOwner owner, Observer<TopUserList> listener, Observer<Deck> deckListener) {
         if (mUserListLiveData == null || mDeckLiveData == null) {
             mUserListLiveData = new MutableLiveData<>();
@@ -37,6 +49,11 @@ public class RatingViewModel extends ViewModel {
         mDeckLiveData.observe(owner, deckListener);
     }
 
+    /**
+     * Send a request to the server to receive top user list
+     *
+     * @param deck Deck for which the top user list is requested
+     */
     public void getUserTopList(Deck deck) {
         mCompositeDisposable.add(
                 mInteractor.getTopUsers(deck)
@@ -49,6 +66,11 @@ public class RatingViewModel extends ViewModel {
         );
     }
 
+    /**
+     * Send a request to the server to receive deck by id
+     *
+     * @param id Id to get
+     */
     public void getDeck(String id) {
         Disposable d = mInteractor.getDeck(id).subscribe(deck -> mDeckLiveData.setValue(deck));
         mCompositeDisposable.add(d);

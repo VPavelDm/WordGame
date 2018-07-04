@@ -43,6 +43,9 @@ public class AddDeckViewModel extends ViewModel {
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
 
+    /**
+     * Constructs ViewModel and init UI
+     */
     public AddDeckViewModel() {
         ActivityComponentManager.getActivityComponent().inject(this);
 

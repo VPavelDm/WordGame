@@ -14,6 +14,6 @@ public interface IFirebaseRepository {
     Completable addDeck(Deck model);
     Completable updateTopList(Deck deck, long time);
     Observable<TopUserList> getTopList(Deck deck);
-    Completable subscribeOnUpdate();
+    Completable subscribesToDecksSingleUpdates();
     DataSource.Factory<Integer, Deck> getDecks();
 }

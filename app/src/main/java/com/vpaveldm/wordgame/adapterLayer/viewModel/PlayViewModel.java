@@ -22,6 +22,9 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+/**
+ * @author Pavel Vaitsikhouski
+ */
 public class PlayViewModel extends ViewModel {
     @Inject
     PlayInteractor mInteractor;
@@ -35,16 +38,30 @@ public class PlayViewModel extends ViewModel {
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
     private long time = 0L;
 
+    /**
+     * Constructs view model
+     */
     public PlayViewModel() {
         ActivityComponentManager.getActivityComponent().inject(this);
     }
 
+    /**
+     * The method that creates live date and subscribes to updates
+     *
+     * @param owner           object that is used to handle lifecycle changes
+     * @param messageObserver callback object that is used for notifications when the game ends
+     */
     public void createLiveDataAndSubscribe(LifecycleOwner owner,
                                            Observer<LiveDataMessage> messageObserver) {
         mMessageLiveData = new MutableLiveData<>();
         mMessageLiveData.observe(owner, messageObserver);
     }
 
+    /**
+     * Start stopwatch and get deck with cards
+     *
+     * @param id Deck's id to play
+     */
     public void startGame(String id) {
         Disposable d = mInteractor.startGame().subscribe(t -> ++time);
         mCompositeDisposable.add(d);
@@ -57,6 +74,11 @@ public class PlayViewModel extends ViewModel {
         mCompositeDisposable.add(d);
     }
 
+    /**
+     * Processing a button press to check the answer
+     *
+     * @param answer User's answer to check
+     */
     public void clickAnswerBtn(String answer) {
         Card card = mDeck.cards.get(currentCard);
         if (card.translate.equals(answer)) { //If answer is correct turn next card

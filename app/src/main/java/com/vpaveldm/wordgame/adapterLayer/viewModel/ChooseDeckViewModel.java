@@ -32,6 +32,9 @@ public class ChooseDeckViewModel extends ViewModel {
     private MutableLiveData<LiveDataMessage> mMessageLiveData;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
+    /**
+     * Constructs view model and get objects
+     */
     public ChooseDeckViewModel() {
         ActivityComponentManager.getActivityComponent().inject(this);
         DataSource.Factory<Integer, Deck> dataSource = mChooseDeckInteractor.getDeckDataSource();
