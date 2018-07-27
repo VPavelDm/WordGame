@@ -10,5 +10,6 @@
 1. Сервер - firebase: realtime database
 2. Стороннее API:
   2.1 Yandex translate API для автоматического перевода слов
+  
   2.2 Dagger 2
 3. Arch components: Lifecycle, Livedata, ViewModel, Data Binding, Paging library, Room
