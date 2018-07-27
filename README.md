@@ -8,5 +8,7 @@
 
 В рамках приложения были использованы следующие технологии: 
 1. Сервер - firebase: realtime database
-2. Стороннее API - Yandex translate API для автоматического перевода слов
-3. Arch components: lifecycle, livedata, viewmodel, data binding, paging library, room
+2. Стороннее API:
+  2.1 Yandex translate API для автоматического перевода слов
+  2.2 Dagger 2
+3. Arch components: Lifecycle, Livedata, ViewModel, Data Binding, Paging library, Room
